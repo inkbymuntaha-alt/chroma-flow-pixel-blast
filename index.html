@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101326">
+<title>Chroma Flow: Pixel Blast</title>
+<style>
+:root{color-scheme:dark;--bg:#101326;--panel:#1b203a;--ink:#f7f7ff;--muted:#aab0d0;--accent:#8cf4e2;--line:#343b61}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(ellipse at 50% -15%,#34305d 0,#171a32 45%,#0d1020 100%);color:var(--ink)}
+body{padding:env(safe-area-inset-top) 12px env(safe-area-inset-bottom);display:flex;justify-content:center}
+.app{width:min(100%,760px);padding:18px 0 28px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:46px;height:46px;border-radius:15px;background:linear-gradient(135deg,#ff6f91,#9b7bff 55%,#52e7d1);display:grid;place-items:center;font-size:25px;box-shadow:0 8px 24px #0006}.brand h1{font-size:clamp(18px,4vw,25px);margin:0;letter-spacing:-.7px}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
+.pill{border:1px solid var(--line);background:#ffffff0b;border-radius:999px;padding:8px 12px;color:var(--muted);font-size:12px;white-space:nowrap}
+.panel{background:linear-gradient(160deg,#222846ed,#171c34ed);border:1px solid #ffffff15;border-radius:22px;padding:16px;box-shadow:0 18px 45px #0003}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.stat{background:#0f1429;border:1px solid #ffffff0d;border-radius:14px;padding:9px;text-align:center}.stat b{display:block;font-size:18px}.stat span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.game-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:3px 2px 13px}.level{font-weight:800;font-size:17px}.sub{color:var(--muted);font-size:12px}
+.board-wrap{width:min(100%,520px);margin:auto;position:relative;touch-action:none}.board{display:grid;gap:7px;padding:11px;background:#0c1124;border:1px solid #ffffff18;border-radius:19px;aspect-ratio:1;box-shadow:inset 0 2px 15px #0008}
+.cell{position:relative;border-radius:10px;background:linear-gradient(145deg,#252d4b,#1a213b);border:1px solid #ffffff0b;min-width:0;min-height:0;display:grid;place-items:center;transition:background .12s}
+.cell.path{background:color-mix(in srgb,var(--c) 24%,#18213a);border-color:color-mix(in srgb,var(--c) 55%,transparent);box-shadow:inset 0 0 12px color-mix(in srgb,var(--c) 18%,transparent)}
+.cell.endpoint{background:color-mix(in srgb,var(--c) 22%,#1b203a);border:2px solid var(--c);box-shadow:0 0 13px color-mix(in srgb,var(--c) 45%,transparent),inset 0 0 12px color-mix(in srgb,var(--c) 24%,transparent)}
+.dot{width:46%;height:46%;border-radius:50%;background:var(--c);box-shadow:0 0 14px var(--c),inset 0 2px 3px #fff9;z-index:2}
+.cell.path:after{content:"";position:absolute;inset:27%;border-radius:50%;background:var(--c);opacity:.85;box-shadow:0 0 10px var(--c)}
+.cell.endpoint:after{display:none}
+.controls{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:15px 0 5px}
+button{font:inherit;border:1px solid #ffffff1c;background:#2b3355;color:var(--ink);padding:11px 15px;border-radius:13px;font-weight:700;cursor:pointer;transition:transform .12s,filter .12s}
+button:active{transform:scale(.96)}button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button.primary{background:linear-gradient(135deg,#70ead6,#7da8ff);color:#10172b;border:0}
+button.soft{background:#ffffff0b;color:#d9def7}button:disabled{opacity:.4;cursor:not-allowed}
+.hint{min-height:22px;text-align:center;color:var(--muted);font-size:12px;margin-top:9px}
+.levels{display:flex;gap:7px;overflow-x:auto;padding:12px 2px 4px;scrollbar-width:thin}.level-btn{flex:0 0 40px;padding:8px 0;border-radius:11px}.level-btn.current{background:#8cf4e2;color:#10172b;border:0}.level-btn.done{border-color:#8cf4e277;color:#8cf4e2}
+.instructions{color:var(--muted);font-size:12px;line-height:1.55;margin:14px 3px 0;text-align:center}
+.overlay{position:fixed;inset:0;background:#080b19c9;display:none;place-items:center;padding:20px;z-index:5}.overlay.show{display:grid}.modal{width:min(100%,380px);text-align:center;background:#202744;border:1px solid #ffffff24;border-radius:24px;padding:25px;box-shadow:0 24px 80px #0009}.modal .emoji{font-size:48px}.modal h2{margin:8px 0}.modal p{color:var(--muted);font-size:14px;line-height:1.5}
+footer{text-align:center;color:#777f9f;font-size:11px;margin:15px 0}
+@media(max-width:420px){.app{padding-top:10px}.panel{padding:11px}.board{gap:5px;padding:8px}.cell{border-radius:8px}.top{margin-bottom:10px}.pill{padding:7px 9px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="top"><div class="brand"><div class="logo">✦</div><div><h1>Chroma Flow</h1><p>PIXEL BLAST · CONNECT THE COLOURS</p></div></div><div class="pill">🧩 <span id="progressPill">0 / 20 cleared</span></div></header>
+<section class="panel">
+<div class="stats"><div class="stat"><b id="moves">0</b><span>Moves</span></div><div class="stat"><b id="time">00:00</b><span>Time</span></div><div class="stat"><b id="best">—</b><span>Best</span></div></div>
+<div class="game-head"><div><div class="level" id="levelName">Level 1 · First Sparks</div><div class="sub" id="goal">Connect every matching pair</div></div><div class="pill" id="pairs">0 / 3 pairs</div></div>
+<div class="board-wrap"><div class="board" id="board" role="application" aria-label="Puzzle board"></div></div>
+<div class="controls"><button class="soft" id="undo">↶ Undo</button><button class="soft" id="reset">⟲ Restart</button><button class="soft" id="hint">✧ Hint</button><button class="primary" id="next" disabled>Next level →</button></div>
+<div class="hint" id="message" aria-live="polite">Drag from a glowing dot to its matching colour.</div>
+<div class="levels" id="levels" aria-label="Choose level"></div>
+<p class="instructions">Join matching colour dots by drawing a path through neighbouring tiles. Paths cannot cross or overlap. Complete every pair to clear the level!</p>
+</section>
+<footer>Made for curious minds · Progress saves on this device</footer>
+</main>
+<div class="overlay" id="win"><div class="modal"><div class="emoji">🌈</div><h2>Pixel perfect!</h2><p id="winText">All colour streams connected.</p><button class="primary" id="winNext">Play next level →</button></div></div>
+<script>
+(()=>{
+'use strict';
+const levels=[
+{n:5,name:'First Sparks',pairs:[['coral',0,0,4,4],['cyan',0,4,4,0],['gold',2,0,2,4]]},
+{n:5,name:'Neon Garden',pairs:[['pink',0,0,4,4],['lime',0,4,4,0],['blue',1,0,3,4]]},
+{n:5,name:'Prism Parade',pairs:[['violet',0,1,4,3],['orange',0,3,4,1],['mint',2,0,2,4]]},
+{n:6,name:'Bright Bridges',pairs:[['coral',0,0,5,5],['cyan',0,5,5,0],['gold',1,0,4,5],['violet',1,5,4,0]]},
+{n:6,name:'Star Circuit',pairs:[['pink',0,0,5,4],['lime',0,5,5,1],['blue',2,0,3,5],['gold',5,0,0,2]]},
+{n:6,name:'Candy Current',pairs:[['coral',0,1,5,4],['cyan',0,4,5,1],['violet',1,0,4,5],['lime',1,5,4,0]]},
+{n:6,name:'Deep Spectrum',pairs:[['pink',0,0,4,5],['gold',0,5,5,0],['mint',2,0,5,3],['blue',1,0,3,5]]},
+{n:7,name:'Pixel Rapids',pairs:[['coral',0,0,6,6],['cyan',0,6,6,0],['gold',1,0,5,6],['violet',1,6,5,0]]},
+{n:7,name:'Aurora Grid',pairs:[['pink',0,1,6,5],['lime',0,5,6,1],['blue',1,0,5,6],['gold',1,6,5,0]]},
+{n:7,name:'Prism Maze',pairs:[['coral',0,0,6,5],['cyan',0,6,6,1],['violet',2,0,5,6],['lime',1,6,4,0]]},
+{n:7,name:'Electric Bloom',pairs:[['pink',0,0,6,6],['gold',0,6,6,0],['mint',1,0,5,6],['blue',1,6,5,0]]},
+{n:7,name:'Comet Trails',pairs:[['coral',0,2,6,4],['cyan',0,4,6,2],['violet',1,0,5,6],['lime',1,6,5,0]]},
+{n:8,name:'Chromatic Rush',pairs:[['pink',0,0,7,7],['cyan',0,7,7,0],['gold',1,0,6,7],['lime',1,7,6,0]]},
+{n:8,name:'Glitter Galaxy',pairs:[['coral',0,1,7,6],['blue',0,6,7,1],['mint',1,0,6,7],['violet',1,7,6,0]]},
+{n:8,name:'Rainbow Reactor',pairs:[['pink',0,0,7,5],['gold',0,7,7,2],['cyan',1,0,6,7],['lime',1,7,6,0]]},
+{n:8,name:'Starlight Stream',pairs:[['coral',0,0,7,7],['cyan',0,7,7,0],['violet',2,0,5,7],['gold',1,0,6,7]]},
+{n:8,name:'Pixel Supernova',pairs:[['pink',0,1,7,6],['lime',0,6,7,1],['blue',1,0,6,7],['gold',1,7,6,0]]},
+{n:8,name:'Spectrum Storm',pairs:[['coral',0,0,6,7],['cyan',0,7,7,0],['violet',1,0,7,6],['mint',1,7,6,0]]},
+{n:9,name:'Infinity Flow',pairs:[['pink',0,0,8,8],['cyan',0,8,8,0],['gold',1,0,7,8],['lime',1,8,7,0]]},
+{n:9,name:'Chroma Champion',pairs:[['coral',0,1,8,7],['blue',0,7,8,1],['violet',1,0,7,8],['mint',1,8,7,0]]}
+];
+const colors={coral:'#ff718d',cyan:'#55e5ed',gold:'#ffd166',pink:'#ff79d1',lime:'#a5ef72',blue:'#79a8ff',violet:'#b48cff',orange:'#ff9d55',mint:'#65edc0'};
+const $=id=>document.getElementById(id);
+let level=0,paths={},active=null,history=[],moves=0,seconds=0,timer=null,started=false,completed=new Set(JSON.parse(localStorage.getItem('cf-completed')||'[]')),best=JSON.parse(localStorage.getItem('cf-best')||'{}');
+const key=(r,c)=>r+','+c, parse=k=>k.split(',').map(Number), data=()=>levels[level], endpoints=()=>{let m={};data().pairs.forEach(([col,r1,c1,r2,c2])=>{m[key(r1,c1)]={col};m[key(r2,c2)]={col}});return m};
+function init(){level=Math.min(19,Math.max(0,Number(localStorage.getItem('cf-level')||0)));renderLevelButtons();loadLevel(level);$('undo').onclick=undo;$('reset').onclick=()=>loadLevel(level);$('hint').onclick=hint;$('next').onclick=next;$('winNext').onclick=()=>{$('win').classList.remove('show');next()};}
+function loadLevel(i){level=i;paths={};active=null;history=[];moves=0;seconds=0;started=false;clearInterval(timer);$('win').classList.remove('show');localStorage.setItem('cf-level',level);renderBoard();update();$('levelName').textContent='Level '+(level+1)+' · '+data().name;$('goal').textContent='Connect every matching pair';$('message').textContent='Drag from a glowing dot to its matching colour.';$('best').textContent=best[level]||'—';$('next').disabled=!completed.has(level);renderLevelButtons();}
+function renderBoard(){const n=data().n,b=$('board');b.innerHTML='';b.style.gridTemplateColumns='repeat('+n+',1fr)';b.style.gridTemplateRows='repeat('+n+',1fr)';const ep=endpoints();for(let r=0;r<n;r++)for(let c=0;c<n;c++){let k=key(r,c),el=document.createElement('div');el.className='cell';el.dataset.key=k;let owner=Object.entries(paths).find(([col,p])=>p.includes(k));if(owner){el.classList.add('path');el.style.setProperty('--c',colors[owner[0]])}if(ep[k]){el.classList.add('endpoint');el.style.setProperty('--c',colors[ep[k].col]);let dot=document.createElement('i');dot.className='dot';el.append(dot)}b.append(el)}}
+function update(){let done=Object.keys(paths).filter(k=>{let pair=data().pairs.find(p=>p[0]===k);return pair&&paths[k].length>1}).length;$('moves').textContent=moves;$('time').textContent=fmt(seconds);$('pairs').textContent=done+' / '+data().pairs.length+' pairs';$('progressPill').textContent=completed.size+' / 20 cleared';$('undo').disabled=!history.length;$('next').disabled=!completed.has(level)||level===19;}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function startTimer(){if(started)return;started=true;timer=setInterval(()=>{seconds++;$('time').textContent=fmt(seconds)},1000)}
+function snapshot(){history.push(JSON.stringify(paths));if(history.length>60)history.shift()}
+function occupied(k,except){return Object.entries(paths).some(([col,p])=>col!==except&&p.includes(k))}
+function owner(k){return Object.entries(paths).find(([col,p])=>p.includes(k))}
+function begin(k){let ep=endpoints()[k],own=owner(k);if(!ep&&!own)return;if(own&&own[1][0]!==k)return;active=ep?ep.col:own[0];snapshot();if(paths[active])delete paths[active];paths[active]=[k];startTimer();renderBoard();update()}
+function extend(k){if(!active||!paths[active])return;let p=paths[active],last=parse(p[p.length-1]),next=parse(k);if(p.includes(k))return;let ep=endpoints()[k];if(occupied(k,active))return;if(Math.abs(last[0]-next[0])+Math.abs(last[1]-next[1])!==1)return;if(ep&&ep.col!==active)return;if(ep&&ep.col===active&&p.length<2)return;p.push(k);renderBoard();if(ep&&ep.col===active){active=null;moves++;$('message').textContent='Nice connection! Keep going ✨';checkWin()}update()}
+function end(){if(active){active=null;update()}}
+const board=$('board');board.addEventListener('pointerdown',e=>{let cell=e.target.closest('.cell');if(!cell)return;e.preventDefault();board.setPointerCapture?.(e.pointerId);begin(cell.dataset.key)});board.addEventListener('pointermove',e=>{if(!active)return;let el=document.elementFromPoint(e.clientX,e.clientY)?.closest('.cell');if(el&&board.contains(el))extend(el.dataset.key)});board.addEventListener('pointerup',end);board.addEventListener('pointercancel',end);
+function undo(){if(!history.length)return;paths=JSON.parse(history.pop());active=null;moves++;renderBoard();update();$('message').textContent='Last path undone.'}
+function hint(){let p=data().pairs.find(([col])=>!paths[col]);if(!p){$('message').textContent='All pairs are connected!';return}let [col,r1,c1,r2,c2]=p;$('message').textContent='Hint: connect the '+col+' dots. Try moving along an outer edge.'}
+function checkWin(){if(data().pairs.every(([col])=>paths[col]&&paths[col].length>1&&paths[col][paths[col].length-1]===key(data().pairs.find(p=>p[0]===col)[3],data().pairs.find(p=>p[0]===col)[4]))){completed.add(level);localStorage.setItem('cf-completed',JSON.stringify([...completed]));if(!best[level]||seconds<toSec(best[level])){best[level]=fmt(seconds);localStorage.setItem('cf-best',JSON.stringify(best))}$('best').textContent=best[level];$('winText').textContent='You connected every stream in '+moves+' moves and '+fmt(seconds)+'. Brilliant work!';$('winNext').textContent=level===19?'Play again ↻':'Play next level →';$('win').classList.add('show');renderLevelButtons();update()}}
+function toSec(t){let [m,s]=t.split(':').map(Number);return m*60+s}
+function next(){if(level<19)loadLevel(level+1);else loadLevel(0)}
+function renderLevelButtons(){let box=$('levels');box.innerHTML='';levels.forEach((l,i)=>{let b=document.createElement('button');b.className='level-btn'+(i===level?' current':'')+(completed.has(i)?' done':'');b.textContent=i+1;b.title='Level '+(i+1)+' · '+l.name;b.onclick=()=>loadLevel(i);box.append(b)})}
+init();
+})();
+</script>
+</body>
+</html>
