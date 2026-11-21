@@ -78,7 +78,8 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 @keyframes produce-breathe{from{transform:translateY(-1px) scale(1.025)}to{transform:translateY(-3px) scale(1.055)}}
 @keyframes market-float{from{transform:translateY(0)}to{transform:translateY(-2px)}}
 
-.produce-art{width:100%;height:100%;max-width:42px;max-height:42px;overflow:visible;filter:drop-shadow(0 3px 2px #130a05)}.item.top-item .produce-art{transform:scale(1.08)}.item .tiny{z-index:2;background:#24170d99;border-radius:4px;padding:0 2px}.shelf .item{overflow:visible}\n/* Per-level colour identity: a fresh hue and coordinated bazaar palette for every day. */
+.produce-art{width:100%;height:100%;max-width:42px;max-height:42px;overflow:visible;filter:drop-shadow(0 3px 2px #130a05)}.item.top-item .produce-art{transform:scale(1.08)}.item .tiny{z-index:2;background:#24170d99;border-radius:4px;padding:0 2px}.shelf .item{overflow:visible}\n.shelf.golden-basket{border-color:#ffe08a!important;background:linear-gradient(115deg,#9a702d,#5a3b19 58%,#33200f)!important;box-shadow:0 0 0 2px #ffd86a55,0 0 16px #ffd86a44,inset 0 1px #fff7!important}.shelf.golden-basket .shelf-label{color:#ffe9a5!important}.golden-tag{display:block;color:#fff0b3;font-size:8px;font-weight:1000;letter-spacing:.6px;margin-top:2px;text-shadow:0 1px 2px #000}
+ /* Per-level colour identity: a fresh hue and coordinated bazaar palette for every day. */
 .app{--level-h:38;--level-accent:hsl(var(--level-h) 78% 70%);--level-deep:hsl(var(--level-h) 42% 22%);--level-mid:hsl(var(--level-h) 38% 31%);--level-glow:hsl(var(--level-h) 90% 62% / .22)}
 .levelpill{border-color:var(--level-accent)!important;box-shadow:0 0 14px var(--level-glow)}
 .brand span,.board-head b{color:var(--level-accent)}
@@ -301,7 +302,10 @@ let totalMoves=0,levelsCompleted=0,totalCoinsEarned=0,playStreak=0,lastFinishDat
 let marketUpgrades={stall:0,awning:0,path:0,lights:0},fruitBest=0,fruitTimer=null,fruitElapsed=0,fruitScore=0,fruitMiss=0,fruitActiveLane=-1,fruitActiveRotten=false;
 let loginLastDate='',loginStreak=0,installPromptEvent=null;
 let musicOn=true,musicTimer=null,musicStep=0,musicMaster=null,ambienceOsc=null;
-let dailyMode=false,dailySeed='',dailyTargetMoves=0,orderProduct=0,specialOrderDone=false;
+let dailyMode=false,dailySeed='',dailyTargetMoves=0,orderProduct=0,specialOrderDone=false,goldenBasketPaid=false;
+let goldenBasketClaims=(()=>{try{return new Set(JSON.parse(localStorage.getItem('nbsGoldenBasketClaims')||'[]'))}catch(e){return new Set()}})();
+function goldenBasketEvent(){return !dailyMode&&level%10===0}
+function goldenBasketKey(){return 'level-'+level}
 const FESTIVALS=[{id:'bazaar',name:'Classic Bazar',icon:'🏪',scene:'🏪 🧺 🌼',tag:'Warm neighborhood market',faces:['🏮','🎏','🌼','🧺']},{id:'diwali',name:'Diwali Lights',icon:'🪔',scene:'🪔 ✨ 🏮',tag:'A glowing festival of lights',faces:['🪔','✨','🏮','🎆']},{id:'holi',name:'Holi Colours',icon:'🎨',scene:'🎨 🌈 🎊',tag:'A joyful splash of colours',faces:['🎨','🌈','🎊','💜']},{id:'eid',name:'Eid Celebration',icon:'🌙',scene:'🌙 ⭐ 🕌',tag:'A moonlit celebration',faces:['🌙','⭐','✨','🕌']},{id:'monsoon',name:'Monsoon Mela',icon:'☔',scene:'☔ 🌧️ 🌿',tag:'A cool rainy-day market',faces:['☔','🌧️','🌿','💧']}];
 let festival='bazaar',festivalBonusPaid=false;
 const DECORATIONS=[{id:'lantern',name:'Golden Lanterns',icon:'🏮',cost:50,desc:'A glowing stall decoration.'},{id:'bunting',name:'Festival Bunting',icon:'🎏',cost:75,desc:'Colourful flags for your market.'},{id:'flower',name:'Flower Garland',icon:'🌼',cost:100,desc:'A cheerful floral touch.'},{id:'fountain',name:'Lucky Fountain',icon:'⛲',cost:150,desc:'A special centerpiece.'}];
@@ -426,7 +430,7 @@ function shelfCount(){return typesForLevel()+1}
 function cloneBoard(b=stacks){return b.map(s=>s.slice())}
 function scramble(){
  const n=typesForLevel(),count=n+1,goal=Array.from({length:count},(_,i)=>i<n?Array(CAP).fill(i):[]);
- let b=cloneBoard(goal),steps=16+level*3,rng=dailyMode?seededRandom(dailySeed+'-'+level):Math.random;
+ let b=cloneBoard(goal),steps=16+level*3,rng=seededRandom(dailyMode?dailySeed+'-'+level:'nbs-level-'+level+'-layout-v2');
  for(let z=0;z<steps;z++){
   let choices=[];
   for(let a=0;a<count;a++)if(b[a].length&& (b[a].length===1||b[a][b[a].length-2]===b[a][b[a].length-1])){
@@ -440,13 +444,13 @@ function scramble(){
  if(b.slice(0,n).every(s=>s.length===CAP&&s.every(x=>x===s[0]))){b[count-1].push(b[0].pop())}
  return b;
 }
-function newDay(){stacks=scramble();selected=-1;moves=0;history=[];busy=false;started=true;specialOrderDone=false;festivalBonusPaid=false;orderProduct=dailyMode?((Number(dailySeed.replace(/-/g,''))||1)%typesForLevel()):((level*3+1)%typesForLevel());dailyTargetMoves=20+typesForLevel()*7;render();update();say(dailyMode?'Daily challenge: complete the customer order within '+dailyTargetMoves+' moves for bonus coins!':'Tap a shelf to pick up its top product. Match it with the same product or an empty shelf.');}
+function newDay(){stacks=scramble();selected=-1;moves=0;history=[];busy=false;started=true;specialOrderDone=false;festivalBonusPaid=false;goldenBasketPaid=goldenBasketClaims.has(goldenBasketKey());orderProduct=dailyMode?((Number(dailySeed.replace(/-/g,''))||1)%typesForLevel()):((level*3+1)%typesForLevel());dailyTargetMoves=20+typesForLevel()*7;render();update();say(dailyMode?'Daily challenge: complete the customer order within '+dailyTargetMoves+' moves for bonus coins!':'Tap a shelf to pick up its top product. Match it with the same product or an empty shelf.');}
 function render(){
  const root=$('shelves');root.innerHTML='';
  stacks.forEach((s,i)=>{
-  const b=document.createElement('button');b.type='button';b.className='shelf'+(i===selected?' selected':'')+(selected>=0&&i!==selected&&(s.length===0||s[s.length-1]===stacks[selected]?.[stacks[selected].length-1]&&s.length<CAP)?' target':'');
+  const isGolden=goldenBasketEvent()&&i===stacks.length-1;const b=document.createElement('button');b.type='button';b.className='shelf'+(isGolden?' golden-basket':'')+(i===selected?' selected':'')+(selected>=0&&i!==selected&&(s.length===0||s[s.length-1]===stacks[selected]?.[stacks[selected].length-1]&&s.length<CAP)?' target':'');
   b.dataset.shelf=String(i);b.setAttribute('aria-label','Shelf '+(i+1)+', '+s.length+' of 4 items');
-  const lab=document.createElement('span');lab.className='shelf-label';lab.innerHTML='<span>'+(i===stacks.length-1?'🧺':'🪵')+'</span>SHELF '+(i+1);
+  const lab=document.createElement('span');lab.className='shelf-label';lab.innerHTML='<span>'+(isGolden?'🌟':i===stacks.length-1?'🧺':'🪵')+'</span>'+(isGolden?'GOLDEN BASKET':'SHELF '+(i+1))+(isGolden?'<i class="golden-tag">+10 COINS ON FIRST USE</i>':'');
   const slots=document.createElement('span');slots.className='slots';
   for(let k=0;k<CAP;k++){const item=document.createElement('span');const v=s[k];item.className='item'+(v===undefined?' empty':k===s.length-1?' top-item':'');if(v!==undefined)item.innerHTML=productArt(v);if(v!==undefined&&k===s.length-1){const t=document.createElement('i');t.className='tiny';t.textContent='TOP';item.appendChild(t)}slots.appendChild(item)}
   b.append(lab,slots);root.appendChild(b);
@@ -512,7 +516,7 @@ function update(){
  $('orderTitle').textContent=(dailyMode?'🌟 DAILY MISSION':'🛍️ CUSTOMER ORDER')+' · '+PRODUCTS[orderProduct].e+' '+PRODUCTS[orderProduct].n;
  $('orderText').textContent=(specialOrderDone?'Special order delivered! Bonus earned.':'First complete the '+PRODUCTS[orderProduct].n+' shelf for a 15-coin tip.')+(festival!=='bazaar'?' Festival first-shelf bonus: '+(festivalBonusPaid?'claimed':'10 coins')+'.':'');
 
- $('orderProgress').textContent=specialOrderDone?'DONE ✓':(sortedCount()+'/'+typesForLevel());$('progressFill').style.width=(sortedCount()/typesForLevel()*100)+'%';
+ $('orderProgress').textContent=specialOrderDone?'DONE ✓':(sortedCount()+'/'+typesForLevel());$('progressFill').style.width=(sortedCount()/typesForLevel()*100)+'%';$('boardTip').textContent=goldenBasketEvent()?(goldenBasketPaid?'Golden Basket bonus collected!':'Golden Basket: use the glowing basket once for +10 coins!'):'Tap a shelf, then tap where its top item goes';
  refreshDailyCard();
  $('hint').disabled=busy||!started;$('undo').disabled=busy||!started||history.length===0;$('shuffle').disabled=busy||!started;
 }
@@ -557,7 +561,7 @@ async function moveShelf(from,to){
  if(busy||!started)return;
  if(from<0||to<0)return;
  if(!legalMove(from,to)){selected=to;render();say('That shelf cannot take this item. Match the top product or choose an empty shelf.');tone(240);return}
- snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;totalMoves++;selected=-1;busy=true;save();try{navigator.vibrate?.(22)}catch(e){}render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(470+item*75,'triangle',.11,.035);await sleep(210);busy=false;update();
+ snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;totalMoves++;selected=-1;busy=true;save();if(goldenBasketEvent()&&to===stacks.length-1&&!goldenBasketPaid){goldenBasketPaid=true;goldenBasketClaims.add(goldenBasketKey());try{localStorage.setItem('nbsGoldenBasketClaims',JSON.stringify([...goldenBasketClaims]))}catch(e){}earnCoins(10);toast('Golden Basket bonus! +10 coins 🌟')}try{navigator.vibrate?.(22)}catch(e){}render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(470+item*75,'triangle',.11,.035);await sleep(210);busy=false;update();
  if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820,'sine',.22,.05);if(festival!=='bazaar'&&!festivalBonusPaid){festivalBonusPaid=true;earnCoins(10);toast('Festival first-shelf bonus! +10 coins 🎊');update()}if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;earnCoins(15);document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast('Customer order delivered! +15 coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! 15 बोनस सिक्के!');update()}}
  if(sortedCount()===typesForLevel())finishDay();
 }
@@ -628,7 +632,7 @@ $('playerNameInput').addEventListener('change',()=>{playerName=$('playerNameInpu
 
 
 // Portable local backup: only this game's namespaced progress keys are exported.
-const BACKUP_KEYS=['nbsLevel','nbsUnlocked','nbsCoins','nbsBest','nbsDecor','nbsFestival','nbsTotalMoves','nbsLevelsCompleted','nbsTotalCoinsEarned','nbsPlayStreak','nbsLastFinishDate','nbsPlayerName','nbsPlayerAvatar','nbsDailyClaim','nbsMarketUpgrades','nbsFruitBest','nbsLoginLastDate','nbsLoginStreak'];
+const BACKUP_KEYS=['nbsLevel','nbsUnlocked','nbsCoins','nbsBest','nbsDecor','nbsFestival','nbsTotalMoves','nbsLevelsCompleted','nbsTotalCoinsEarned','nbsPlayStreak','nbsLastFinishDate','nbsPlayerName','nbsPlayerAvatar','nbsDailyClaim','nbsMarketUpgrades','nbsFruitBest','nbsLoginLastDate','nbsLoginStreak','nbsGoldenBasketClaims'];
 function makeBackup(){const data={};BACKUP_KEYS.forEach(k=>{const v=localStorage.getItem(k);if(v!==null)data[k]=v});return {app:'Nazeef Bazar Sort Stories',format:1,createdAt:new Date().toISOString(),data};}
 function exportBackup(){try{const blob=new Blob([JSON.stringify(makeBackup(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='nazeef-bazar-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);$('cloudStatus').textContent='Backup file exported. Keep it somewhere safe.'}catch(e){$('cloudStatus').textContent='Could not export backup on this browser.'}}
 function restoreBackupObject(obj){if(!obj||obj.app!=='Nazeef Bazar Sort Stories'||obj.format!==1||!obj.data||typeof obj.data!=='object'||Array.isArray(obj.data))throw new Error('This is not a supported Nazeef Bazar backup.');const allowed=new Set(BACKUP_KEYS);for(const [k,v] of Object.entries(obj.data)){if(!allowed.has(k)||typeof v!=='string'||v.length>200000)throw new Error('Backup contains invalid data.');}if(!obj.data.nbsLevel||!obj.data.nbsCoins)throw new Error('Backup is incomplete.');if(!confirm('Restore this backup? Your current device progress will be replaced.'))return false;BACKUP_KEYS.forEach(k=>{if(Object.prototype.hasOwnProperty.call(obj.data,k))localStorage.setItem(k,obj.data[k]);else localStorage.removeItem(k)});location.reload();return true;}
