@@ -503,6 +503,10 @@ function renderShelf(i,updateItems=true){
 function render(){
  ensureShelfNodes();for(let i=0;i<stacks.length;i++)renderShelf(i,true);
 }
+// Selection changes only need class/label updates; keep all product DOM nodes untouched.
+function renderSelection(){
+ ensureShelfNodes();for(let i=0;i<stacks.length;i++)renderShelf(i,false);
+}
 function renderMove(from,to){
  ensureShelfNodes();
  // Product art is regenerated only for the two shelves whose contents changed.
@@ -633,11 +637,11 @@ function moveShelf(from,to){
 }
 function onShelf(i){
  if(busy||!started)return;
- if(selected<0){if(!stacks[i].length){say('That shelf is empty. Choose a shelf with products first.');return}selected=i;try{navigator.vibrate?.(12)}catch(e){}render();say('Picked up '+PRODUCTS[stacks[i][stacks[i].length-1]].n+'. Now choose a matching shelf or an empty shelf.');tone(420);return}
- if(selected===i){selected=-1;render();say('Selection cleared. Choose a shelf.');return}
+ if(selected<0){if(!stacks[i].length){say('That shelf is empty. Choose a shelf with products first.');return}selected=i;renderSelection();say('Picked up '+PRODUCTS[stacks[i][stacks[i].length-1]].n+'. Now choose a matching shelf or an empty shelf.');return}
+ if(selected===i){selected=-1;renderSelection();say('Selection cleared. Choose a shelf.');return}
  const from=selected;
  if(legalMove(from,i)){moveShelf(from,i);return}
- if(stacks[i].length){selected=i;render();say('New shelf selected. Its top product is '+PRODUCTS[stacks[i][stacks[i].length-1]].n+'.')}
+ if(stacks[i].length){selected=i;renderSelection();say('New shelf selected. Its top product is '+PRODUCTS[stacks[i][stacks[i].length-1]].n+'.')}
  else{say('That move is not available. Try an empty shelf or matching goods.')}
 }
 function findHint(){
