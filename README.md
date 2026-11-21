@@ -1,27 +1,33 @@
-# Chroma Flow: Pixel Blast
+# Nazeef Bazar Sort Stories
 
-A self-contained, mobile-friendly colour-connection puzzle game built with HTML, CSS and vanilla JavaScript.
+A mobile-first, portrait 2D sorting puzzle set in a growing neighbourhood bazaar. Built with vanilla HTML, CSS and JavaScript; no game engine, external runtime library, account or network connection is required to play the core game.
 
-## Play locally
-Open `index.html` in a modern browser. No build step, dependencies, external fonts, images, APIs or network access are required.
+## Play
+https://inkbymuntaha-alt.github.io/chroma-flow-pixel-blast/
 
-## Publish with GitHub Pages
-1. Open **Settings → Pages** in this repository.
-2. Under **Build and deployment**, choose **Deploy from a branch**.
-3. Select branch **main** and folder **/(root)**, then Save.
-4. Wait for GitHub Pages to finish publishing, then open the URL shown on the Pages settings screen.
+For offline play, open the game once while online and allow the service worker to cache it. Then use the browser's **Install app / Add to Home screen** option where available.
 
-## Game features
-- 20 progressive levels with boards from 5×5 to 9×9
-- Guaranteed connected route layouts generated locally in the browser
-- Mouse, stylus and touch drag controls
-- Start a colour path from either matching endpoint
-- Undo, restart, hints, move counter and elapsed timer
-- Best-time records and level progress saved on the current device
-- Responsive layout for phones, tablets and desktop screens
-- No external libraries, images, fonts, APIs or network dependencies
+## Gameplay
+- Tap a shelf to select its top item, then tap an empty shelf or a shelf with the same top item.
+- Each shelf holds four items. Complete shelves of matching products to finish a level.
+- 100 progressive levels across ten market chapters.
+- Ten products, with new varieties introduced as levels advance.
+- Chapter-specific customers, market scenes, first-shelf rewards and boss challenges.
+- Hints, undo, mix-up, three-star ratings, daily challenges and bonus baskets.
+- Coins, profile, achievements, market upgrades, decorations, festivals and Fruit Dash.
+- Local progress and JSON backup/restore.
+- Optional Supabase cloud save requires the player to configure their own project and database policies.
 
-## Controls
-Drag from a glowing endpoint to its matching endpoint, moving one neighbouring tile at a time. Paths cannot overlap. Fill every tile and connect every colour pair to clear the level. Use **Undo** to restore the previous path, **Restart** to reset the level, or **Hint** for a nudge.
+## Development and quality checks
+The project is dependency-free. Run automated regression checks with Node.js 22 or newer:
 
-Progress is stored in your browser's local storage and stays on that device.
+```sh
+node qa.mjs
+```
+
+The GitHub Actions **Game QA** workflow runs these checks on pushes and pull requests. It checks JavaScript syntax, unique HTML IDs, direct UI element references, PWA assets, reward isolation and 300 deterministic puzzle layouts across all 100 levels.
+
+## Android / Google Play
+The current published build is a web PWA hosted on GitHub Pages, not a native Android App Bundle. Google Play release requires an Android package/AAB, signing and Play Console setup. Test on real Android devices before closed testing or public release.
+
+See [TESTING.md](TESTING.md) for the manual device-test checklist.
