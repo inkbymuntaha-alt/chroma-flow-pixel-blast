@@ -27,6 +27,23 @@ button{font:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transp
 .overlay{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:18px;background:#090704df;backdrop-filter:blur(9px)}.hidden{display:none!important}.panel{width:min(100%,420px);max-height:90dvh;overflow:auto;border:1px solid #c49a50;border-radius:23px;padding:23px 19px;text-align:center;background:linear-gradient(145deg,#382b1a,#17120c 75%);box-shadow:0 24px 70px #000d,inset 0 1px #fff3}.hero{font-size:49px}.panel h1{font-size:clamp(25px,7vw,34px);line-height:1.05;color:#ffedc2;margin:8px 0}.panel h1 span{color:var(--gold)}.panel p{font-size:13px;line-height:1.55;color:#d8c7a4}.primary{border:1px solid #ffe9ac;border-radius:14px;padding:14px 22px;background:linear-gradient(100deg,#ffedb3,#c18c35);color:#241707;font-weight:1000;font-size:14px;min-width:190px;box-shadow:0 5px 17px #0008}.secondary{border:1px solid #a47b38;border-radius:12px;padding:10px 16px;background:#ffffff0e;color:#f1dfb7;font-weight:800;margin:7px}.steps{display:grid;gap:8px;text-align:left;margin:15px 0}.step{display:flex;gap:10px;align-items:center;padding:9px;border:1px solid #9a763d66;border-radius:12px;background:#ffffff09;color:#e9d9b5;font-size:12px}.step b{width:27px;height:27px;flex:0 0 27px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#ffe7a1,#b9822c);color:#251707}.level-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;max-height:40vh;overflow:auto;margin:14px 0}.level-cell{border:1px solid #a47b38;border-radius:10px;min-height:40px;background:#21190f;color:#ffdf91;font-weight:900}.level-cell:disabled{opacity:.25}.level-cell.current{background:linear-gradient(145deg,#ffe7a1,#b9822c);color:#241707}
 .celebrate{position:fixed;inset:0;z-index:25;pointer-events:none;overflow:hidden}.spark{position:absolute;font-size:24px;animation:burst 1.3s ease-out forwards}@keyframes burst{0%{transform:translateY(15vh) scale(.2) rotate(0);opacity:0}20%{opacity:1}100%{transform:translateY(-75vh) scale(1.4) rotate(280deg);opacity:0}}
 @media(max-height:740px){.app{gap:7px;padding-top:7px}.item{height:37px}.shelf{min-height:58px;padding:5px 7px}.board-wrap{padding:8px}.market{padding:6px 9px}}
+/* Premium interaction polish */
+.shelf{position:relative;overflow:hidden;min-height:70px;border:1px solid #a9854d;background:linear-gradient(115deg,#59452b 0%,#392a19 48%,#241a10 100%);box-shadow:inset 0 1px 0 #fff3,inset 0 -5px 12px #100b07aa,0 5px 12px #0007;transition:transform .16s cubic-bezier(.2,.8,.2,1),border-color .16s,box-shadow .16s,background .16s}
+.shelf:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(#ffe5a0,#9c6827);opacity:.65}
+.shelf:active{transform:scale(.975);filter:brightness(1.12)}
+.shelf.selected{border:2px solid #ffe39a;background:linear-gradient(115deg,#80602f,#4b351c);box-shadow:0 0 0 3px #f6cf7140,0 0 23px #f6cf7160,inset 0 1px #fff6;animation:chosen .24s ease-out}
+.shelf.target{border-color:#a5f1b0;box-shadow:0 0 0 2px #8ee4a033,0 0 14px #8ee4a044}
+.item{transition:transform .16s cubic-bezier(.2,.8,.2,1),filter .16s,box-shadow .16s;background:linear-gradient(145deg,#705638,#302113);box-shadow:inset 0 2px 5px #fff3,0 4px 7px #0008}
+.item.top-item{transform:translateY(-2px) scale(1.035);filter:brightness(1.24) drop-shadow(0 2px 4px #0008);border-color:#ffe29a}
+.item.empty{background:linear-gradient(145deg,#21180f,#17110b);border-color:#b18b50aa}
+.tool,.primary,.secondary,.footer button{transition:transform .14s ease,filter .14s ease,box-shadow .14s ease}
+.tool:active,.primary:active,.secondary:active,.footer button:active{transform:translateY(2px) scale(.98);filter:brightness(1.2)}
+button:focus-visible{outline:3px solid #ffe39a;outline-offset:3px}
+@keyframes chosen{0%{transform:scale(.985)}100%{transform:scale(1)}}
+@keyframes shelf-arrive{0%{transform:scale(.96);filter:brightness(1.5)}100%{transform:scale(1);filter:brightness(1)}}
+.shelf.just-moved{animation:shelf-arrive .2s ease-out}
+@media(hover:hover){.shelf:hover{border-color:#e4c17c;filter:brightness(1.08)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 @media(min-height:850px){.app{justify-content:center}.item{height:47px}.shelf{min-height:72px}}
 </style>
 </head>
@@ -126,7 +143,26 @@ function undo(){if(!history.length||busy)return;const prev=history.pop();stacks=
 function mixUp(){if(busy||!started)return;stacks=scramble();selected=-1;history=[];render();update();say('Shelves mixed up. A fresh sorting puzzle is ready!');toast('Fresh market mix!')}
 function finishDay(){started=false;const reward=20+typesForLevel()*10+Math.max(0,30-moves);coins+=reward;unlocked=Math.max(unlocked,Math.min(100,level+1));best=Math.max(best,level);save();celebrate();$('finishIcon').textContent='🎉🏪🪙';$('finishTitle').textContent='DAY '+level+' COMPLETE!';$('finishText').textContent='All the shelves are sorted! Happy customers earned you '+reward+' coins. Your neighborhood bazaar is growing!';$('continue').textContent=level>=100?'CELEBRATE YOUR BAZAR ▶':'OPEN NEXT DAY ▶';$('finish').classList.remove('hidden');update()}
 function drawMap(){const root=$('levelGrid');root.innerHTML='';for(let n=1;n<=100;n++){const b=document.createElement('button');b.type='button';b.className='level-cell'+(n===level?' current':'');b.textContent=n<=unlocked?'★ '+n:'🔒';b.disabled=n>unlocked;b.addEventListener('click',()=>{level=n;$('map').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newDay()});root.appendChild(b)}}
-$('shelves').addEventListener('click',e=>{const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b))return;onShelf(Number(b.dataset.shelf))});
+// Pointer-first controls: taps select instantly; dragging a picked shelf onto another moves its top item.
+let pointerShelf=-1;
+$('shelves').addEventListener('pointerdown',e=>{
+ const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b)||!started||busy)return;
+ pointerShelf=Number(b.dataset.shelf);
+ if(selected<0&&stacks[pointerShelf]?.length){selected=pointerShelf;render();tone(420)}
+});
+$('shelves').addEventListener('pointerup',e=>{
+ const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b))return;
+ const dest=Number(b.dataset.shelf),source=pointerShelf;pointerShelf=-1;
+ if(source>=0&&source!==dest&&selected===source){
+   if(legalMove(source,dest))moveShelf(source,dest);else onShelf(dest);
+ }
+});
+$('shelves').addEventListener('pointercancel',()=>{pointerShelf=-1});
+$('shelves').addEventListener('click',e=>{
+ // Pointer interactions are handled above. Keep native keyboard activation accessible.
+ if(e.detail!==0)return;
+ const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b))return;onShelf(Number(b.dataset.shelf));
+});
 bind('start',()=>{$('welcome').classList.add('hidden');newDay()});
 bind('continue',()=>{level=level>=100?1:Math.min(100,level+1);unlocked=Math.max(unlocked,level);save();$('finish').classList.add('hidden');newDay()});
 bind('again',()=>{$('finish').classList.add('hidden');newDay()});
