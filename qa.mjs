@@ -28,16 +28,14 @@ assert.ok(js.includes("if(!dailyMode&&!worldBonusPaid)"), 'Daily mode must not c
 assert.ok(js.includes("'nbsWorldPerkClaims'"), 'Chapter reward claims must be persisted');
 assert.ok(js.includes('Math.min(10,3+Math.floor((level-1)/4))'), 'Progression must support ten product types');
 
-const getFunction = (name) => {
-  const start = js.indexOf('function ' + name + '(');
-  assert.ok(start >= 0, 'Missing function ' + name);
-  const end = js.indexOf('\n}', start);
-  assert.ok(end > start, 'Could not extract function ' + name);
-  return js.slice(start, end + 2);
+const extract = (pattern, label) => {
+  const match = js.match(pattern);
+  assert.ok(match, 'Missing function ' + label);
+  return match[0];
 };
-const seedFn = getFunction('seededRandom');
-const typeFn = getFunction('typesForLevel');
-const scrambleFn = getFunction('scramble');
+const seedFn = extract(/function seededRandom\(seed\)\{[^\n]*\}/, 'seededRandom');
+const typeFn = extract(/function typesForLevel\(\)\{[^\n]*\}/, 'typesForLevel');
+const scrambleFn = extract(/function scramble\(\)\{[\s\S]*?\n\}/, 'scramble');
 const generate = new Function('level', 'dailyMode', 'dailySeed', 'scrambleVariant', 'CAP', 'cloneBoard',
   seedFn + '\n' + typeFn + '\n' + scrambleFn + '\nreturn scramble();');
 const cloneBoard = board => board.map(stack => stack.slice());
