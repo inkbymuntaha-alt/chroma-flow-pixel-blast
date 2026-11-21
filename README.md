@@ -9,15 +9,19 @@ Open `index.html` in a modern browser. No build step, dependencies, external fon
 1. Open **Settings → Pages** in this repository.
 2. Under **Build and deployment**, choose **Deploy from a branch**.
 3. Select branch **main** and folder **/(root)**, then Save.
-4. After GitHub finishes publishing, open the Pages URL shown on that settings page.
+4. Wait for GitHub Pages to finish publishing, then open the URL shown on the Pages settings screen.
 
 ## Game features
-- 20 handcrafted grid layouts with increasing board sizes and colour pairs
-- Pointer/touch drag controls, undo, restart and hints
-- Move counter, elapsed timer, best-time tracking and level progress
-- Local-device progress saving via localStorage
-- Responsive layout, keyboard-focus styles and reduced-motion support
-- Fully offline after the page is loaded
+- 20 progressive levels with boards from 5×5 to 9×9
+- Guaranteed connected route layouts generated locally in the browser
+- Mouse, stylus and touch drag controls
+- Start a colour path from either matching endpoint
+- Undo, restart, hints, move counter and elapsed timer
+- Best-time records and level progress saved on the current device
+- Responsive layout for phones, tablets and desktop screens
+- No external libraries, images, fonts, APIs or network dependencies
 
 ## Controls
-Drag from a coloured endpoint through adjacent tiles to its matching endpoint. Paths cannot cross or overlap. Complete every pair to clear the level.
+Drag from a glowing endpoint to its matching endpoint, moving one neighbouring tile at a time. Paths cannot overlap. Fill every tile and connect every colour pair to clear the level. Use **Undo** to restore the previous path, **Restart** to reset the level, or **Hint** for a nudge.
+
+Progress is stored in your browser's local storage and stays on that device.
