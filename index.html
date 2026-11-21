@@ -76,7 +76,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 @keyframes produce-breathe{from{transform:translateY(-1px) scale(1.025)}to{transform:translateY(-3px) scale(1.055)}}
 @keyframes market-float{from{transform:translateY(0)}to{transform:translateY(-2px)}}
 
-</style>
+.produce-art{width:100%;height:100%;max-width:42px;max-height:42px;overflow:visible;filter:drop-shadow(0 3px 2px #130a05)}.item.top-item .produce-art{transform:scale(1.08)}.item .tiny{z-index:2;background:#24170d99;border-radius:4px;padding:0 2px}.shelf .item{overflow:visible}\n</style>
 </head>
 <body>
 <main class="app">
@@ -98,6 +98,16 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
 const CAP=4,PRODUCTS=[{e:'🍎',n:'Apples'},{e:'🥕',n:'Carrots'},{e:'🍋',n:'Lemons'},{e:'🍇',n:'Grapes'},{e:'🥐',n:'Pastries'}];
+function productArt(v){
+ const common='class="produce-art" viewBox="0 0 64 64" role="img" aria-label="'+PRODUCTS[v].n+'"';
+ const arts=[
+ '<svg '+common+'><defs><radialGradient id="pa" cx="30%" cy="24%"><stop stop-color="#ffb2a0"/><stop offset=".48" stop-color="#e83b35"/><stop offset="1" stop-color="#8d171c"/></radialGradient></defs><path d="M33 13c-3-7 1-10 6-11" fill="none" stroke="#68401d" stroke-width="4" stroke-linecap="round"/><path d="M36 10c8-8 17-5 18 1-7 5-13 5-18-1" fill="#5b913d"/><path d="M32 15C17 7 6 20 9 37c3 17 13 24 23 20 10 4 21-3 23-20 3-17-8-30-23-22Z" fill="url(#pa)"/><ellipse cx="21" cy="23" rx="5" ry="9" fill="#fff" opacity=".27" transform="rotate(-28 21 23)"/><path d="M15 42q7 11 16 9" fill="none" stroke="#ffb1a0" stroke-width="2" opacity=".45"/></svg>',
+ '<svg '+common+'><defs><linearGradient id="ca" x2=".9" y2="1"><stop stop-color="#ffd17a"/><stop offset=".42" stop-color="#ff8a25"/><stop offset="1" stop-color="#b83a12"/></linearGradient></defs><path d="M29 14Q13 7 10 1q16 0 24 12Q43 0 55 4q-3 13-19 16" fill="#4f9b4d"/><path d="M31 12C20 20 14 33 11 53q-1 7 6 5 17-7 25-31 4-11-11-15Z" fill="url(#ca)"/><path d="M27 20q-7 14-10 28" stroke="#ffe0a0" stroke-width="3" opacity=".55" fill="none" stroke-linecap="round"/><path d="m23 33-5 2m13-10-5 2m8 8-5 2" stroke="#b84c18" stroke-width="1.5" opacity=".45"/></svg>',
+ '<svg '+common+'><defs><radialGradient id="le" cx="32%" cy="22%"><stop stop-color="#fff6a8"/><stop offset=".55" stop-color="#f4d83e"/><stop offset="1" stop-color="#b7a51b"/></radialGradient></defs><path d="M9 32Q17 13 32 13q15 0 23 19Q47 51 32 52 17 51 9 32Z" fill="url(#le)"/><path d="M9 32q-7-3-5 1 2 5 7 4m44-5q7-3 5 1-2 5-7 4" fill="#e5c42c"/><path d="M19 23q7-7 15-5" fill="none" stroke="#fffbd0" stroke-width="4" opacity=".65" stroke-linecap="round"/><path d="M19 42q12 7 24 0" fill="none" stroke="#c3a91d" stroke-width="1.5" opacity=".55"/></svg>',
+ '<svg '+common+'><path d="M31 14q-8-9-15-5 0 7 11 10" fill="#4c8e43"/><path d="M33 14q9-11 17-5-1 8-13 12" fill="#68a74a"/><g stroke="#5d255d" stroke-width="1.3"><path d="M31 15q-18-4-20 11-1 9 10 10 12 0 12-12 0 12 11 12 11-1 10-12-2-14-23-9Z" fill="#8241a0"/><path d="M31 32q-18-4-20 11-1 9 10 10 12 0 12-12 0 12 11 12 11-1 10-12-2-14-23-9Z" fill="#6b2d88"/></g><g fill="#d9a9e9" opacity=".8"><circle cx="19" cy="25" r="2"/><circle cx="42" cy="24" r="2"/><circle cx="20" cy="43" r="2"/><circle cx="43" cy="43" r="2"/></g></svg>',
+ '<svg '+common+'><path d="M8 34 18 12q2-4 7-2l30 12q5 2 3 7L48 51q-2 5-8 3L12 44q-7-2-4-10Z" fill="#d99a45" stroke="#8d4e22" stroke-width="2"/><path d="m18 16 29 12-7 20-28-11Z" fill="#f1c477"/><path d="m22 19 6 3-8 20-6-3Zm13 5 6 3-8 20-6-3Z" fill="#9e5427" opacity=".65"/><path d="m21 16 27 11" stroke="#fff0c3" stroke-width="3" stroke-linecap="round" opacity=".8"/><circle cx="35" cy="35" r="3" fill="#ffe6a4"/></svg>'
+ ];return arts[v]||arts[0];
+}
 const STALLS=[['🏪🥬🧺',"NAZEEF'S CORNER BAZAR",'A little shop with big dreams'],['🍎🥕🏬','FRESH PRODUCE STALL','The neighborhood favourite'],['🥐🍋🛍️','THE BUSY MARKET','More customers are coming'],['🌼🍇🏘️','GOLDEN BAZAR STREET','A beautiful market street'],['🎪🧺✨','THE GRAND BAZAR','Your market is shining']];
 let level=1,coins=0,best=0,unlocked=1,stacks=[],selected=-1,moves=0,history=[],busy=false,started=false,soundOn=true;
 try{level=Math.max(1,Number(localStorage.getItem('nbsLevel'))||1);unlocked=Math.max(1,Number(localStorage.getItem('nbsUnlocked'))||1);coins=Math.max(0,Number(localStorage.getItem('nbsCoins'))||0);best=Math.max(0,Number(localStorage.getItem('nbsBest'))||0)}catch(e){}
@@ -133,7 +143,7 @@ function render(){
   b.dataset.shelf=String(i);b.setAttribute('aria-label','Shelf '+(i+1)+', '+s.length+' of 4 items');
   const lab=document.createElement('span');lab.className='shelf-label';lab.innerHTML='<span>'+(i===stacks.length-1?'🧺':'🪵')+'</span>SHELF '+(i+1);
   const slots=document.createElement('span');slots.className='slots';
-  for(let k=0;k<CAP;k++){const item=document.createElement('span');const v=s[k];item.className='item'+(v===undefined?' empty':k===s.length-1?' top-item':'');item.textContent=v===undefined?'':PRODUCTS[v].e;if(v!==undefined&&k===s.length-1){const t=document.createElement('i');t.className='tiny';t.textContent='TOP';item.appendChild(t)}slots.appendChild(item)}
+  for(let k=0;k<CAP;k++){const item=document.createElement('span');const v=s[k];item.className='item'+(v===undefined?' empty':k===s.length-1?' top-item':'');if(v!==undefined)item.innerHTML=productArt(v);if(v!==undefined&&k===s.length-1){const t=document.createElement('i');t.className='tiny';t.textContent='TOP';item.appendChild(t)}slots.appendChild(item)}
   b.append(lab,slots);root.appendChild(b);
  });
 }
