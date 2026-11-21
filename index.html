@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#17120b">
+<link rel="manifest" href="./manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="icon" href="./icon.svg" type="image/svg+xml">
 <meta name="description" content="Nazeef Bazar Sort Stories — a cozy 2D market sorting puzzle. Sort goods, serve customers and grow your neighborhood bazaar.">
 <title>Nazeef Bazar Sort Stories</title>
 <style>
@@ -195,12 +196,25 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 .market-upgraded[data-path="1"]{box-shadow:inset 0 -5px 0 #b48a4a55}.market-upgraded[data-path="2"]{box-shadow:inset 0 -8px 0 #c7a36a77}.market-upgraded[data-path="3"]{box-shadow:inset 0 -11px 0 #d9c08b99,0 0 18px #e4c17c22}
 .market-upgraded[data-lights="1"] .stall-dress span{filter:drop-shadow(0 0 5px #ffd76d)}.market-upgraded[data-lights="2"] .stall-dress span{filter:drop-shadow(0 0 9px #ffca52)}.market-upgraded[data-lights="3"] .stall-dress span{filter:drop-shadow(0 0 13px #ffe18a)}
 @media(max-width:360px){.fruit-lane{min-height:112px}.upgrade-card{grid-template-columns:34px 1fr auto;padding:8px}.upgrade-card button{padding:7px 6px}}
+
+/* Offline-ready install experience and seven-day login calendar */
+.login-reward{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:9px 11px;border:1px solid #b28a49;border-radius:13px;background:linear-gradient(105deg,#4b351f,#21170f);box-shadow:inset 0 1px #fff2}
+.login-reward b{display:block;color:#ffe4a1;font-size:11px}.login-reward small{display:block;color:#d0bc94;font-size:9px;margin-top:3px;line-height:1.35}
+.login-reward button{flex:none;border:1px solid #f0d18a;border-radius:10px;padding:9px 11px;background:linear-gradient(145deg,#ffe7a1,#a9782e);color:#241707;font-weight:1000;font-size:10px}
+.login-reward button:disabled{opacity:.45;filter:grayscale(.6)}
+.login-calendar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:14px 0}
+.login-day{border:1px solid #98723b;border-radius:11px;padding:9px 3px;background:#21170f;color:#f5dfb3;text-align:center}
+.login-day span{display:block;font-size:22px}.login-day b{display:block;color:#ffdf91;font-size:11px;margin:3px 0}.login-day small{display:block;color:#cbb68e;font-size:8px}
+.login-day.claimed{background:linear-gradient(145deg,#75532a,#382614);border-color:#ffe09a}.login-day.today{outline:2px solid #ffe39a;outline-offset:1px}
+.install-note{font-size:10px!important;color:#d6c39c!important;line-height:1.5!important}
+.customer-personality{color:#ffe3a0!important}
 </style>
 </head>
 <body>
 <main class="app">
 <header class="top"><div class="brand">NAZEEF <span>BAZAR</span><small>SORT STORIES · NEIGHBORHOOD MARKET</small></div><div class="levelpill"><b id="level">1</b><small>DAY / LEVEL</small></div></header>
 <section class="profile-card"><div class="profile-avatar" id="profileAvatar">🧑🏽‍🌾</div><div class="profile-copy"><b id="profileName">BAZAR PLAYER</b><small id="profileSub">Your market adventure starts here</small></div><button class="profile-open" id="profileOpen" type="button">MY PROFILE</button></section>
+<section class="login-reward"><div><b>🎁 DAILY LOGIN GIFT</b><small id="loginRewardText">Your seven-day reward trail is ready.</small></div><button id="loginRewardOpen" type="button">COLLECT GIFT</button></section>
 <section class="stats"><div class="stat"><b id="moves">0</b><small>MOVES</small></div><div class="stat"><b id="sorted">0/4</b><small>SHELVES SORTED</small></div><div class="stat"><b id="best">0</b><small>BEST DAY</small></div></section>
 <section class="market"><div class="market-scene" id="marketScene">🏪🥬🧺</div><div class="market-copy"><b id="marketName">NAZEEF'S CORNER BAZAR</b><small id="marketRank">A little shop with big dreams</small></div><div class="coins">🪙 <span id="coins">0</span></div></section>
 <section class="living-bazaar" id="livingBazaar" data-weather="sun" aria-label="Living neighborhood bazaar">
@@ -215,7 +229,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 <section class="daily-card" id="dailyCard"><div class="daily-copy"><b>🌟 DAILY BAZAAR CHALLENGE</b><small id="dailyDescription">A fresh puzzle and bonus coins every day.</small></div><button id="dailyStart" type="button">PLAY TODAY ▶</button></section>
 <section class="controls"><button class="tool" id="hint">💡 HINT</button><button class="tool" id="undo">↶ UNDO</button><button class="tool" id="shuffle">🔀 MIX UP</button></section>
 <div class="message" id="message">Choose a shelf to pick up its top product.</div>
-<footer class="footer"><button id="sound">🔊 SOUND ON</button><button id="music">🎵 MUSIC ON</button><button id="voiceTest">🎙️ TEST HINDI VOICE</button><button id="restart">↻ RESTART DAY</button><button id="mapOpen">🗺️ MARKET MAP</button><button id="festivalOpen">🎊 FESTIVALS</button><button id="albumOpen">🏆 COLLECTION</button></footer>
+<footer class="footer"><button id="sound">🔊 SOUND ON</button><button id="music">🎵 MUSIC ON</button><button id="voiceTest">🎙️ TEST HINDI VOICE</button><button id="installApp">📲 INSTALL GAME</button><button id="restart">↻ RESTART DAY</button><button id="mapOpen">🗺️ MARKET MAP</button><button id="festivalOpen">🎊 FESTIVALS</button><button id="albumOpen">🏆 COLLECTION</button></footer>
 </main>
 <div class="toast" id="toast">Lovely sorting!</div>
 <div class="overlay" id="welcome"><div class="panel"><div class="hero">🏪🥭🧺</div><h1>NAZEEF <span>BAZAR</span><br>SORT STORIES</h1><p>Welcome to your little neighborhood market! Sort fruits, vegetables and treats, serve happy customers, earn coins and grow your bazaar one shelf at a time.</p><div class="steps"><div class="step"><b>1</b><span>Tap a shelf to pick up its top item.</span></div><div class="step"><b>2</b><span>Tap another shelf to place it. Match the item on top, or use an empty shelf.</span></div><div class="step"><b>3</b><span>Make every shelf hold four matching products to finish the day.</span></div></div><button class="primary" id="start">OPEN THE BAZAR ▶</button></div></div>
@@ -258,6 +272,7 @@ with check (auth.uid() = user_id);</pre>
 </div><div class="profile-section-title">YOUR PROGRESS</div><div class="profile-metrics"><div class="profile-metric"><b id="pLevels">0</b><small>LEVELS COMPLETED</small></div><div class="profile-metric"><b id="pMoves">0</b><small>TOTAL MOVES</small></div><div class="profile-metric"><b id="pCoins">0</b><small>COINS EARNED</small></div><div class="profile-metric"><b id="pStreak">0</b><small>DAY STREAK 🔥</small></div></div>
 <div class="profile-section-title">NEXT MILESTONE</div><div id="nextAchievement">Complete your first day to earn a badge.</div><div class="profile-progress"><i id="achievementProgress"></i></div>
 <div class="profile-section-title">ACHIEVEMENT COLLECTION</div><div class="achievement-list" id="achievementList"></div><button class="secondary" id="profileClose">BACK TO MARKET</button></div></div>
+<div class="overlay hidden" id="loginRewards"><div class="panel"><div class="hero">🎁🌟🪙</div><h1>DAILY <span>REWARDS</span></h1><p>Visit the bazaar each day and collect a bigger gift. Missed a day? Your streak starts again at Day 1.</p><div class="login-calendar" id="loginCalendar"></div><div class="festival-banner" id="loginRewardStatus">Your next gift is waiting!</div><button class="primary" id="loginClaim" type="button">COLLECT TODAY'S GIFT</button><br><button class="secondary" id="loginRewardsClose" type="button">BACK TO MARKET</button></div></div>
 <div class="overlay hidden" id="marketUpgrade"><div class="panel"><div class="hero">🏗️🏮🏪</div><h1>MARKET <span>MAKEOVER</span></h1><p>Spend your earned coins to improve your bazaar. Each upgrade changes the look of your market and stays saved on this device.</p><div class="market-upgrade-list" id="marketUpgradeList"></div><div class="festival-banner" id="upgradeBalance">Your bazaar is ready to grow!</div><button class="secondary" id="marketUpgradeClose">BACK TO MARKET</button></div></div>
 <div class="overlay hidden" id="fruitDash"><div class="panel"><div class="hero">🍎🍋🍇</div><h1>FRUIT <span>DASH</span></h1><p class="fruit-instructions" id="fruitInstructions">Catch the fresh fruit before it disappears. Avoid rotten fruit! You have 25 seconds.</p><div class="fruit-scorebar"><div><b id="fruitScore">0</b><small>CAUGHT</small></div><div><b id="fruitTime">25</b><small>SECONDS</small></div><div><b id="fruitMiss">0</b><small>MISSED</small></div></div><div class="fruit-lanes"><button class="fruit-lane" data-lane="0" type="button"><span class="lane-fruit" id="fruitLane0">🧺</span><small>BASKET 1</small></button><button class="fruit-lane" data-lane="1" type="button"><span class="lane-fruit" id="fruitLane1">🧺</span><small>BASKET 2</small></button><button class="fruit-lane" data-lane="2" type="button"><span class="lane-fruit" id="fruitLane2">🧺</span><small>BASKET 3</small></button></div><button class="primary" id="fruitStart">START FRUIT DASH ▶</button><br><button class="secondary" id="fruitDashClose">BACK TO MARKET</button></div></div>
 <div class="overlay hidden" id="album"><div class="panel"><div class="hero">🏆🎁🪙</div><h1>MARKET <span>COLLECTION</span></h1><p>Collect decorations with your earned coins. Your collection stays saved on this device.</p><div class="album-grid" id="albumGrid"></div><button class="secondary" id="albumClose">BACK TO MARKET</button></div></div>
@@ -284,6 +299,7 @@ const STALLS=[['🏪🥬🧺',"NAZEEF'S CORNER BAZAR",'A little shop with big dr
 let level=1,coins=0,best=0,unlocked=1,stacks=[],selected=-1,moves=0,history=[],busy=false,started=false,soundOn=true;
 let totalMoves=0,levelsCompleted=0,totalCoinsEarned=0,playStreak=0,lastFinishDate='',playerName='Bazaar Player',playerAvatar='🧑🏽‍🌾';
 let marketUpgrades={stall:0,awning:0,path:0,lights:0},fruitBest=0,fruitTimer=null,fruitElapsed=0,fruitScore=0,fruitMiss=0,fruitActiveLane=-1,fruitActiveRotten=false;
+let loginLastDate='',loginStreak=0,installPromptEvent=null;
 let musicOn=true,musicTimer=null,musicStep=0,musicMaster=null,ambienceOsc=null;
 let dailyMode=false,dailySeed='',dailyTargetMoves=0,orderProduct=0,specialOrderDone=false;
 const FESTIVALS=[{id:'bazaar',name:'Classic Bazar',icon:'🏪',scene:'🏪 🧺 🌼',tag:'Warm neighborhood market',faces:['🏮','🎏','🌼','🧺']},{id:'diwali',name:'Diwali Lights',icon:'🪔',scene:'🪔 ✨ 🏮',tag:'A glowing festival of lights',faces:['🪔','✨','🏮','🎆']},{id:'holi',name:'Holi Colours',icon:'🎨',scene:'🎨 🌈 🎊',tag:'A joyful splash of colours',faces:['🎨','🌈','🎊','💜']},{id:'eid',name:'Eid Celebration',icon:'🌙',scene:'🌙 ⭐ 🕌',tag:'A moonlit celebration',faces:['🌙','⭐','✨','🕌']},{id:'monsoon',name:'Monsoon Mela',icon:'☔',scene:'☔ 🌧️ 🌿',tag:'A cool rainy-day market',faces:['☔','🌧️','🌿','💧']}];
@@ -295,6 +311,22 @@ try{festival=localStorage.getItem('nbsFestival')||'bazaar'}catch(e){}
 function saveFestival(){try{localStorage.setItem('nbsFestival',festival);localStorage.setItem('nbsDecor',JSON.stringify(ownedDecor))}catch(e){}}
 function chapterName(n){return ['Little Corner','Fruit Lane','Flower Courtyard','River Walk','Lantern Street','Grand Festival','Garden Quarter','Old Town','Rooftop Market','Royal Bazaar'][Math.floor((n-1)/10)%10]}
 function renderFestivals(){const root=$('festivalChoices');root.innerHTML='';FESTIVALS.forEach(f=>{const b=document.createElement('button');b.type='button';b.className='festival-choice'+(festival===f.id?' active':'');b.innerHTML='<span>'+f.icon+'</span>'+f.name;b.addEventListener('click',()=>{festival=f.id;saveFestival();renderFestivals();applyLevelPalette();toast(f.name+' selected!');});root.appendChild(b)});const chosen=FESTIVALS.find(f=>f.id===festival)||FESTIVALS[0];$('festivalHero').textContent=chosen.scene;$('festivalStatus').textContent=chosen.tag+' · +10 coins for your first sorted shelf in each day.'}
+
+
+const LOGIN_REWARDS=[15,20,25,30,40,50,100];
+function dateBefore(key,days){const d=new Date(key+'T12:00:00');d.setDate(d.getDate()-days);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function loginRewardClaimedToday(){return loginLastDate===todayKey()}
+function renderLoginRewards(){const today=todayKey(),claimed=loginRewardClaimedToday();let streak=loginStreak;if(loginLastDate&&loginLastDate!==today&&loginLastDate!==dateBefore(today,1))streak=0;const nextDay=claimed?Math.max(1,Math.min(7,loginStreak)):Math.min(7,streak+1);const root=$('loginCalendar');root.innerHTML='';LOGIN_REWARDS.forEach((reward,i)=>{const day=i+1,cell=document.createElement('div');cell.className='login-day'+(day<=loginStreak&&claimed?' claimed':'')+(day===nextDay&&!claimed?' today':'');const icon=document.createElement('span');icon.textContent=day<=loginStreak&&claimed?'🎉':['🪙','🎁','🌼','🧺','🏮','💎','👑'][i];const label=document.createElement('b');label.textContent=reward+' coins';const sub=document.createElement('small');sub.textContent='DAY '+day;cell.append(icon,label,sub);root.append(cell)});$('loginClaim').disabled=claimed;$('loginClaim').textContent=claimed?'GIFT COLLECTED ✓':"COLLECT "+LOGIN_REWARDS[nextDay-1]+" COINS";$('loginRewardStatus').textContent=claimed?'You have collected today’s gift. Come back tomorrow!':'Day '+nextDay+' reward is ready: '+LOGIN_REWARDS[nextDay-1]+' coins.';$('loginRewardText').textContent=claimed?'Gift collected! Your next visit brings another reward.':'Day '+nextDay+' gift waiting · up to 100 coins!';$('loginRewardOpen').disabled=claimed;$('loginRewardOpen').textContent=claimed?'COLLECTED ✓':'COLLECT GIFT'}
+function claimLoginReward(){if(loginRewardClaimedToday())return;const today=todayKey();if(!loginLastDate||loginLastDate!==dateBefore(today,1))loginStreak=0;loginStreak=loginStreak%7+1;const reward=LOGIN_REWARDS[loginStreak-1];loginLastDate=today;earnCoins(reward);save();renderLoginRewards();update();toast('Daily gift collected: +'+reward+' coins!');}
+function setupInstallExperience(){
+ const btn=$('installApp');if(!btn)return;
+ const standalone=window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+ if(standalone){btn.textContent='✓ GAME INSTALLED';btn.disabled=true}
+ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPromptEvent=e;btn.textContent='📲 INSTALL GAME';btn.classList.add('install-ready')});
+ window.addEventListener('appinstalled',()=>{installPromptEvent=null;btn.textContent='✓ GAME INSTALLED';btn.disabled=true});
+ btn.addEventListener('click',async()=>{if(installPromptEvent){installPromptEvent.prompt();try{await installPromptEvent.userChoice}catch(e){}installPromptEvent=null;return}say('To install: open your browser menu ⋮ and choose “Install app” or “Add to Home screen”. First open the game online once so offline files can be saved.');toast('Open browser menu ⋮ to install');});
+ if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').then(()=>{btn.title='Offline files are being prepared'}).catch(()=>{btn.title='Offline install is not available in this browser'}))}
+}
 
 const MARKET_UPGRADES=[
  {id:'stall',name:'Stall Craftsmanship',icon:'🪵',desc:'Polish the woodwork and add richer stall details.',costs:[60,110,180],labels:['Carved timber','Royal woodwork','Grand artisan stall']},
@@ -308,7 +340,7 @@ function openMarketUpgrades(){renderMarketUpgrades();$('marketUpgrade').classLis
 function clearFruitDash(){if(fruitTimer){clearInterval(fruitTimer);fruitTimer=null}fruitActiveLane=-1;document.querySelectorAll('.fruit-lane').forEach(b=>{b.classList.remove('active','rotten')})}
 function showFruitLanes(){for(let i=0;i<3;i++){$('fruitLane'+i).textContent='🧺';const b=document.querySelector('[data-lane="'+i+'"]');b.classList.remove('active','rotten')}}
 function fruitSpawn(){if(fruitActiveLane>=0)fruitMiss++;showFruitLanes();fruitActiveLane=Math.floor(Math.random()*3);fruitActiveRotten=Math.random()<.17;const fruit=PRODUCTS[Math.floor(Math.random()*PRODUCTS.length)].e;$('fruitLane'+fruitActiveLane).textContent=fruitActiveRotten?'🤢':fruit;const b=document.querySelector('[data-lane="'+fruitActiveLane+'"]');b.classList.add('active');if(fruitActiveRotten)b.classList.add('rotten');$('fruitMiss').textContent=fruitMiss}
-function finishFruitDash(){clearFruitDash();const reward=fruitScore*2+(fruitScore>=15?20:0);if(reward>0)earnCoins(reward);fruitBest=Math.max(fruitBest,fruitScore);try{localStorage.setItem('nbsFruitBest',String(fruitBest))}catch(e){}$('fruitInstructions').textContent='Round complete! You caught '+fruitScore+' fruit. '+(fruitScore>=15?'Amazing market speed!':'Keep practising to beat your best score!')+' Reward: '+reward+' coins.';$('fruitStart').textContent='PLAY AGAIN ▶';$('fruitStart').disabled=false;update();toast('Fruit Dash: +'+reward+' coins!')}
+function finishFruitDash(){clearFruitDash();const reward=fruitScore*2+(fruitScore>=15?20:0);if(reward>0)earnCoins(reward);fruitBest=Math.max(fruitBest,fruitScore);try{localStorage.setItem('nbsFruitBest',String(fruitBest));localStorage.setItem('nbsLoginLastDate',loginLastDate);localStorage.setItem('nbsLoginStreak',String(loginStreak))}catch(e){}$('fruitInstructions').textContent='Round complete! You caught '+fruitScore+' fruit. '+(fruitScore>=15?'Amazing market speed!':'Keep practising to beat your best score!')+' Reward: '+reward+' coins.';$('fruitStart').textContent='PLAY AGAIN ▶';$('fruitStart').disabled=false;update();toast('Fruit Dash: +'+reward+' coins!')}
 function startFruitDash(){clearFruitDash();fruitElapsed=0;fruitScore=0;fruitMiss=0;$('fruitScore').textContent='0';$('fruitMiss').textContent='0';$('fruitTime').textContent='25';$('fruitInstructions').textContent='Tap the basket showing fresh fruit. Avoid the rotten one!';$('fruitStart').disabled=true;$('fruitStart').textContent='DASH IN PROGRESS…';showFruitLanes();fruitSpawn();fruitTimer=setInterval(()=>{fruitElapsed+=.8;$('fruitTime').textContent=String(Math.max(0,Math.ceil(25-fruitElapsed)));if(fruitElapsed>=25){finishFruitDash();return}fruitSpawn()},800)}
 function tapFruitLane(i){if(!fruitTimer||i!==fruitActiveLane)return;if(fruitActiveRotten){fruitMiss+=2;toast('Rotten fruit! Watch out!')}else{fruitScore++;tone(650+fruitScore%5*55,'sine',.08,.025)}fruitActiveLane=-1;showFruitLanes();$('fruitScore').textContent=fruitScore;$('fruitMiss').textContent=fruitMiss}
 
@@ -317,6 +349,7 @@ function renderAlbum(){const root=$('albumGrid');root.innerHTML='';DECORATIONS.f
 try{level=Math.max(1,Number(localStorage.getItem('nbsLevel'))||1);unlocked=Math.max(1,Number(localStorage.getItem('nbsUnlocked'))||1);coins=Math.max(0,Number(localStorage.getItem('nbsCoins'))||0);best=Math.max(0,Number(localStorage.getItem('nbsBest'))||0);
  totalMoves=Math.max(0,Number(localStorage.getItem('nbsTotalMoves'))||0);levelsCompleted=Math.max(0,Number(localStorage.getItem('nbsLevelsCompleted'))||0);totalCoinsEarned=Math.max(0,Number(localStorage.getItem('nbsTotalCoinsEarned'))||0);playStreak=Math.max(0,Number(localStorage.getItem('nbsPlayStreak'))||0);lastFinishDate=localStorage.getItem('nbsLastFinishDate')||'';playerName=localStorage.getItem('nbsPlayerName')||'Bazaar Player';playerAvatar=localStorage.getItem('nbsPlayerAvatar')||'🧑🏽‍🌾';
 try{marketUpgrades={...marketUpgrades,...JSON.parse(localStorage.getItem('nbsMarketUpgrades')||'{}')};fruitBest=Math.max(0,Number(localStorage.getItem('nbsFruitBest'))||0)}catch(e){}
+try{loginLastDate=localStorage.getItem('nbsLoginLastDate')||'';loginStreak=Math.max(0,Number(localStorage.getItem('nbsLoginStreak'))||0)}catch(e){}
 }catch(e){}
 const say=t=>{$('message').textContent=t};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -453,19 +486,24 @@ function applyLevelPalette(){
 }
 
 function refreshBazaarLife(){
- const done=sortedCount(),total=typesForLevel();
- const title=$('customerTitle'),line=$('customerLine'),mood=$('customerMood');
- const one=$('customerOne'),two=$('customerTwo'),three=$('customerThree');
- if(!title||!line||!mood)return;
- if(!started){title.textContent='THE NEIGHBOURHOOD IS CHEERING!';line.textContent='Every customer is happy. Your bazaar is growing!';mood.textContent='🥳';one.textContent='🧑🏽‍🦱';two.textContent='👩🏽';three.textContent='🧒🏻';return}
- if(done>=total-1){title.textContent='ONE LAST ORDER!';line.textContent='Almost there — one more shelf will make the day!';mood.textContent='🤩'}
- else if(done>0){title.textContent='CUSTOMERS ARE SMILING';line.textContent=done+' shelf'+(done===1?'':'es')+' sorted. The queue is getting happier!';mood.textContent='😄'}
- else if(moves>0){title.textContent='SHOPPERS ARE WAITING';line.textContent='Nice start! Keep matching the goods to fill their baskets.';mood.textContent='🛍️'}
- else{title.textContent='NEIGHBOURHOOD CUSTOMERS';line.textContent='Your first shoppers are arriving. Make them smile!';mood.textContent='😊'}
- const faces=[['🧑🏽','👩🏻','🧒🏽'],['👨🏽','👩🏾','👦🏻'],['🧔🏽','👩🏻‍🦱','👧🏽'],['👳🏽','👩🏽‍🦰','🧒🏻']];
- const set=faces[(level-1)%faces.length];one.textContent=set[0];two.textContent=set[1];three.textContent=set[2];
+ const done=sortedCount(),total=typesForLevel(),title=$('customerTitle'),line=$('customerLine'),mood=$('customerMood');
+ const one=$('customerOne'),two=$('customerTwo'),three=$('customerThree');if(!title||!line||!mood)return;
+ const guests=[
+  {name:'Amina Aunty',job:'the spice-loving regular',face:['🧕🏽','👨🏽','🧒🏻'],hello:'Amina Aunty says: fresh fruit makes the best afternoon snack!',cheer:'Amina Aunty is delighted with your tidy shelves!'},
+  {name:'Raju Bhai',job:'the cheerful fruit seller',face:['👨🏽‍🍳','👩🏽','👦🏻'],hello:'Raju Bhai is looking for perfectly sorted produce.',cheer:'Raju Bhai gives you a big thumbs-up!'},
+  {name:'Meera Didi',job:'the flower-shop neighbour',face:['👩🏽‍🦱','🧔🏽','👧🏽'],hello:'Meera Didi loves a neat and colourful bazaar.',cheer:'Meera Didi says your market looks beautiful!'},
+  {name:'Kabir',job:'the young market helper',face:['🧑🏽','👳🏽','👧🏻'],hello:'Kabir is ready to help carry the shopping baskets.',cheer:'Kabir cheers: that was a super sorting job!'},
+  {name:'Farah Begum',job:'the family baker',face:['👩🏽‍🍳','🧑🏽‍🌾','🧒🏽'],hello:'Farah Begum has come by for fresh ingredients.',cheer:'Farah Begum is smiling from ear to ear!'},
+  {name:'Dev Uncle',job:'the neighbourhood gardener',face:['🧔🏻','👩🏾','👦🏽'],hello:'Dev Uncle is checking out today’s garden-fresh goods.',cheer:'Dev Uncle says: excellent work, young shopkeeper!'}
+ ];
+ const guest=guests[(level+Math.floor(done/2))%guests.length];one.textContent=guest.face[0];two.textContent=guest.face[1];three.textContent=guest.face[2];
+ if(!started){title.textContent='THE NEIGHBOURHOOD IS CHEERING!';line.textContent=guest.cheer;mood.textContent='🥳';return}
+ title.textContent=guest.name.toUpperCase()+' · '+guest.job.toUpperCase();
+ if(done>=total-1){line.textContent=guest.name+' says: just one more shelf and the order is ready!';mood.textContent='🤩'}
+ else if(done>0){line.textContent=guest.name+' is happy! '+done+' shelf'+(done===1?'':'es')+' sorted. Keep going!';mood.textContent='😄'}
+ else if(moves>0){line.textContent=guest.name+' says: lovely start! Match the goods to fill the baskets.';mood.textContent='🛍️'}
+ else{line.textContent=guest.hello;mood.textContent='😊'}
 }
-
 function update(){
  applyLevelPalette();
  refreshBazaarLife();
@@ -573,6 +611,7 @@ bind('voiceTest',()=>{const sample='शाबाश नाज़ीफ़! क�
 bind('mapOpen',()=>{drawMap();$('map').classList.remove('hidden')});bind('mapClose',()=>$('map').classList.add('hidden'));
 bind('festivalOpen',()=>{renderFestivals();$('festival').classList.remove('hidden')});bind('festivalClose',()=>{$('festival').classList.add('hidden');if(musicOn&&soundOn)startMarketMusic()});
 bind('albumOpen',()=>{renderAlbum();$('album').classList.remove('hidden')});
+bind('loginRewardOpen',()=>{renderLoginRewards();$('loginRewards').classList.remove('hidden')});bind('loginRewardsClose',()=>$('loginRewards').classList.add('hidden'));bind('loginClaim',claimLoginReward);
 bind('marketUpgradeOpen',openMarketUpgrades);bind('marketUpgradeClose',()=>$('marketUpgrade').classList.add('hidden'));
 bind('fruitDashOpen',()=>{$('fruitDash').classList.remove('hidden');$('fruitStart').disabled=false;$('fruitStart').textContent='START FRUIT DASH ▶';$('fruitInstructions').textContent='Catch the fresh fruit before it disappears. Avoid rotten fruit! You have 25 seconds.';$('fruitScore').textContent='0';$('fruitMiss').textContent='0';$('fruitTime').textContent='25';showFruitLanes()});
 bind('fruitDashClose',()=>{clearFruitDash();$('fruitDash').classList.add('hidden')});bind('fruitStart',startFruitDash);
@@ -584,7 +623,7 @@ $('playerNameInput').addEventListener('change',()=>{playerName=$('playerNameInpu
 
 
 // Portable local backup: only this game's namespaced progress keys are exported.
-const BACKUP_KEYS=['nbsLevel','nbsUnlocked','nbsCoins','nbsBest','nbsDecor','nbsFestival','nbsTotalMoves','nbsLevelsCompleted','nbsTotalCoinsEarned','nbsPlayStreak','nbsLastFinishDate','nbsPlayerName','nbsPlayerAvatar','nbsDailyClaim','nbsMarketUpgrades','nbsFruitBest'];
+const BACKUP_KEYS=['nbsLevel','nbsUnlocked','nbsCoins','nbsBest','nbsDecor','nbsFestival','nbsTotalMoves','nbsLevelsCompleted','nbsTotalCoinsEarned','nbsPlayStreak','nbsLastFinishDate','nbsPlayerName','nbsPlayerAvatar','nbsDailyClaim','nbsMarketUpgrades','nbsFruitBest','nbsLoginLastDate','nbsLoginStreak'];
 function makeBackup(){const data={};BACKUP_KEYS.forEach(k=>{const v=localStorage.getItem(k);if(v!==null)data[k]=v});return {app:'Nazeef Bazar Sort Stories',format:1,createdAt:new Date().toISOString(),data};}
 function exportBackup(){try{const blob=new Blob([JSON.stringify(makeBackup(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='nazeef-bazar-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);$('cloudStatus').textContent='Backup file exported. Keep it somewhere safe.'}catch(e){$('cloudStatus').textContent='Could not export backup on this browser.'}}
 function restoreBackupObject(obj){if(!obj||obj.app!=='Nazeef Bazar Sort Stories'||obj.format!==1||!obj.data||typeof obj.data!=='object'||Array.isArray(obj.data))throw new Error('This is not a supported Nazeef Bazar backup.');const allowed=new Set(BACKUP_KEYS);for(const [k,v] of Object.entries(obj.data)){if(!allowed.has(k)||typeof v!=='string'||v.length>200000)throw new Error('Backup contains invalid data.');}if(!obj.data.nbsLevel||!obj.data.nbsCoins)throw new Error('Backup is incomplete.');if(!confirm('Restore this backup? Your current device progress will be replaced.'))return false;BACKUP_KEYS.forEach(k=>{if(Object.prototype.hasOwnProperty.call(obj.data,k))localStorage.setItem(k,obj.data[k]);else localStorage.removeItem(k)});location.reload();return true;}
@@ -605,7 +644,7 @@ $('cloudSave').addEventListener('click',()=>cloudAction(cloudSave));
 $('cloudRestore').addEventListener('click',()=>cloudAction(cloudRestore));
 try{$('cloudUrl').value=localStorage.getItem('nbsCloudUrl')||'';$('cloudKey').value=localStorage.getItem('nbsCloudKey')||'';const cs=cloudSession();if(cs?.user?.email)$('cloudStatus').textContent='Cloud account: '+cs.user.email+' · Ready to sync.'}catch(e){}
 
-applyMarketUpgrades();
+applyMarketUpgrades();renderLoginRewards();setupInstallExperience();
 updateAudioButtons();
 renderProfile();
 update();
