@@ -23,6 +23,7 @@ button{font:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transp
 .shelf-foot{grid-column:2;font-size:9px;color:#bda779;text-align:right;margin-top:-4px}
 .controls{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.tool{border:1px solid #a47b38;border-radius:12px;padding:11px 5px;background:linear-gradient(145deg,#715026,#382710);color:#ffedc2;font-size:11px;font-weight:900;box-shadow:inset 0 1px #fff3,0 4px 8px #0007}.tool:active{filter:brightness(1.2);transform:translateY(1px)}.tool:disabled{opacity:.4;cursor:not-allowed}
 .message{text-align:center;color:#ddc99e;font-size:11px;line-height:1.45;min-height:17px}.footer{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}.footer button{border:1px solid #76592e;border-radius:10px;background:#ffffff0c;color:#d9c59a;padding:8px 10px;font-size:10px;font-weight:800}
+#voiceTest{border-color:#bd9858;color:#ffe4a3}.voice-speaking{animation:voicePulse .7s ease-in-out infinite alternate}@keyframes voicePulse{to{filter:brightness(1.5);box-shadow:0 0 15px #f4d58d88}}
 .toast{position:fixed;z-index:20;top:12%;left:50%;transform:translate(-50%,-8px);opacity:0;pointer-events:none;border-radius:30px;background:linear-gradient(100deg,#ffefbd,#c18e3c);color:#241707;font-weight:1000;padding:10px 17px;box-shadow:0 8px 25px #000b;transition:.2s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
 .overlay{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:18px;background:#090704df;backdrop-filter:blur(9px)}.hidden{display:none!important}.panel{width:min(100%,420px);max-height:90dvh;overflow:auto;border:1px solid #c49a50;border-radius:23px;padding:23px 19px;text-align:center;background:linear-gradient(145deg,#382b1a,#17120c 75%);box-shadow:0 24px 70px #000d,inset 0 1px #fff3}.hero{font-size:49px}.panel h1{font-size:clamp(25px,7vw,34px);line-height:1.05;color:#ffedc2;margin:8px 0}.panel h1 span{color:var(--gold)}.panel p{font-size:13px;line-height:1.55;color:#d8c7a4}.primary{border:1px solid #ffe9ac;border-radius:14px;padding:14px 22px;background:linear-gradient(100deg,#ffedb3,#c18c35);color:#241707;font-weight:1000;font-size:14px;min-width:190px;box-shadow:0 5px 17px #0008}.secondary{border:1px solid #a47b38;border-radius:12px;padding:10px 16px;background:#ffffff0e;color:#f1dfb7;font-weight:800;margin:7px}.steps{display:grid;gap:8px;text-align:left;margin:15px 0}.step{display:flex;gap:10px;align-items:center;padding:9px;border:1px solid #9a763d66;border-radius:12px;background:#ffffff09;color:#e9d9b5;font-size:12px}.step b{width:27px;height:27px;flex:0 0 27px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#ffe7a1,#b9822c);color:#251707}.level-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;max-height:40vh;overflow:auto;margin:14px 0}.level-cell{border:1px solid #a47b38;border-radius:10px;min-height:40px;background:#21190f;color:#ffdf91;font-weight:900}.level-cell:disabled{opacity:.25}.level-cell.current{background:linear-gradient(145deg,#ffe7a1,#b9822c);color:#241707}
 .celebrate{position:fixed;inset:0;z-index:25;pointer-events:none;overflow:hidden}.spark{position:absolute;font-size:24px;animation:burst 1.3s ease-out forwards}@keyframes burst{0%{transform:translateY(15vh) scale(.2) rotate(0);opacity:0}20%{opacity:1}100%{transform:translateY(-75vh) scale(1.4) rotate(280deg);opacity:0}}
@@ -88,7 +89,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 <section class="board-wrap"><div class="board-head"><b>🧺 MARKET SHELVES</b><small id="boardTip">Tap a shelf, then tap where its top item goes</small></div><div class="shelves" id="shelves" aria-label="Sorting shelves"></div></section>
 <section class="controls"><button class="tool" id="hint">💡 HINT</button><button class="tool" id="undo">↶ UNDO</button><button class="tool" id="shuffle">🔀 MIX UP</button></section>
 <div class="message" id="message">Choose a shelf to pick up its top product.</div>
-<footer class="footer"><button id="sound">🔊 SOUND ON</button><button id="restart">↻ RESTART DAY</button><button id="mapOpen">🗺️ MARKET MAP</button></footer>
+<footer class="footer"><button id="sound">🔊 SOUND ON</button><button id="voiceTest">🎙️ TEST HINDI VOICE</button><button id="restart">↻ RESTART DAY</button><button id="mapOpen">🗺️ MARKET MAP</button></footer>
 </main>
 <div class="toast" id="toast">Lovely sorting!</div>
 <div class="overlay" id="welcome"><div class="panel"><div class="hero">🏪🥭🧺</div><h1>NAZEEF <span>BAZAR</span><br>SORT STORIES</h1><p>Welcome to your little neighborhood market! Sort fruits, vegetables and treats, serve happy customers, earn coins and grow your bazaar one shelf at a time.</p><div class="steps"><div class="step"><b>1</b><span>Tap a shelf to pick up its top item.</span></div><div class="step"><b>2</b><span>Tap another shelf to place it. Match the item on top, or use an empty shelf.</span></div><div class="step"><b>3</b><span>Make every shelf hold four matching products to finish the day.</span></div></div><button class="primary" id="start">OPEN THE BAZAR ▶</button></div></div>
@@ -159,18 +160,49 @@ function snapshot(){history.push({stacks:cloneBoard(),moves});if(history.length>
 function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1000)}
 const HINDI_PRAISES=['शाबाश नाज़ीफ़! क्या कमाल कर दिया!','वाह नाज़ीफ़! तुमने तो बाज़ार चमका दिया!','बहुत खूब! ऐसे ही आगे बढ़ते रहो!','गज़ब कर दिया नाज़ीफ़! शानदार खेला!','कमाल है! सारे ग्राहक बहुत खुश हैं!','अरे वाह! तुम्हारी मेहनत रंग लाई!','जियो नाज़ीफ़! एक और शानदार जीत!','बहुत बढ़िया! तुम्हारा बाज़ार तरक्की कर रहा है!','क्या बात है! तुम तो sorting के उस्ताद हो!','शानदार! अगला दिन तुम्हारा इंतज़ार कर रहा है!','वाह! दिल खुश कर दिया नाज़ीफ़!','मस्त काम! ऐसे ही चमकते रहो!'];
 let lastPraise='शाबाश नाज़ीफ़! क्या कमाल कर दिया!';
-function celebrate(){const layer=document.createElement('div');layer.className='celebrate';document.body.appendChild(layer);const icons=['✨','🎉','🪙','🥭','⭐','🎊'];for(let i=0;i<36;i++){const p=document.createElement('span');p.className='spark';p.textContent=icons[i%icons.length];p.style.left=Math.random()*100+'%';p.style.bottom=(-10+Math.random()*20)+'%';p.style.animationDelay=Math.random()*.35+'s';layer.appendChild(p)}setTimeout(()=>layer.remove(),1900);lastPraise=HINDI_PRAISES[Math.floor(Math.random()*HINDI_PRAISES.length)];if(soundOn&&'speechSynthesis'in window){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lastPraise);u.lang='hi-IN';u.rate=.88;u.pitch=1.08;const voices=speechSynthesis.getVoices();const hindi=voices.find(v=>/^hi(-|_)/i.test(v.lang));if(hindi)u.voice=hindi;speechSynthesis.speak(u)}catch(e){}}tone(880);setTimeout(()=>tone(1080),140)}
+let hindiVoice=null,voiceReady=false;
+function pickHindiVoice(){
+ if(!('speechSynthesis'in window))return null;
+ const voices=speechSynthesis.getVoices()||[];
+ const hindi=voices.filter(v=>/^hi(?:-|_|$)/i.test(v.lang));
+ hindi.sort((a,b)=>{
+  const score=v=>((/google/i.test(v.name)?8:0)+(/india|hi[-_ ]?in/i.test(v.name+' '+v.lang)?5:0)+(/natural|neural|premium/i.test(v.name)?4:0)+(v.localService?1:0));
+  return score(b)-score(a);
+ });
+ return hindi[0]||null;
+}
+function loadHindiVoice(){hindiVoice=pickHindiVoice();voiceReady=true;const b=$('voiceTest');if(b)b.title=hindiVoice?'Hindi voice: '+hindiVoice.name+' ('+hindiVoice.lang+')':'No Hindi voice found. Install/enable a Hindi voice in Android text-to-speech settings.'}
+if('speechSynthesis'in window){loadHindiVoice();speechSynthesis.addEventListener?.('voiceschanged',loadHindiVoice)}
+function speakHindi(textToSpeak){
+ if(!soundOn||!('speechSynthesis'in window)){say('Turn SOUND ON to hear the Hindi celebration.');return false}
+ try{
+  loadHindiVoice();
+  if(!hindiVoice){say('Hindi voice is not available on this device. Enable a Hindi voice in Android Text-to-speech settings.');return false}
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(textToSpeak);
+  u.voice=hindiVoice;u.lang=hindiVoice.lang||'hi-IN';u.rate=.91;u.pitch=1.02;u.volume=1;
+  const btn=$('voiceTest');if(btn){btn.classList.add('voice-speaking');u.onend=()=>btn.classList.remove('voice-speaking');u.onerror=()=>btn.classList.remove('voice-speaking')}
+  speechSynthesis.speak(u);return true;
+ }catch(e){say('Hindi voice could not start. Check Android Text-to-speech settings.');return false}
+}
+function celebrate(){
+ const layer=document.createElement('div');layer.className='celebrate';document.body.appendChild(layer);
+ const icons=['✨','🎉','🪙','🥭','⭐','🎊'];for(let i=0;i<44;i++){const p=document.createElement('span');p.className='spark';p.textContent=icons[i%icons.length];p.style.left=Math.random()*100+'%';p.style.bottom=(-10+Math.random()*20)+'%';p.style.animationDelay=Math.random()*.35+'s';layer.appendChild(p)}
+ setTimeout(()=>layer.remove(),1900);lastPraise=HINDI_PRAISES[Math.floor(Math.random()*HINDI_PRAISES.length)];
+ if(soundOn)speakHindi(lastPraise);
+ tone(880);setTimeout(()=>tone(1080),140);
+}
 async function moveShelf(from,to){
  if(busy||!started)return;
  if(from<0||to<0)return;
  if(!legalMove(from,to)){selected=to;render();say('That shelf cannot take this item. Match the top product or choose an empty shelf.');tone(240);return}
- snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;selected=-1;busy=true;render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(520+item*80);await sleep(210);busy=false;update();
+ snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;selected=-1;busy=true;try{navigator.vibrate?.(22)}catch(e){}render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(520+item*80);await sleep(210);busy=false;update();
  if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820)}
  if(sortedCount()===typesForLevel())finishDay();
 }
 function onShelf(i){
  if(busy||!started)return;
- if(selected<0){if(!stacks[i].length){say('That shelf is empty. Choose a shelf with products first.');return}selected=i;render();say('Picked up '+PRODUCTS[stacks[i][stacks[i].length-1]].n+'. Now choose a matching shelf or an empty shelf.');tone(420);return}
+ if(selected<0){if(!stacks[i].length){say('That shelf is empty. Choose a shelf with products first.');return}selected=i;try{navigator.vibrate?.(12)}catch(e){}render();say('Picked up '+PRODUCTS[stacks[i][stacks[i].length-1]].n+'. Now choose a matching shelf or an empty shelf.');tone(420);return}
  if(selected===i){selected=-1;render();say('Selection cleared. Choose a shelf.');return}
  const from=selected;
  if(legalMove(from,i)){moveShelf(from,i);return}
@@ -184,7 +216,7 @@ function findHint(){
  say('Every move is possible. Keep sorting!');}
 function undo(){if(!history.length||busy)return;const prev=history.pop();stacks=cloneBoard(prev.stacks);moves=prev.moves;selected=-1;render();update();say('Last move undone. Try another shelf!');tone(330)}
 function mixUp(){if(busy||!started)return;stacks=scramble();selected=-1;history=[];render();update();say('Shelves mixed up. A fresh sorting puzzle is ready!');toast('Fresh market mix!')}
-function finishDay(){started=false;const reward=20+typesForLevel()*10+Math.max(0,30-moves);coins+=reward;unlocked=Math.max(unlocked,Math.min(100,level+1));best=Math.max(best,level);save();celebrate();$('finishIcon').textContent='🎉🏪🪙';$('finishTitle').textContent='DAY '+level+' COMPLETE!';$('finishText').textContent=lastPraise+' All the shelves are sorted! Happy customers earned you '+reward+' coins. तुम्हारे लिए '+reward+' सिक्के!';$('continue').textContent=level>=100?'CELEBRATE YOUR BAZAR ▶':'OPEN NEXT DAY ▶';$('finish').classList.remove('hidden');update()}
+function finishDay(){started=false;try{navigator.vibrate?.([35,45,35,45,90])}catch(e){}const reward=20+typesForLevel()*10+Math.max(0,30-moves);coins+=reward;unlocked=Math.max(unlocked,Math.min(100,level+1));best=Math.max(best,level);save();celebrate();$('finishIcon').textContent='🎉🏪🪙';$('finishTitle').textContent='DAY '+level+' COMPLETE!';$('finishText').textContent=lastPraise+' All the shelves are sorted! Happy customers earned you '+reward+' coins. तुम्हारे लिए '+reward+' सिक्के!';$('continue').textContent=level>=100?'CELEBRATE YOUR BAZAR ▶':'OPEN NEXT DAY ▶';$('finish').classList.remove('hidden');update()}
 function drawMap(){const root=$('levelGrid');root.innerHTML='';for(let n=1;n<=100;n++){const b=document.createElement('button');b.type='button';b.className='level-cell'+(n===level?' current':'');b.textContent=n<=unlocked?'★ '+n:'🔒';b.disabled=n>unlocked;b.addEventListener('click',()=>{level=n;$('map').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newDay()});root.appendChild(b)}}
 // Pointer-first controls: taps select instantly; dragging a picked shelf onto another moves its top item.
 let pointerShelf=-1;
@@ -212,6 +244,7 @@ bind('again',()=>{$('finish').classList.add('hidden');newDay()});
 bind('restart',()=>{if(!busy)newDay()});
 bind('hint',findHint);bind('undo',undo);bind('shuffle',mixUp);
 bind('sound',()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'🔊 SOUND ON':'🔇 SOUND OFF';if(soundOn)tone()});
+bind('voiceTest',()=>{const sample='शाबाश नाज़ीफ़! क्या कमाल कर दिया!';if(speakHindi(sample))say('Hindi voice test playing. If it sounds robotic, choose a higher-quality Hindi voice in Android Text-to-speech settings.');});
 bind('mapOpen',()=>{drawMap();$('map').classList.remove('hidden')});bind('mapClose',()=>$('map').classList.add('hidden'));
 update();
 window.addEventListener('error',()=>{busy=false;say('A small hiccup occurred. Use RESTART DAY to recover.')});
