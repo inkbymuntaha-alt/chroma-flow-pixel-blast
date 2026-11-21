@@ -385,7 +385,7 @@ function hasBossBadge(){return bossBadges.has(bossBadgeKey())}
 function saveBossBadges(){try{localStorage.setItem('nbsBossBadges',JSON.stringify([...bossBadges]))}catch(e){}}
 const FESTIVALS=[{id:'bazaar',name:'Classic Bazar',icon:'🏪',scene:'🏪 🧺 🌼',tag:'Warm neighborhood market',faces:['🏮','🎏','🌼','🧺']},{id:'diwali',name:'Diwali Lights',icon:'🪔',scene:'🪔 ✨ 🏮',tag:'A glowing festival of lights',faces:['🪔','✨','🏮','🎆']},{id:'holi',name:'Holi Colours',icon:'🎨',scene:'🎨 🌈 🎊',tag:'A joyful splash of colours',faces:['🎨','🌈','🎊','💜']},{id:'eid',name:'Eid Celebration',icon:'🌙',scene:'🌙 ⭐ 🕌',tag:'A moonlit celebration',faces:['🌙','⭐','✨','🕌']},{id:'monsoon',name:'Monsoon Mela',icon:'☔',scene:'☔ 🌧️ 🌿',tag:'A cool rainy-day market',faces:['☔','🌧️','🌿','💧']}];
 let festival='bazaar',festivalBonusPaid=false;
-let levelStars=(()=>{try{return JSON.parse(localStorage.getItem('nbsLevelStars')||'{}')}catch(e){return {}}})();
+let levelStars=(()=>{try{const value=JSON.parse(localStorage.getItem('nbsLevelStars')||'{}');return value&&typeof value==='object'&&!Array.isArray(value)?value:{}}catch(e){return {}}})();
 const DECORATIONS=[{id:'lantern',name:'Golden Lanterns',icon:'🏮',cost:50,desc:'A glowing stall decoration.'},{id:'bunting',name:'Festival Bunting',icon:'🎏',cost:75,desc:'Colourful flags for your market.'},{id:'flower',name:'Flower Garland',icon:'🌼',cost:100,desc:'A cheerful floral touch.'},{id:'fountain',name:'Lucky Fountain',icon:'⛲',cost:150,desc:'A special centerpiece.'}];
 function readSet(key){try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?value.filter(v=>typeof v==='string'):[]}catch(e){return []}}
 let ownedDecor=readSet('nbsDecor');
@@ -431,7 +431,7 @@ function renderAlbum(){const root=$('albumGrid');root.innerHTML='';DECORATIONS.f
 try{const safeInt=(key,fallback,min,max)=>{const value=Number(localStorage.getItem(key));return Number.isFinite(value)?Math.min(max,Math.max(min,Math.floor(value))):fallback};level=safeInt('nbsLevel',1,1,100);unlocked=safeInt('nbsUnlocked',1,1,100);level=Math.min(level,unlocked);unlocked=Math.max(unlocked,level);coins=safeInt('nbsCoins',0,0,Number.MAX_SAFE_INTEGER);best=safeInt('nbsBest',0,0,100);
  totalMoves=safeInt('nbsTotalMoves',0,0,Number.MAX_SAFE_INTEGER);levelsCompleted=safeInt('nbsLevelsCompleted',0,0,Number.MAX_SAFE_INTEGER);totalCoinsEarned=safeInt('nbsTotalCoinsEarned',0,0,Number.MAX_SAFE_INTEGER);playStreak=safeInt('nbsPlayStreak',0,0,100000);lastFinishDate=localStorage.getItem('nbsLastFinishDate')||'';playerName=localStorage.getItem('nbsPlayerName')||'Bazaar Player';playerAvatar=localStorage.getItem('nbsPlayerAvatar')||'🧑🏽‍🌾';
 try{const savedUpgrades=JSON.parse(localStorage.getItem('nbsMarketUpgrades')||'{}');if(savedUpgrades&&typeof savedUpgrades==='object'&&!Array.isArray(savedUpgrades))for(const key of Object.keys(marketUpgrades))marketUpgrades[key]=Math.min(3,Math.max(0,Math.floor(Number(savedUpgrades[key])||0)));fruitBest=safeInt('nbsFruitBest',0,0,Number.MAX_SAFE_INTEGER)}catch(e){}
-try{loginLastDate=localStorage.getItem('nbsLoginLastDate')||'';loginStreak=Math.max(0,Number(localStorage.getItem('nbsLoginStreak'))||0)}catch(e){}
+try{loginLastDate=localStorage.getItem('nbsLoginLastDate')||'';loginStreak=safeInt('nbsLoginStreak',0,0,7)}catch(e){}
 }catch(e){}
 const say=t=>{$('message').textContent=t};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
