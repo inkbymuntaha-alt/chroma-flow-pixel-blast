@@ -45,6 +45,37 @@ button:focus-visible{outline:3px solid #ffe39a;outline-offset:3px}
 @media(hover:hover){.shelf:hover{border-color:#e4c17c;filter:brightness(1.08)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 @media(min-height:850px){.app{justify-content:center}.item{height:47px}.shelf{min-height:72px}}
+
+/* Illustrated-realism art direction: warm cinematic bazaar, tactile wood and dimensional produce */
+:root{--gold:#f4d58d;--gold2:#a9792d;--cream:#fff3d8;--muted:#d1bd98;--panel:#2b2015;--line:#a9824b}
+html,body{background-color:#17100b;background-image:radial-gradient(ellipse at 50% 0%,#80603a 0%,#49301d 24%,#24180f 58%,#100b08 100%);background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;background-image:repeating-linear-gradient(0deg,transparent 0 5px,#e6c18a 6px,transparent 7px 13px);mix-blend-mode:soft-light}
+.app{position:relative;isolation:isolate}
+.brand{text-shadow:0 2px 2px #120b05,0 0 18px #f1c56a55;letter-spacing:.2px}
+.levelpill,.stat,.market,.order,.board-wrap,.panel{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.market{position:relative;overflow:hidden;background:linear-gradient(115deg,#70502d 0%,#3b2919 42%,#24180f 100%);box-shadow:inset 0 1px #fff5,inset 0 -5px 12px #120b0788,0 7px 18px #0006}
+.market:after,.board-wrap:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,#fff2,transparent 28% 72%,#0002)}
+.market-scene{filter:drop-shadow(0 3px 3px #100904);text-shadow:0 2px 5px #0008}
+.board-wrap{position:relative;overflow:hidden;border:1px solid #d0a45f;background:linear-gradient(145deg,#6b4b2a 0%,#392719 17%,#21170f 76%,#130e09 100%);box-shadow:0 18px 35px #000a,inset 0 2px 0 #fff4,inset 0 -8px 18px #0b0705}
+.board-head{position:relative;z-index:1}
+.shelf{border:1px solid #c19557;background:linear-gradient(110deg,#8a6338 0%,#684727 17%,#49301c 48%,#332113 100%);box-shadow:inset 0 2px 0 #fff5,inset 0 -7px 12px #1b1009aa,0 6px 10px #0008,0 1px 0 #e5bd7a}
+.shelf:before{width:7px;opacity:.9;background:linear-gradient(90deg,#d9ad69,#8b5728,#f1d092)}
+.shelf:after{content:"";position:absolute;left:8px;right:8px;top:5px;height:1px;background:#fff4;pointer-events:none}
+.shelf-label{color:#f8dfae;text-shadow:0 1px 2px #160d06}
+.slots{position:relative;z-index:1}
+.item{border:1px solid #c69a5c;background:radial-gradient(ellipse at 30% 18%,#9b7950 0%,#63472b 42%,#2a1b10 100%);box-shadow:inset 0 2px 3px #fff5,inset 0 -4px 7px #140b06aa,0 4px 7px #0009;text-shadow:0 3px 4px #100804;filter:drop-shadow(0 1px 1px #0008)}
+.item.top-item{background:radial-gradient(ellipse at 30% 12%,#c49a5b 0%,#79552f 45%,#342012 100%);box-shadow:inset 0 2px 4px #fff8,0 0 12px #f5d28a66,0 4px 8px #0009}
+.item.empty{background:linear-gradient(145deg,#2c1d12,#160f0a);border-color:#b38a53}
+.stat{background:linear-gradient(145deg,#57402a,#26190f);border-color:#b68a4b;box-shadow:inset 0 1px #fff5,inset 0 -4px 9px #120b07,0 4px 10px #0005}
+.order{background:linear-gradient(110deg,#4d351f,#24170e);border-color:#b68a4b;box-shadow:inset 0 1px #fff3,0 5px 12px #0005}
+.tool,.primary,.secondary,.footer button{box-shadow:inset 0 1px #fff5,inset 0 -3px 7px #170d07aa,0 5px 10px #0007}
+.panel{background:radial-gradient(ellipse at 50% 0%,#76522f 0%,#3d2b1b 36%,#1b120c 100%);border-color:#e0b66d;box-shadow:0 25px 75px #000e,inset 0 1px #fff6}
+.hero{filter:drop-shadow(0 5px 4px #120904)}
+.toast{box-shadow:0 8px 28px #000c,inset 0 1px #fff8}
+@media(prefers-reduced-motion:no-preference){.item.top-item{animation:produce-breathe 2.8s ease-in-out infinite alternate}.market-scene{animation:market-float 3.4s ease-in-out infinite alternate}}
+@keyframes produce-breathe{from{transform:translateY(-1px) scale(1.025)}to{transform:translateY(-3px) scale(1.055)}}
+@keyframes market-float{from{transform:translateY(0)}to{transform:translateY(-2px)}}
+
 </style>
 </head>
 <body>
