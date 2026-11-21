@@ -32,7 +32,9 @@ try {
   const shelves = page.locator('#shelves button.shelf');
   await shelves.first().waitFor({state:'visible'});
   assert.equal(await shelves.count(),4,'Level 1 must render 4 shelves');
-  const source = page.locator('#shelves button.shelf[aria-label$="4 of 4 items"]').first();
+  const sourceIndex = await shelves.evaluateAll(nodes => nodes.findIndex(node => !node.getAttribute('aria-label')?.endsWith('0 of 4 items')));
+  assert.ok(sourceIndex >= 0, 'Puzzle must have at least one non-empty shelf');
+  const source = shelves.nth(sourceIndex);
   await source.click();
   await assert.doesNotReject(async()=>page.locator('#shelves button.shelf.selected').waitFor({state:'visible'}),'Shelf tap must select a shelf');
   const legalTarget = page.locator('#shelves button.shelf.target').first();
