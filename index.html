@@ -214,6 +214,8 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 .shelf.rainbow-basket{border-color:#e7b7ff!important;background:linear-gradient(115deg,#754d8e,#3d285d 58%,#241536)!important;box-shadow:0 0 0 2px #d99cff55,0 0 18px #c77cff55,inset 0 1px #fff8!important}
 .shelf.rainbow-basket .shelf-label{color:#f1d2ff!important}
 .shelf.rainbow-basket .golden-tag{color:#f6dfff!important}
+/* Instant shelf response: subtle feedback without blocking subsequent moves. */
+.shelf.just-moved,.item.arriving{animation:none!important}.shelf{transition:border-color .08s,background .08s,box-shadow .08s!important}.item{transition:filter .08s,box-shadow .08s!important}
 </style>
 </head>
 <body>
@@ -567,12 +569,15 @@ function celebrate(){
  if(soundOn)speakHindi(lastPraise);
  celebrationJingle();
 }
-async function moveShelf(from,to){
- if(busy||!started)return;
- if(from<0||to<0)return;
+function moveShelf(from,to){
+ if(busy||!started||from<0||to<0)return;
  if(!legalMove(from,to)){selected=to;render();say('That shelf cannot take this item. Match the top product or choose an empty shelf.');tone(240);return}
- snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;totalMoves++;selected=-1;busy=true;save();if(goldenBasketEvent()&&to===stacks.length-1&&!goldenBasketPaid){goldenBasketPaid=true;goldenBasketClaims.add(goldenBasketKey());try{localStorage.setItem('nbsGoldenBasketClaims',JSON.stringify([...goldenBasketClaims]))}catch(e){}const basketReward=specialBasketType()==='rainbow'?20:10;earnCoins(basketReward);toast((specialBasketType()==='rainbow'?'Rainbow':'Golden')+' Basket bonus! +'+basketReward+' coins 🌟')}try{navigator.vibrate?.(22)}catch(e){}render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(470+item*75,'triangle',.11,.035);await sleep(75);busy=false;update();
- if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820,'sine',.22,.05);if(festival!=='bazaar'&&!festivalBonusPaid){festivalBonusPaid=true;earnCoins(10);toast('Festival first-shelf bonus! +10 coins 🎊');update()}if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;const orderBonus=vipCustomerRush()?30:15;earnCoins(orderBonus);document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast((vipCustomerRush()?'VIP rush order':'Customer order')+' delivered! +'+orderBonus+' coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! '+orderBonus+' बोनस सिक्के!');update()}}
+ snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;totalMoves++;selected=-1;save();
+ if(goldenBasketEvent()&&to===stacks.length-1&&!goldenBasketPaid){goldenBasketPaid=true;goldenBasketClaims.add(goldenBasketKey());try{localStorage.setItem('nbsGoldenBasketClaims',JSON.stringify([...goldenBasketClaims]))}catch(e){}const basketReward=specialBasketType()==='rainbow'?20:10;earnCoins(basketReward);toast((specialBasketType()==='rainbow'?'Rainbow':'Golden')+' Basket bonus! +'+basketReward+' coins 🌟')}
+ try{navigator.vibrate?.(10)}catch(e){}
+ // Commit the move immediately; do not wait for an animation timer before accepting the next move.
+ render();update();tone(470+item*75,'triangle',.07,.025);
+ if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820,'sine',.16,.04);if(festival!=='bazaar'&&!festivalBonusPaid){festivalBonusPaid=true;earnCoins(10);toast('Festival first-shelf bonus! +10 coins 🎊');update()}if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;const orderBonus=vipCustomerRush()?30:15;earnCoins(orderBonus);document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast((vipCustomerRush()?'VIP rush order':'Customer order')+' delivered! +'+orderBonus+' coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! '+orderBonus+' बोनस सिक्के!');update()}}
  if(sortedCount()===typesForLevel())finishDay();
 }
 function onShelf(i){
