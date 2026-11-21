@@ -16,3 +16,9 @@ jobs:
         with:
           node-version: 22
       - run: node qa.mjs
+      - name: Install browser test runner
+        run: npm install --no-save playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run Android-sized gameplay smoke test
+        run: node qa-browser.mjs
