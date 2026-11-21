@@ -68,11 +68,32 @@ function findMatches(){let set=new Set();for(let r=0;r<N;r++)for(let c=0;c<N;c++
 function hasMove(){for(let i=0;i<N*N;i++){let right=i%N<N-1?i+1:-1,down=i+N<N*N?i+N:-1;for(let j of [right,down])if(j>=0){[board[i],board[j]]=[board[j],board[i]];let ok=findMatches().length>0;[board[i],board[j]]=[board[j],board[i]];if(ok)return true}}return false}
 function makeBoard(){let tries=0;do{board=Array.from({length:N*N},randomGem);tries++}while((findMatches().length||!hasMove())&&tries<500);selected=-1;render()}
 function render(){let el=$('board');el.innerHTML='';board.forEach((v,i)=>{let b=document.createElement('button');b.className='tile'+(i===selected?' selected':'');b.type='button';b.textContent=TYPES[v];b.style.background='linear-gradient(145deg,'+COLORS[v]+'77,#160f48)';b.setAttribute('aria-label',TYPES[v]+' gem, row '+(Math.floor(i/N)+1)+', column '+(i%N+1));b.setAttribute('aria-pressed',i===selected?'true':'false');b.dataset.index=String(i);el.appendChild(b)})}
-let lastBoardPointer=0,boardPress=-1;const boardEl=$('board');
+let lastBoardPointer=0,boardPress=-1,boardPointerId=null,boardStartX=0,boardStartY=0;const boardEl=$('board');
 function tileIndex(node){const tile=node&&node.closest?node.closest('button.tile'):null;if(!tile||!boardEl.contains(tile))return -1;const i=Number(tile.dataset.index);return Number.isInteger(i)&&i>=0&&i<N*N?i:-1}
-boardEl.addEventListener('pointerdown',e=>{boardPress=tileIndex(e.target)},{passive:true});
-boardEl.addEventListener('pointerup',e=>{const from=boardPress;boardPress=-1;let target=document.elementFromPoint(e.clientX,e.clientY);let to=tileIndex(target);if(to<0)to=tileIndex(e.target);if(from<0&&to<0)return;e.preventDefault();lastBoardPointer=Date.now();if(from>=0&&to>=0&&from!==to&&neighbours(from,to)){if(selected===from)tap(to);else if(selected<0){tap(from);tap(to)}else{tap(from);setTimeout(()=>tap(to),0)}}else if(to>=0)tap(to);else if(from>=0)tap(from)},{passive:false});
-boardEl.addEventListener('pointercancel',()=>{boardPress=-1},{passive:true});
+function finishBoardGesture(e){
+  if(boardPointerId!==null&&e.pointerId!==boardPointerId)return;
+  const from=boardPress;boardPress=-1;boardPointerId=null;
+  const target=document.elementFromPoint(e.clientX,e.clientY);
+  const to=tileIndex(target);
+  if(from<0&&to<0)return;
+  e.preventDefault();lastBoardPointer=Date.now();
+  const dx=e.clientX-boardStartX,dy=e.clientY-boardStartY;
+  const dragged=Math.hypot(dx,dy)>12;
+  if(dragged&&from>=0&&to>=0&&from!==to&&neighbours(from,to)){
+    if(selected!==-1&&selected!==from){selected=-1;render()}
+    tap(from);tap(to);
+  }else if(!dragged&&to>=0){tap(to)}
+  else if(!dragged&&from>=0){tap(from)}
+}
+boardEl.addEventListener('pointerdown',e=>{
+  const i=tileIndex(e.target);if(i<0)return;
+  boardPress=i;boardPointerId=e.pointerId;boardStartX=e.clientX;boardStartY=e.clientY;
+  try{boardEl.setPointerCapture(e.pointerId)}catch(_){}
+  e.preventDefault();
+},{passive:false});
+boardEl.addEventListener('pointerup',finishBoardGesture,{passive:false});
+boardEl.addEventListener('pointercancel',()=>{boardPress=-1;boardPointerId=null},{passive:true});
+boardEl.addEventListener('lostpointercapture',()=>{boardPress=-1;boardPointerId=null},{passive:true});
 boardEl.addEventListener('click',e=>{if(Date.now()-lastBoardPointer<800){e.preventDefault();return}const i=tileIndex(e.target);if(i>=0)tap(i)});
 function updateHUD(){$('level').textContent=level;$('score').textContent=score;$('moves').textContent=moves;$('target').textContent=target;$('progress').textContent=Math.min(score,target)+' / '+target;$('progressFill').style.width=Math.min(100,score/target*100)+'%';$('best').textContent='🏅 BEST: '+best}
 function say(t){$('message').textContent=t}
