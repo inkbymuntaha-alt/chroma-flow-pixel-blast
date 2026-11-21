@@ -123,6 +123,17 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 @keyframes rain-drop{0%{transform:translateY(-8px);opacity:0}30%{opacity:.7}100%{transform:translateY(48px);opacity:0}}
 @media(prefers-reduced-motion:reduce){.stall-dress span,.customer,.customer-mood,.weather-particle{animation:none!important}}
 
+
+/* Missions, daily challenge and newly unlocked produce */
+.daily-card{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;border:1px solid #9d793d;border-radius:13px;background:linear-gradient(105deg,#342819,#1b150d);box-shadow:inset 0 1px #fff2}
+.daily-copy{min-width:0}.daily-copy b{display:block;color:#ffe4a0;font-size:11px;letter-spacing:.5px}.daily-copy small{display:block;color:#cdb98e;font-size:10px;line-height:1.3;margin-top:2px}
+.daily-card button{flex:none;border:1px solid #e2bb68;border-radius:10px;padding:9px 11px;background:linear-gradient(145deg,#a87932,#65431d);color:#fff0c5;font-size:10px;font-weight:1000;box-shadow:inset 0 1px #fff4}
+.daily-card button:disabled{opacity:.42;filter:grayscale(.7)}
+.order strong{max-width:46%;text-align:right;white-space:normal}
+.mission-flash{animation:mission-flash .55s ease-out}
+@keyframes mission-flash{0%{box-shadow:0 0 0 0 #ffe08b99}100%{box-shadow:0 0 0 12px #ffe08b00}}
+@media(max-width:370px){.daily-card{padding:8px}.daily-card button{padding:8px;font-size:9px}.daily-copy small{font-size:9px}}
+
 </style>
 </head>
 <body>
@@ -138,6 +149,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 <section class="order"><div><b id="orderTitle">CUSTOMER ORDER</b><small id="orderText">Sort every shelf to serve the neighborhood.</small></div><strong id="orderProgress">0 / 4</strong></section>
 <div class="progress"><i id="progressFill"></i></div>
 <section class="board-wrap"><div class="board-head"><b>🧺 MARKET SHELVES</b><small id="boardTip">Tap a shelf, then tap where its top item goes</small></div><div class="shelves" id="shelves" aria-label="Sorting shelves"></div></section>
+<section class="daily-card" id="dailyCard"><div class="daily-copy"><b>🌟 DAILY BAZAAR CHALLENGE</b><small id="dailyDescription">A fresh puzzle and bonus coins every day.</small></div><button id="dailyStart" type="button">PLAY TODAY ▶</button></section>
 <section class="controls"><button class="tool" id="hint">💡 HINT</button><button class="tool" id="undo">↶ UNDO</button><button class="tool" id="shuffle">🔀 MIX UP</button></section>
 <div class="message" id="message">Choose a shelf to pick up its top product.</div>
 <footer class="footer"><button id="sound">🔊 SOUND ON</button><button id="voiceTest">🎙️ TEST HINDI VOICE</button><button id="restart">↻ RESTART DAY</button><button id="mapOpen">🗺️ MARKET MAP</button></footer>
@@ -149,7 +161,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
-const CAP=4,PRODUCTS=[{e:'🍎',n:'Apples'},{e:'🥕',n:'Carrots'},{e:'🍋',n:'Lemons'},{e:'🍇',n:'Grapes'},{e:'🥐',n:'Pastries'}];
+const CAP=4,PRODUCTS=[{e:'🍎',n:'Apples'},{e:'🥕',n:'Carrots'},{e:'🍋',n:'Lemons'},{e:'🍇',n:'Grapes'},{e:'🥐',n:'Pastries'},{e:'🥭',n:'Mangoes'},{e:'🍉',n:'Watermelons'}];
 function productArt(v){
  const common='class="produce-art" viewBox="0 0 64 64" role="img" aria-label="'+PRODUCTS[v].n+'"';
  const arts=[
@@ -158,22 +170,31 @@ function productArt(v){
  '<svg '+common+'><defs><radialGradient id="le" cx="32%" cy="22%"><stop stop-color="#fff6a8"/><stop offset=".55" stop-color="#f4d83e"/><stop offset="1" stop-color="#b7a51b"/></radialGradient></defs><path d="M9 32Q17 13 32 13q15 0 23 19Q47 51 32 52 17 51 9 32Z" fill="url(#le)"/><path d="M9 32q-7-3-5 1 2 5 7 4m44-5q7-3 5 1-2 5-7 4" fill="#e5c42c"/><path d="M19 23q7-7 15-5" fill="none" stroke="#fffbd0" stroke-width="4" opacity=".65" stroke-linecap="round"/><path d="M19 42q12 7 24 0" fill="none" stroke="#c3a91d" stroke-width="1.5" opacity=".55"/></svg>',
  '<svg '+common+'><path d="M31 14q-8-9-15-5 0 7 11 10" fill="#4c8e43"/><path d="M33 14q9-11 17-5-1 8-13 12" fill="#68a74a"/><g stroke="#5d255d" stroke-width="1.3"><path d="M31 15q-18-4-20 11-1 9 10 10 12 0 12-12 0 12 11 12 11-1 10-12-2-14-23-9Z" fill="#8241a0"/><path d="M31 32q-18-4-20 11-1 9 10 10 12 0 12-12 0 12 11 12 11-1 10-12-2-14-23-9Z" fill="#6b2d88"/></g><g fill="#d9a9e9" opacity=".8"><circle cx="19" cy="25" r="2"/><circle cx="42" cy="24" r="2"/><circle cx="20" cy="43" r="2"/><circle cx="43" cy="43" r="2"/></g></svg>',
  '<svg '+common+'><path d="M8 34 18 12q2-4 7-2l30 12q5 2 3 7L48 51q-2 5-8 3L12 44q-7-2-4-10Z" fill="#d99a45" stroke="#8d4e22" stroke-width="2"/><path d="m18 16 29 12-7 20-28-11Z" fill="#f1c477"/><path d="m22 19 6 3-8 20-6-3Zm13 5 6 3-8 20-6-3Z" fill="#9e5427" opacity=".65"/><path d="m21 16 27 11" stroke="#fff0c3" stroke-width="3" stroke-linecap="round" opacity=".8"/><circle cx="35" cy="35" r="3" fill="#ffe6a4"/></svg>'
- ];return arts[v]||arts[0];
+ 
+ ,'<svg '+common+'><defs><radialGradient id="ma" cx="30%" cy="22%"><stop stop-color="#fff0a1"/><stop offset=".48" stop-color="#ffb52e"/><stop offset="1" stop-color="#d45a16"/></radialGradient></defs><path d="M34 12q-2-8 5-10" fill="none" stroke="#68401d" stroke-width="4" stroke-linecap="round"/><path d="M37 8q10-8 17 0-7 7-17 0" fill="#5d9a42"/><path d="M32 12C15 7 7 23 13 40q7 18 22 13 19-5 17-25-2-15-20-16Z" fill="url(#ma)"/><path d="M22 20q-7 10-2 20" fill="none" stroke="#fff4c2" stroke-width="4" opacity=".55" stroke-linecap="round"/></svg>'
+ ,'<svg '+common+'><defs><radialGradient id="wa" cx="30%" cy="22%"><stop stop-color="#b9ed8a"/><stop offset=".55" stop-color="#4d9c4b"/><stop offset="1" stop-color="#17623b"/></radialGradient></defs><path d="M32 8C12 8 5 22 9 39q4 17 23 17 22 0 24-19Q58 10 32 8Z" fill="url(#wa)" stroke="#174d34" stroke-width="2"/><path d="M16 17q-8 17 1 31m11-38q-5 20 0 43m13-41q8 17 1 37" fill="none" stroke="#c5e78b" stroke-width="2.2" opacity=".7"/><path d="M32 8q-3-5 2-7" stroke="#7a4b23" stroke-width="3" fill="none" stroke-linecap="round"/></svg>'
+
+  ];return arts[v]||arts[0];
 }
 const STALLS=[['🏪🥬🧺',"NAZEEF'S CORNER BAZAR",'A little shop with big dreams'],['🍎🥕🏬','FRESH PRODUCE STALL','The neighborhood favourite'],['🥐🍋🛍️','THE BUSY MARKET','More customers are coming'],['🌼🍇🏘️','GOLDEN BAZAR STREET','A beautiful market street'],['🎪🧺✨','THE GRAND BAZAR','Your market is shining']];
 let level=1,coins=0,best=0,unlocked=1,stacks=[],selected=-1,moves=0,history=[],busy=false,started=false,soundOn=true;
+let dailyMode=false,dailySeed='',dailyTargetMoves=0,orderProduct=0,specialOrderDone=false;
 try{level=Math.max(1,Number(localStorage.getItem('nbsLevel'))||1);unlocked=Math.max(1,Number(localStorage.getItem('nbsUnlocked'))||1);coins=Math.max(0,Number(localStorage.getItem('nbsCoins'))||0);best=Math.max(0,Number(localStorage.getItem('nbsBest'))||0)}catch(e){}
 const say=t=>{$('message').textContent=t};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function tone(freq=620){if(!soundOn)return;try{const A=window.AudioContext||window.webkitAudioContext;if(!window.ac)window.ac=new A();if(window.ac.state==='suspended')window.ac.resume();let o=window.ac.createOscillator(),g=window.ac.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(.04,window.ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,window.ac.currentTime+.13);o.connect(g);g.connect(window.ac.destination);o.start();o.stop(window.ac.currentTime+.14)}catch(e){}}
 function bind(id,fn){$(id).addEventListener('click',e=>{e.preventDefault();fn(e)})}
 function save(){try{localStorage.setItem('nbsLevel',String(level));localStorage.setItem('nbsUnlocked',String(unlocked));localStorage.setItem('nbsCoins',String(coins));localStorage.setItem('nbsBest',String(best))}catch(e){}}
-function typesForLevel(){return Math.min(5,3+Math.floor((level-1)/4))}
+function typesForLevel(){return Math.min(7,3+Math.floor((level-1)/4))}
+function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function seededRandom(seed){let h=2166136261;for(let i=0;i<seed.length;i++){h^=seed.charCodeAt(i);h=Math.imul(h,16777619)}return function(){h+=0x6D2B79F5;let t=h;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
+function dailyAlreadyClaimed(){try{return localStorage.getItem('nbsDailyClaim')===todayKey()}catch(e){return false}}
+function refreshDailyCard(){const b=$('dailyStart'),d=$('dailyDescription');if(!b||!d)return;const claimed=dailyAlreadyClaimed();b.disabled=claimed||busy; b.textContent=claimed?'COMPLETED ✓':'PLAY TODAY ▶';d.textContent=claimed?'Today’s challenge is complete. Come back tomorrow!':'Beat the move target for a '+(35+typesForLevel()*5)+' coin bonus.';}
 function shelfCount(){return typesForLevel()+1}
 function cloneBoard(b=stacks){return b.map(s=>s.slice())}
 function scramble(){
  const n=typesForLevel(),count=n+1,goal=Array.from({length:count},(_,i)=>i<n?Array(CAP).fill(i):[]);
- let b=cloneBoard(goal),steps=16+level*3;
+ let b=cloneBoard(goal),steps=16+level*3,rng=dailyMode?seededRandom(dailySeed+'-'+level):Math.random;
  for(let z=0;z<steps;z++){
   let choices=[];
   for(let a=0;a<count;a++)if(b[a].length&& (b[a].length===1||b[a][b[a].length-2]===b[a][b[a].length-1])){
@@ -181,13 +202,13 @@ function scramble(){
    for(let d=0;d<count;d++)if(d!==a&&b[d].length<CAP&&b[d][b[d].length-1]!==item)choices.push([a,d]);
   }
   if(!choices.length)break;
-  const [a,d]=choices[Math.floor(Math.random()*choices.length)];
+  const [a,d]=choices[Math.floor(rng()*choices.length)];
   b[d].push(b[a].pop());
  }
- if(b.slice(0,n).every(s=>s.length===CAP&&s.every(x=>x===s[0]))){return scramble()}
+ if(b.slice(0,n).every(s=>s.length===CAP&&s.every(x=>x===s[0]))){b[count-1].push(b[0].pop())}
  return b;
 }
-function newDay(){stacks=scramble();selected=-1;moves=0;history=[];busy=false;started=true;render();update();say('Tap a shelf to pick up its top product. Match it with the same product or an empty shelf.');}
+function newDay(){stacks=scramble();selected=-1;moves=0;history=[];busy=false;started=true;specialOrderDone=false;orderProduct=dailyMode?((Number(dailySeed.replace(/-/g,''))||1)%typesForLevel()):((level*3+1)%typesForLevel());dailyTargetMoves=20+typesForLevel()*7;render();update();say(dailyMode?'Daily challenge: complete the customer order within '+dailyTargetMoves+' moves for bonus coins!':'Tap a shelf to pick up its top product. Match it with the same product or an empty shelf.');}
 function render(){
  const root=$('shelves');root.innerHTML='';
  stacks.forEach((s,i)=>{
@@ -248,7 +269,10 @@ function update(){
  refreshBazaarLife();
  $('level').textContent=level;$('moves').textContent=moves;$('sorted').textContent=sortedCount()+'/'+typesForLevel();$('best').textContent=best;$('coins').textContent=coins;
 
- $('orderTitle').textContent='CUSTOMER ORDER · DAY '+level;$('orderText').textContent='Sort '+typesForLevel()+' shelves of four matching goods.';$('orderProgress').textContent=sortedCount()+' / '+typesForLevel();$('progressFill').style.width=(sortedCount()/typesForLevel()*100)+'%';
+ $('orderTitle').textContent=(dailyMode?'🌟 DAILY MISSION':'🛍️ CUSTOMER ORDER')+' · '+PRODUCTS[orderProduct].e+' '+PRODUCTS[orderProduct].n;
+ $('orderText').textContent=specialOrderDone?'Special order delivered! Bonus earned.':'First complete the '+PRODUCTS[orderProduct].n+' shelf for a 15-coin tip.';
+ $('orderProgress').textContent=specialOrderDone?'DONE ✓':(sortedCount()+'/'+typesForLevel());$('progressFill').style.width=(sortedCount()/typesForLevel()*100)+'%';
+ refreshDailyCard();
  $('hint').disabled=busy||!started;$('undo').disabled=busy||!started||history.length===0;$('shuffle').disabled=busy||!started;
 }
 function legalMove(a,d){if(a===d||!stacks[a]||!stacks[a].length||stacks[d].length>=CAP)return false;const item=stacks[a][stacks[a].length-1];return stacks[d].length===0||stacks[d][stacks[d].length-1]===item}
@@ -293,7 +317,7 @@ async function moveShelf(from,to){
  if(from<0||to<0)return;
  if(!legalMove(from,to)){selected=to;render();say('That shelf cannot take this item. Match the top product or choose an empty shelf.');tone(240);return}
  snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;selected=-1;busy=true;try{navigator.vibrate?.(22)}catch(e){}render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(520+item*80);await sleep(210);busy=false;update();
- if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820)}
+ if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820);if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;coins+=15;save();$('order').classList.add('mission-flash');setTimeout(()=>$('order').classList.remove('mission-flash'),650);toast('Customer order delivered! +15 coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! 15 बोनस सिक्के!');update()}}
  if(sortedCount()===typesForLevel())finishDay();
 }
 function onShelf(i){
@@ -312,7 +336,7 @@ function findHint(){
  say('Every move is possible. Keep sorting!');}
 function undo(){if(!history.length||busy)return;const prev=history.pop();stacks=cloneBoard(prev.stacks);moves=prev.moves;selected=-1;render();update();say('Last move undone. Try another shelf!');tone(330)}
 function mixUp(){if(busy||!started)return;stacks=scramble();selected=-1;history=[];render();update();say('Shelves mixed up. A fresh sorting puzzle is ready!');toast('Fresh market mix!')}
-function finishDay(){started=false;try{navigator.vibrate?.([35,45,35,45,90])}catch(e){}const reward=20+typesForLevel()*10+Math.max(0,30-moves);coins+=reward;unlocked=Math.max(unlocked,Math.min(100,level+1));best=Math.max(best,level);save();celebrate();$('finishIcon').textContent='🎉🏪🪙';$('finishTitle').textContent='DAY '+level+' COMPLETE!';$('finishText').textContent=lastPraise+' All the shelves are sorted! Happy customers earned you '+reward+' coins. तुम्हारे लिए '+reward+' सिक्के!';$('continue').textContent=level>=100?'CELEBRATE YOUR BAZAR ▶':'OPEN NEXT DAY ▶';$('finish').classList.remove('hidden');update()}
+function finishDay(){started=false;try{navigator.vibrate?.([35,45,35,45,90])}catch(e){}let reward=20+typesForLevel()*10+Math.max(0,30-moves);let extra='';if(dailyMode){const won=moves<=dailyTargetMoves;try{localStorage.setItem('nbsDailyClaim',todayKey())}catch(e){}if(won){const bonus=35+typesForLevel()*5;reward+=bonus;extra=' Daily challenge bonus: '+bonus+' coins!'}else{extra=' Daily target was '+dailyTargetMoves+' moves; try again tomorrow for the bonus.'}}else{unlocked=Math.max(unlocked,Math.min(100,level+1));best=Math.max(best,level)}coins+=reward;save();celebrate();$('finishIcon').textContent='🎉🏪🪙';$('finishTitle').textContent=dailyMode?'DAILY CHALLENGE COMPLETE!':'DAY '+level+' COMPLETE!';$('finishText').textContent=lastPraise+' All the shelves are sorted! Happy customers earned you '+reward+' coins. '+(specialOrderDone?'Special customer order bonus included! ':'')+extra+' तुम्हारे लिए '+reward+' सिक्के!';$('continue').textContent=dailyMode?'BACK TO BAZAAR':(level>=100?'CELEBRATE YOUR BAZAR ▶':'OPEN NEXT DAY ▶');$('finish').classList.remove('hidden');update()}
 function drawMap(){const root=$('levelGrid');root.innerHTML='';for(let n=1;n<=100;n++){const b=document.createElement('button');b.type='button';b.className='level-cell'+(n===level?' current':'');b.textContent=n<=unlocked?'★ '+n:'🔒';b.disabled=n>unlocked;b.addEventListener('click',()=>{level=n;$('map').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newDay()});root.appendChild(b)}}
 // Pointer-first controls: taps select instantly; dragging a picked shelf onto another moves its top item.
 let pointerShelf=-1;
@@ -335,9 +359,10 @@ $('shelves').addEventListener('click',e=>{
  const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b))return;onShelf(Number(b.dataset.shelf));
 });
 bind('start',()=>{$('welcome').classList.add('hidden');newDay()});
-bind('continue',()=>{level=level>=100?1:Math.min(100,level+1);unlocked=Math.max(unlocked,level);save();$('finish').classList.add('hidden');newDay()});
+bind('continue',()=>{if(dailyMode){dailyMode=false}else{level=level>=100?1:Math.min(100,level+1);unlocked=Math.max(unlocked,level)}save();$('finish').classList.add('hidden');newDay()});
 bind('again',()=>{$('finish').classList.add('hidden');newDay()});
 bind('restart',()=>{if(!busy)newDay()});
+bind('dailyStart',()=>{if(busy||dailyAlreadyClaimed())return;dailyMode=true;dailySeed=todayKey();$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newDay()});
 bind('hint',findHint);bind('undo',undo);bind('shuffle',mixUp);
 bind('sound',()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'🔊 SOUND ON':'🔇 SOUND OFF';if(soundOn)tone()});
 bind('voiceTest',()=>{const sample='शाबाश नाज़ीफ़! क्या कमाल कर दिया!';if(speakHindi(sample))say('Hindi voice test playing. If it sounds robotic, choose a higher-quality Hindi voice in Android Text-to-speech settings.');});
