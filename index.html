@@ -583,19 +583,24 @@ function drawMap(){const root=$('levelGrid');root.innerHTML='';for(let n=1;n<=10
 let pointerShelf=-1;
 $('shelves').addEventListener('pointerdown',e=>{
  const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b)||!started||busy)return;
+ // Record the origin only. Re-rendering here can cancel Android's pressed pointer.
  pointerShelf=Number(b.dataset.shelf);
- if(selected<0&&stacks[pointerShelf]?.length){selected=pointerShelf;render();tone(420)}
 });
 $('shelves').addEventListener('pointerup',e=>{
- const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b))return;
- const dest=Number(b.dataset.shelf),source=selected;pointerShelf=-1;
- if(source>=0&&source!==dest){
-   if(legalMove(source,dest))moveShelf(source,dest);else onShelf(dest);
+ const b=e.target.closest('button.shelf'),down=pointerShelf;pointerShelf=-1;
+ if(!b||!$('shelves').contains(b)){if(down>=0&&selected<0)onShelf(down);return}
+ const dest=Number(b.dataset.shelf);
+ if(selected>=0){
+  if(selected===dest){onShelf(dest);return}
+  if(legalMove(selected,dest))moveShelf(selected,dest);else onShelf(dest);
+  return;
  }
+ if(down>=0&&down!==dest&&legalMove(down,dest)){moveShelf(down,dest);return}
+ onShelf(dest);
 });
 $('shelves').addEventListener('pointercancel',()=>{pointerShelf=-1});
 $('shelves').addEventListener('click',e=>{
- // Pointer interactions are handled above. Keep native keyboard activation accessible.
+ // Pointer taps are handled on pointerup; retain keyboard activation.
  if(e.detail!==0)return;
  const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b))return;onShelf(Number(b.dataset.shelf));
 });
