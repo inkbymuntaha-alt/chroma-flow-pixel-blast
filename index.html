@@ -216,6 +216,15 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 .shelf.rainbow-basket .golden-tag{color:#f6dfff!important}
 /* Instant shelf response: subtle feedback without blocking subsequent moves. */
 .shelf.just-moved,.item.arriving{animation:none!important}.shelf{transition:border-color .08s,background .08s,box-shadow .08s!important}.item{transition:filter .08s,box-shadow .08s!important}
+
+/* Android performance mode: keep input and board updates ahead of decoration. */
+@media (pointer:coarse){
+ .app,.board-wrap,.market,.living-bazaar,.panel{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+ .app:before,body:before{display:none!important}
+ .item.top-item,.market-scene,.stall-dress span,.customer,.weather-particle{animation:none!important}
+ .shelf,.item,.tool,.primary,.secondary,.footer button{transition:none!important}
+ .shelf:active{transform:none!important;filter:none!important}
+}
 </style>
 </head>
 <body>
@@ -458,15 +467,16 @@ function scramble(){
 }
 function newDay(){scrambleVariant=0;stacks=scramble();selected=-1;moves=0;history=[];busy=false;started=true;specialOrderDone=false;festivalBonusPaid=false;goldenBasketPaid=goldenBasketClaims.has(goldenBasketKey());orderProduct=dailyMode?((Number(dailySeed.replace(/-/g,''))||1)%typesForLevel()):((level*3+1)%typesForLevel());dailyTargetMoves=20+typesForLevel()*7;render();update();say(dailyMode?'Daily challenge: complete the customer order within '+dailyTargetMoves+' moves for bonus coins!':'Tap a shelf to pick up its top product. Match it with the same product or an empty shelf.');}
 function render(){
- const root=$('shelves');root.innerHTML='';
+ const root=$('shelves'),fragment=document.createDocumentFragment(),basketType=specialBasketType(),goldenIndex=stacks.length-1,isGoldenEvent=goldenBasketEvent();
  stacks.forEach((s,i)=>{
-  const basketType=specialBasketType();const isGolden=goldenBasketEvent()&&i===stacks.length-1;const b=document.createElement('button');b.type='button';b.className='shelf'+(isGolden?(basketType==='rainbow'?' rainbow-basket':' golden-basket'):'')+(i===selected?' selected':'')+(selected>=0&&i!==selected&&(s.length===0||s[s.length-1]===stacks[selected]?.[stacks[selected].length-1]&&s.length<CAP)?' target':'');
+  const isGolden=isGoldenEvent&&i===goldenIndex;const b=document.createElement('button');b.type='button';b.className='shelf'+(isGolden?(basketType==='rainbow'?' rainbow-basket':' golden-basket'):'')+(i===selected?' selected':'')+(selected>=0&&i!==selected&&(s.length===0||s[s.length-1]===stacks[selected]?.[stacks[selected].length-1]&&s.length<CAP)?' target':'');
   b.dataset.shelf=String(i);b.setAttribute('aria-label','Shelf '+(i+1)+', '+s.length+' of 4 items');
-  const lab=document.createElement('span');lab.className='shelf-label';lab.innerHTML='<span>'+(isGolden?(basketType==='rainbow'?'🌈':'🌟'):i===stacks.length-1?'🧺':'🪵')+'</span>'+(isGolden?(basketType==='rainbow'?'RAINBOW BASKET':'GOLDEN BASKET'):'SHELF '+(i+1))+(isGolden?'<i class="golden-tag">'+(basketType==='rainbow'?'+20 COINS ON FIRST USE':'+10 COINS ON FIRST USE')+'</i>':'');
+  const lab=document.createElement('span');lab.className='shelf-label';lab.innerHTML='<span>'+(isGolden?(basketType==='rainbow'?'🌈':'🌟'):i===goldenIndex?'🧺':'🪵')+'</span>'+(isGolden?(basketType==='rainbow'?'RAINBOW BASKET':'GOLDEN BASKET'):'SHELF '+(i+1))+(isGolden?'<i class="golden-tag">'+(basketType==='rainbow'?'+20 COINS ON FIRST USE':'+10 COINS ON FIRST USE')+'</i>':'');
   const slots=document.createElement('span');slots.className='slots';
   for(let k=0;k<CAP;k++){const item=document.createElement('span');const v=s[k];item.className='item'+(v===undefined?' empty':k===s.length-1?' top-item':'');if(v!==undefined)item.innerHTML=productArt(v);if(v!==undefined&&k===s.length-1){const t=document.createElement('i');t.className='tiny';t.textContent='TOP';item.appendChild(t)}slots.appendChild(item)}
-  b.append(lab,slots);root.appendChild(b);
+  b.append(lab,slots);fragment.appendChild(b);
  });
+ root.replaceChildren(fragment);
 }
 function sortedCount(){return stacks.filter(s=>s.length===CAP&&s.every(v=>v===s[0])).length}
 function applyLevelPalette(){
@@ -532,6 +542,16 @@ function update(){
  refreshDailyCard();
  $('hint').disabled=busy||!started;$('undo').disabled=busy||!started||history.length===0;$('shuffle').disabled=busy||!started;
 }
+// Hot-path UI refresh: a shelf move does not need palette, daily-card or full-screen work.
+function updateMoveUI(){
+ const done=sortedCount(),total=typesForLevel();
+ $('moves').textContent=moves;$('sorted').textContent=done+'/'+total;$('best').textContent=best;$('coins').textContent=coins;
+ $('orderProgress').textContent=specialOrderDone?'DONE ✓':done+'/'+total;
+ $('progressFill').style.width=(done/total*100)+'%';
+ $('boardTip').textContent=goldenBasketEvent()?(goldenBasketPaid?'Special basket bonus collected!':(specialBasketType()==='rainbow'?'Rainbow Basket: use it once for +20 coins!':'Golden Basket: use it once for +10 coins!')):chapterChallenge()?'Chapter challenge: stay within '+chapterMoveTarget()+' moves for a bonus!':'Tap a shelf, then tap where its top item goes';
+ refreshBazaarLife();
+ $('hint').disabled=busy||!started;$('undo').disabled=busy||!started||history.length===0;$('shuffle').disabled=busy||!started;
+}
 function legalMove(a,d){if(a===d||!stacks[a]||!stacks[a].length||stacks[d].length>=CAP)return false;const item=stacks[a][stacks[a].length-1];return stacks[d].length===0||stacks[d][stacks[d].length-1]===item}
 function snapshot(){history.push({stacks:cloneBoard(),moves});if(history.length>30)history.shift()}
 function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1000)}
@@ -576,7 +596,7 @@ function moveShelf(from,to){
  if(goldenBasketEvent()&&to===stacks.length-1&&!goldenBasketPaid){goldenBasketPaid=true;goldenBasketClaims.add(goldenBasketKey());try{localStorage.setItem('nbsGoldenBasketClaims',JSON.stringify([...goldenBasketClaims]))}catch(e){}const basketReward=specialBasketType()==='rainbow'?20:10;earnCoins(basketReward);toast((specialBasketType()==='rainbow'?'Rainbow':'Golden')+' Basket bonus! +'+basketReward+' coins 🌟')}
  try{navigator.vibrate?.(10)}catch(e){}
  // Commit the move immediately; do not wait for an animation timer before accepting the next move.
- render();update();tone(470+item*75,'triangle',.07,.025);
+ render();updateMoveUI();tone(470+item*75,'triangle',.07,.025);
  if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820,'sine',.16,.04);if(festival!=='bazaar'&&!festivalBonusPaid){festivalBonusPaid=true;earnCoins(10);toast('Festival first-shelf bonus! +10 coins 🎊');update()}if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;const orderBonus=vipCustomerRush()?30:15;earnCoins(orderBonus);document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast((vipCustomerRush()?'VIP rush order':'Customer order')+' delivered! +'+orderBonus+' coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! '+orderBonus+' बोनस सिक्के!');update()}}
  if(sortedCount()===typesForLevel())finishDay();
 }
