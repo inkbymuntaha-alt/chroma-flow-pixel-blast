@@ -412,7 +412,10 @@ function updateAudioButtons(){
 function celebrationJingle(){if(!soundOn)return;const seq=festival==='diwali'?[523,659,784,1047,988,784]:festival==='holi'?[392,494,587,784,659,784]:festival==='eid'?[440,554,659,880,784,659]:festival==='monsoon'?[392,440,523,587,659,587]:[523,659,784,880,784,1047];seq.forEach((n,i)=>setTimeout(()=>tone(n,'sine',.28,.035),i*115))}
 
 function bind(id,fn){$(id).addEventListener('click',e=>{e.preventDefault();fn(e)})}
-function save(){try{localStorage.setItem('nbsLevel',String(level));localStorage.setItem('nbsUnlocked',String(unlocked));localStorage.setItem('nbsCoins',String(coins));localStorage.setItem('nbsBest',String(best));localStorage.setItem('nbsDecor',JSON.stringify(ownedDecor));localStorage.setItem('nbsFestival',festival);localStorage.setItem('nbsTotalMoves',String(totalMoves));localStorage.setItem('nbsLevelsCompleted',String(levelsCompleted));localStorage.setItem('nbsTotalCoinsEarned',String(totalCoinsEarned));localStorage.setItem('nbsPlayStreak',String(playStreak));localStorage.setItem('nbsLastFinishDate',lastFinishDate);localStorage.setItem('nbsPlayerName',playerName);localStorage.setItem('nbsPlayerAvatar',playerAvatar);localStorage.setItem('nbsMarketUpgrades',JSON.stringify(marketUpgrades));localStorage.setItem('nbsFruitBest',String(fruitBest))}catch(e){}}
+let saveTimer=0;
+function flushSave(){saveTimer=0;try{localStorage.setItem('nbsLevel',String(level));localStorage.setItem('nbsUnlocked',String(unlocked));localStorage.setItem('nbsCoins',String(coins));localStorage.setItem('nbsBest',String(best));localStorage.setItem('nbsDecor',JSON.stringify(ownedDecor));localStorage.setItem('nbsFestival',festival);localStorage.setItem('nbsTotalMoves',String(totalMoves));localStorage.setItem('nbsLevelsCompleted',String(levelsCompleted));localStorage.setItem('nbsTotalCoinsEarned',String(totalCoinsEarned));localStorage.setItem('nbsPlayStreak',String(playStreak));localStorage.setItem('nbsLastFinishDate',lastFinishDate);localStorage.setItem('nbsPlayerName',playerName);localStorage.setItem('nbsPlayerAvatar',playerAvatar);localStorage.setItem('nbsMarketUpgrades',JSON.stringify(marketUpgrades));localStorage.setItem('nbsFruitBest',String(fruitBest))}catch(e){}}
+function save(){if(saveTimer)clearTimeout(saveTimer);saveTimer=setTimeout(flushSave,180)}
+window.addEventListener('pagehide',flushSave,{capture:true});
 function earnCoins(amount){coins+=amount;totalCoinsEarned+=amount;save()}
 const AVATARS=['🧑🏽‍🌾','👨🏽‍🍳','🧑🏻‍🌾','🧔🏽','👳🏽','🧕🏽','🧑🏾','👨🏻‍🌾','👩🏽‍🌾','🧑🏽‍🍳','👨🏾‍🌾','🧑🏻‍🍳'];
 const ACHIEVEMENTS=[
@@ -467,16 +470,28 @@ function scramble(){
 }
 function newDay(){scrambleVariant=0;stacks=scramble();selected=-1;moves=0;history=[];busy=false;started=true;specialOrderDone=false;festivalBonusPaid=false;goldenBasketPaid=goldenBasketClaims.has(goldenBasketKey());orderProduct=dailyMode?((Number(dailySeed.replace(/-/g,''))||1)%typesForLevel()):((level*3+1)%typesForLevel());dailyTargetMoves=20+typesForLevel()*7;render();update();say(dailyMode?'Daily challenge: complete the customer order within '+dailyTargetMoves+' moves for bonus coins!':'Tap a shelf to pick up its top product. Match it with the same product or an empty shelf.');}
 function render(){
- const root=$('shelves'),fragment=document.createDocumentFragment(),basketType=specialBasketType(),goldenIndex=stacks.length-1,isGoldenEvent=goldenBasketEvent();
- stacks.forEach((s,i)=>{
-  const isGolden=isGoldenEvent&&i===goldenIndex;const b=document.createElement('button');b.type='button';b.className='shelf'+(isGolden?(basketType==='rainbow'?' rainbow-basket':' golden-basket'):'')+(i===selected?' selected':'')+(selected>=0&&i!==selected&&(s.length===0||s[s.length-1]===stacks[selected]?.[stacks[selected].length-1]&&s.length<CAP)?' target':'');
-  b.dataset.shelf=String(i);b.setAttribute('aria-label','Shelf '+(i+1)+', '+s.length+' of 4 items');
-  const lab=document.createElement('span');lab.className='shelf-label';lab.innerHTML='<span>'+(isGolden?(basketType==='rainbow'?'🌈':'🌟'):i===goldenIndex?'🧺':'🪵')+'</span>'+(isGolden?(basketType==='rainbow'?'RAINBOW BASKET':'GOLDEN BASKET'):'SHELF '+(i+1))+(isGolden?'<i class="golden-tag">'+(basketType==='rainbow'?'+20 COINS ON FIRST USE':'+10 COINS ON FIRST USE')+'</i>':'');
-  const slots=document.createElement('span');slots.className='slots';
-  for(let k=0;k<CAP;k++){const item=document.createElement('span');const v=s[k];item.className='item'+(v===undefined?' empty':k===s.length-1?' top-item':'');if(v!==undefined)item.innerHTML=productArt(v);if(v!==undefined&&k===s.length-1){const t=document.createElement('i');t.className='tiny';t.textContent='TOP';item.appendChild(t)}slots.appendChild(item)}
-  b.append(lab,slots);fragment.appendChild(b);
+ const root=$('shelves'),basketType=specialBasketType(),goldenIndex=stacks.length-1,isGoldenEvent=goldenBasketEvent();
+ // Keep shelf nodes alive: rebuilding the whole board on every tap caused avoidable layout and paint work.
+ if(root.children.length!==stacks.length){
+  const fragment=document.createDocumentFragment();
+  stacks.forEach((s,i)=>{const b=document.createElement('button');b.type='button';b.className='shelf';b.dataset.shelf=String(i);const lab=document.createElement('span');lab.className='shelf-label';const slots=document.createElement('span');slots.className='slots';b.append(lab,slots);fragment.appendChild(b)});
+  root.replaceChildren(fragment);
+ }
+ const source=selected>=0?stacks[selected]:null,sourceTop=source?.[source.length-1];
+ stacks.forEach((stack,i)=>{
+  const b=root.children[i],isGolden=isGoldenEvent&&i===goldenIndex;
+  b.className='shelf'+(isGolden?(basketType==='rainbow'?' rainbow-basket':' golden-basket'):'')+(i===selected?' selected':'')+(selected>=0&&i!==selected&&(stack.length===0||stack[stack.length-1]===sourceTop&&stack.length<CAP)?' target':'');
+  b.setAttribute('aria-label','Shelf '+(i+1)+', '+stack.length+' of 4 items');
+  const lab=b.firstElementChild,slots=b.lastElementChild;
+  const label=(isGolden?(basketType==='rainbow'?'🌈':'🌟'):i===goldenIndex?'🧺':'🪵')+'|'+(isGolden?(basketType==='rainbow'?'RAINBOW BASKET':'GOLDEN BASKET'):'SHELF '+(i+1))+'|'+(isGolden?(basketType==='rainbow'?'+20 COINS ON FIRST USE':'+10 COINS ON FIRST USE'):'');
+  if(lab.dataset.label!==label){lab.dataset.label=label;lab.innerHTML='<span>'+label.split('|')[0]+'</span>'+label.split('|')[1]+(label.split('|')[2]?'<i class="golden-tag">'+label.split('|')[2]+'</i>':'')}
+  const signature=stack.join(',');
+  if(slots.dataset.signature!==signature){
+   slots.dataset.signature=signature;const fragment=document.createDocumentFragment();
+   for(let k=0;k<CAP;k++){const item=document.createElement('span'),v=stack[k];item.className='item'+(v===undefined?' empty':k===stack.length-1?' top-item':'');if(v!==undefined)item.innerHTML=productArt(v);if(v!==undefined&&k===stack.length-1){const t=document.createElement('i');t.className='tiny';t.textContent='TOP';item.appendChild(t)}fragment.appendChild(item)}
+   slots.replaceChildren(fragment);
+  }
  });
- root.replaceChildren(fragment);
 }
 function sortedCount(){return stacks.filter(s=>s.length===CAP&&s.every(v=>v===s[0])).length}
 function applyLevelPalette(){
@@ -543,13 +558,14 @@ function update(){
  $('hint').disabled=busy||!started;$('undo').disabled=busy||!started||history.length===0;$('shuffle').disabled=busy||!started;
 }
 // Hot-path UI refresh: a shelf move does not need palette, daily-card or full-screen work.
+let lastMoveCustomerCount=-1;
 function updateMoveUI(){
  const done=sortedCount(),total=typesForLevel();
  $('moves').textContent=moves;$('sorted').textContent=done+'/'+total;$('best').textContent=best;$('coins').textContent=coins;
  $('orderProgress').textContent=specialOrderDone?'DONE ✓':done+'/'+total;
  $('progressFill').style.width=(done/total*100)+'%';
  $('boardTip').textContent=goldenBasketEvent()?(goldenBasketPaid?'Special basket bonus collected!':(specialBasketType()==='rainbow'?'Rainbow Basket: use it once for +20 coins!':'Golden Basket: use it once for +10 coins!')):chapterChallenge()?'Chapter challenge: stay within '+chapterMoveTarget()+' moves for a bonus!':'Tap a shelf, then tap where its top item goes';
- refreshBazaarLife();
+ if(done!==lastMoveCustomerCount){lastMoveCustomerCount=done;refreshBazaarLife()}
  $('hint').disabled=busy||!started;$('undo').disabled=busy||!started||history.length===0;$('shuffle').disabled=busy||!started;
 }
 function legalMove(a,d){if(a===d||!stacks[a]||!stacks[a].length||stacks[d].length>=CAP)return false;const item=stacks[a][stacks[a].length-1];return stacks[d].length===0||stacks[d][stacks[d].length-1]===item}
@@ -594,7 +610,7 @@ function moveShelf(from,to){
  if(!legalMove(from,to)){selected=to;render();say('That shelf cannot take this item. Match the top product or choose an empty shelf.');tone(240);return}
  snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;totalMoves++;selected=-1;save();
  if(goldenBasketEvent()&&to===stacks.length-1&&!goldenBasketPaid){goldenBasketPaid=true;goldenBasketClaims.add(goldenBasketKey());try{localStorage.setItem('nbsGoldenBasketClaims',JSON.stringify([...goldenBasketClaims]))}catch(e){}const basketReward=specialBasketType()==='rainbow'?20:10;earnCoins(basketReward);toast((specialBasketType()==='rainbow'?'Rainbow':'Golden')+' Basket bonus! +'+basketReward+' coins 🌟')}
- try{navigator.vibrate?.(10)}catch(e){}
+
  // Commit the move immediately; do not wait for an animation timer before accepting the next move.
  render();updateMoveUI();tone(470+item*75,'triangle',.07,.025);
  if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820,'sine',.16,.04);if(festival!=='bazaar'&&!festivalBonusPaid){festivalBonusPaid=true;earnCoins(10);toast('Festival first-shelf bonus! +10 coins 🎊');update()}if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;const orderBonus=vipCustomerRush()?30:15;earnCoins(orderBonus);document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast((vipCustomerRush()?'VIP rush order':'Customer order')+' delivered! +'+orderBonus+' coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! '+orderBonus+' बोनस सिक्के!');update()}}
