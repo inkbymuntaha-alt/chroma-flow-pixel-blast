@@ -152,8 +152,8 @@ $('shelves').addEventListener('pointerdown',e=>{
 });
 $('shelves').addEventListener('pointerup',e=>{
  const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b))return;
- const dest=Number(b.dataset.shelf),source=pointerShelf;pointerShelf=-1;
- if(source>=0&&source!==dest&&selected===source){
+ const dest=Number(b.dataset.shelf),source=selected;pointerShelf=-1;
+ if(source>=0&&source!==dest){
    if(legalMove(source,dest))moveShelf(source,dest);else onShelf(dest);
  }
 });
