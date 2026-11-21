@@ -154,6 +154,18 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 @media(max-width:360px){.festival-choice{font-size:11px;min-height:60px;padding:8px 5px}}
 
 
+/* Player profile, progress and achievement dashboard */
+.profile-card{border:1px solid #a9824b;border-radius:15px;padding:12px;background:linear-gradient(120deg,#46331f,#21170e);display:flex;align-items:center;gap:10px;box-shadow:inset 0 1px #fff2}
+.profile-avatar{width:45px;height:45px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,#ffe7a1,#a9782e);font-size:27px;flex:0 0 45px}
+.profile-copy{min-width:0;flex:1}.profile-copy b{display:block;color:#ffe6a4;font-size:12px}.profile-copy small{color:#cbb68e;font-size:10px}
+.profile-open{border:1px solid #c49a50;border-radius:10px;background:#765329;color:#fff0c8;padding:8px 10px;font-weight:900;font-size:10px}
+.profile-fields{display:grid;gap:9px;text-align:left;margin:12px 0}.profile-fields label{font-size:11px;color:#e8d5ad}.profile-fields input{width:100%;margin-top:5px;border:1px solid #a47b38;border-radius:10px;background:#17120c;color:#fff0c8;padding:11px;font:inherit}
+.avatar-choices{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:7px}.avatar-choice{border:1px solid #8d6b3a;border-radius:10px;background:#241a10;padding:8px 2px;font-size:22px}.avatar-choice.active{background:#725027;border:2px solid #ffe39a}
+.profile-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0}.profile-metric{border:1px solid #8d6b3a;border-radius:11px;padding:10px;background:#ffffff09}.profile-metric b{display:block;color:#ffdf91;font-size:20px}.profile-metric small{color:#cbb68e;font-size:9px;letter-spacing:.6px}
+.achievement-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;text-align:left;margin:12px 0}.achievement{border:1px solid #8d6b3a;border-radius:11px;padding:9px;background:#ffffff09;min-width:0}.achievement.locked{opacity:.4;filter:grayscale(1)}.achievement span{font-size:22px;display:block}.achievement b{font-size:10px;color:#ffe5a8;display:block;margin:3px 0}.achievement small{font-size:9px;color:#cbb68e;line-height:1.3;display:block}
+.profile-progress{height:7px;border-radius:8px;background:#ffffff18;overflow:hidden;margin:8px 0}.profile-progress i{display:block;height:100%;background:linear-gradient(90deg,#a8782d,#ffe49a)}
+.profile-section-title{text-align:left;color:#f4d58d;font-size:12px;letter-spacing:1px;margin:14px 0 5px}
+@media(max-width:360px){.achievement-list{gap:5px}.achievement{padding:7px}}
 /* Original synthesized market soundtrack controls */
 #music{border-color:#b28b48;color:#ffe4a1}
 #music.music-muted{opacity:.62;color:#c5b58f}
@@ -164,6 +176,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 <body>
 <main class="app">
 <header class="top"><div class="brand">NAZEEF <span>BAZAR</span><small>SORT STORIES · NEIGHBORHOOD MARKET</small></div><div class="levelpill"><b id="level">1</b><small>DAY / LEVEL</small></div></header>
+<section class="profile-card"><div class="profile-avatar" id="profileAvatar">🧑🏽‍🌾</div><div class="profile-copy"><b id="profileName">BAZAR PLAYER</b><small id="profileSub">Your market adventure starts here</small></div><button class="profile-open" id="profileOpen" type="button">MY PROFILE</button></section>
 <section class="stats"><div class="stat"><b id="moves">0</b><small>MOVES</small></div><div class="stat"><b id="sorted">0/4</b><small>SHELVES SORTED</small></div><div class="stat"><b id="best">0</b><small>BEST DAY</small></div></section>
 <section class="market"><div class="market-scene" id="marketScene">🏪🥬🧺</div><div class="market-copy"><b id="marketName">NAZEEF'S CORNER BAZAR</b><small id="marketRank">A little shop with big dreams</small></div><div class="coins">🪙 <span id="coins">0</span></div></section>
 <section class="living-bazaar" id="livingBazaar" data-weather="sun" aria-label="Living neighborhood bazaar">
@@ -185,6 +198,11 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 <div class="overlay hidden" id="map"><div class="panel"><div class="hero">🛍️🏘️</div><h1>BAZAR <span>JOURNEY</span></h1><p>Choose a day you have unlocked.</p><div id="levelGrid" class="level-grid"></div><button class="secondary" id="mapClose">BACK TO MARKET</button></div></div>
 
 <div class="overlay hidden" id="festival"><div class="panel"><div class="hero" id="festivalHero">🎊🏮✨</div><h1>BAZAR <span>FESTIVALS</span></h1><p>Choose a celebration to decorate your market. Every festival has its own colours, lights and atmosphere.</p><div class="festival-row" id="festivalChoices"></div><div class="festival-banner" id="festivalStatus">Your market, your celebration!</div><button class="secondary" id="festivalClose">BACK TO MARKET</button></div></div>
+<div class="overlay hidden" id="profile"><div class="panel"><div class="hero" id="profileHero">🧑🏽‍🌾</div><h1>PLAYER <span>PROFILE</span></h1><p>Your bazaar story, milestones and rewards are saved on this device.</p>
+<div class="profile-fields"><label>PLAYER NICKNAME<input id="playerNameInput" maxlength="18" autocomplete="nickname" placeholder="Enter nickname"></label><label>CHOOSE YOUR AVATAR<div class="avatar-choices" id="avatarChoices"></div></label></div>
+<div class="profile-section-title">YOUR PROGRESS</div><div class="profile-metrics"><div class="profile-metric"><b id="pLevels">0</b><small>LEVELS COMPLETED</small></div><div class="profile-metric"><b id="pMoves">0</b><small>TOTAL MOVES</small></div><div class="profile-metric"><b id="pCoins">0</b><small>COINS EARNED</small></div><div class="profile-metric"><b id="pStreak">0</b><small>DAY STREAK 🔥</small></div></div>
+<div class="profile-section-title">NEXT MILESTONE</div><div id="nextAchievement">Complete your first day to earn a badge.</div><div class="profile-progress"><i id="achievementProgress"></i></div>
+<div class="profile-section-title">ACHIEVEMENT COLLECTION</div><div class="achievement-list" id="achievementList"></div><button class="secondary" id="profileClose">BACK TO MARKET</button></div></div>
 <div class="overlay hidden" id="album"><div class="panel"><div class="hero">🏆🎁🪙</div><h1>MARKET <span>COLLECTION</span></h1><p>Collect decorations with your earned coins. Your collection stays saved on this device.</p><div class="album-grid" id="albumGrid"></div><button class="secondary" id="albumClose">BACK TO MARKET</button></div></div>
 
 <script>
@@ -207,6 +225,7 @@ function productArt(v){
 }
 const STALLS=[['🏪🥬🧺',"NAZEEF'S CORNER BAZAR",'A little shop with big dreams'],['🍎🥕🏬','FRESH PRODUCE STALL','The neighborhood favourite'],['🥐🍋🛍️','THE BUSY MARKET','More customers are coming'],['🌼🍇🏘️','GOLDEN BAZAR STREET','A beautiful market street'],['🎪🧺✨','THE GRAND BAZAR','Your market is shining']];
 let level=1,coins=0,best=0,unlocked=1,stacks=[],selected=-1,moves=0,history=[],busy=false,started=false,soundOn=true;
+let totalMoves=0,levelsCompleted=0,totalCoinsEarned=0,playStreak=0,lastFinishDate='',playerName='Bazaar Player',playerAvatar='🧑🏽‍🌾';
 let musicOn=true,musicTimer=null,musicStep=0,musicMaster=null,ambienceOsc=null;
 let dailyMode=false,dailySeed='',dailyTargetMoves=0,orderProduct=0,specialOrderDone=false;
 const FESTIVALS=[{id:'bazaar',name:'Classic Bazar',icon:'🏪',scene:'🏪 🧺 🌼',tag:'Warm neighborhood market',faces:['🏮','🎏','🌼','🧺']},{id:'diwali',name:'Diwali Lights',icon:'🪔',scene:'🪔 ✨ 🏮',tag:'A glowing festival of lights',faces:['🪔','✨','🏮','🎆']},{id:'holi',name:'Holi Colours',icon:'🎨',scene:'🎨 🌈 🎊',tag:'A joyful splash of colours',faces:['🎨','🌈','🎊','💜']},{id:'eid',name:'Eid Celebration',icon:'🌙',scene:'🌙 ⭐ 🕌',tag:'A moonlit celebration',faces:['🌙','⭐','✨','🕌']},{id:'monsoon',name:'Monsoon Mela',icon:'☔',scene:'☔ 🌧️ 🌿',tag:'A cool rainy-day market',faces:['☔','🌧️','🌿','💧']}];
@@ -220,7 +239,9 @@ function chapterName(n){return ['Little Corner','Fruit Lane','Flower Courtyard',
 function renderFestivals(){const root=$('festivalChoices');root.innerHTML='';FESTIVALS.forEach(f=>{const b=document.createElement('button');b.type='button';b.className='festival-choice'+(festival===f.id?' active':'');b.innerHTML='<span>'+f.icon+'</span>'+f.name;b.addEventListener('click',()=>{festival=f.id;saveFestival();renderFestivals();applyLevelPalette();toast(f.name+' selected!');});root.appendChild(b)});const chosen=FESTIVALS.find(f=>f.id===festival)||FESTIVALS[0];$('festivalHero').textContent=chosen.scene;$('festivalStatus').textContent=chosen.tag+' · +10 coins for your first sorted shelf in each day.'}
 function renderAlbum(){const root=$('albumGrid');root.innerHTML='';DECORATIONS.forEach(d=>{const owned=ownedDecor.includes(d.id);const item=document.createElement('div');item.className='album-item';const art=document.createElement('div');art.className='art';art.textContent=d.icon;const name=document.createElement('b');name.textContent=d.name;const desc=document.createElement('small');desc.textContent=d.desc;const btn=document.createElement('button');btn.type='button';btn.textContent=owned?'COLLECTED ✓':'UNLOCK · '+d.cost+' 🪙';btn.disabled=owned||coins<d.cost;btn.addEventListener('click',()=>{if(ownedDecor.includes(d.id)||coins<d.cost)return;coins-=d.cost;ownedDecor.push(d.id);save();saveFestival();renderAlbum();update();toast(d.name+' added to your collection!')});item.append(art,name,desc,btn);root.appendChild(item)});}
 
-try{level=Math.max(1,Number(localStorage.getItem('nbsLevel'))||1);unlocked=Math.max(1,Number(localStorage.getItem('nbsUnlocked'))||1);coins=Math.max(0,Number(localStorage.getItem('nbsCoins'))||0);best=Math.max(0,Number(localStorage.getItem('nbsBest'))||0)}catch(e){}
+try{level=Math.max(1,Number(localStorage.getItem('nbsLevel'))||1);unlocked=Math.max(1,Number(localStorage.getItem('nbsUnlocked'))||1);coins=Math.max(0,Number(localStorage.getItem('nbsCoins'))||0);best=Math.max(0,Number(localStorage.getItem('nbsBest'))||0);
+ totalMoves=Math.max(0,Number(localStorage.getItem('nbsTotalMoves'))||0);levelsCompleted=Math.max(0,Number(localStorage.getItem('nbsLevelsCompleted'))||0);totalCoinsEarned=Math.max(0,Number(localStorage.getItem('nbsTotalCoinsEarned'))||0);playStreak=Math.max(0,Number(localStorage.getItem('nbsPlayStreak'))||0);lastFinishDate=localStorage.getItem('nbsLastFinishDate')||'';playerName=localStorage.getItem('nbsPlayerName')||'Bazaar Player';playerAvatar=localStorage.getItem('nbsPlayerAvatar')||'🧑🏽‍🌾';
+}catch(e){}
 const say=t=>{$('message').textContent=t};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
@@ -257,7 +278,36 @@ function updateAudioButtons(){
 function celebrationJingle(){if(!soundOn)return;const seq=festival==='diwali'?[523,659,784,1047,988,784]:festival==='holi'?[392,494,587,784,659,784]:festival==='eid'?[440,554,659,880,784,659]:festival==='monsoon'?[392,440,523,587,659,587]:[523,659,784,880,784,1047];seq.forEach((n,i)=>setTimeout(()=>tone(n,'sine',.28,.035),i*115))}
 
 function bind(id,fn){$(id).addEventListener('click',e=>{e.preventDefault();fn(e)})}
-function save(){try{localStorage.setItem('nbsLevel',String(level));localStorage.setItem('nbsUnlocked',String(unlocked));localStorage.setItem('nbsCoins',String(coins));localStorage.setItem('nbsBest',String(best));localStorage.setItem('nbsDecor',JSON.stringify(ownedDecor));localStorage.setItem('nbsFestival',festival)}catch(e){}}
+function save(){try{localStorage.setItem('nbsLevel',String(level));localStorage.setItem('nbsUnlocked',String(unlocked));localStorage.setItem('nbsCoins',String(coins));localStorage.setItem('nbsBest',String(best));localStorage.setItem('nbsDecor',JSON.stringify(ownedDecor));localStorage.setItem('nbsFestival',festival);localStorage.setItem('nbsTotalMoves',String(totalMoves));localStorage.setItem('nbsLevelsCompleted',String(levelsCompleted));localStorage.setItem('nbsTotalCoinsEarned',String(totalCoinsEarned));localStorage.setItem('nbsPlayStreak',String(playStreak));localStorage.setItem('nbsLastFinishDate',lastFinishDate);localStorage.setItem('nbsPlayerName',playerName);localStorage.setItem('nbsPlayerAvatar',playerAvatar)}catch(e){}}
+function earnCoins(amount){coins+=amount;totalCoinsEarned+=amount;save()}
+const AVATARS=['🧑🏽‍🌾','👨🏽‍🍳','🧑🏻‍🌾','🧔🏽','👳🏽','🧕🏽','🧑🏾','👨🏻‍🌾','👩🏽‍🌾','🧑🏽‍🍳','👨🏾‍🌾','🧑🏻‍🍳'];
+const ACHIEVEMENTS=[
+ {id:'first',icon:'🌱',name:'First Day',desc:'Complete your first level.',goal:1,metric:'levels'},
+ {id:'five',icon:'🧺',name:'Market Regular',desc:'Complete 5 levels.',goal:5,metric:'levels'},
+ {id:'ten',icon:'🏘️',name:'Neighbourhood Star',desc:'Complete 10 levels.',goal:10,metric:'levels'},
+ {id:'twentyfive',icon:'🏆',name:'Bazar Champion',desc:'Complete 25 levels.',goal:25,metric:'levels'},
+ {id:'hundred',icon:'👑',name:'Royal Bazaar',desc:'Complete all 100 levels.',goal:100,metric:'levels'},
+ {id:'moves100',icon:'👣',name:'Quick Hands',desc:'Make 100 sorting moves.',goal:100,metric:'moves'},
+ {id:'moves500',icon:'⚡',name:'Sorting Expert',desc:'Make 500 sorting moves.',goal:500,metric:'moves'},
+ {id:'coins250',icon:'🪙',name:'Coin Collector',desc:'Earn 250 coins.',goal:250,metric:'coins'},
+ {id:'coins1000',icon:'💰',name:'Golden Trader',desc:'Earn 1,000 coins.',goal:1000,metric:'coins'},
+ {id:'streak3',icon:'🔥',name:'Three-Day Streak',desc:'Finish a level on 3 consecutive days.',goal:3,metric:'streak'},
+ {id:'streak7',icon:'🌟',name:'Market Devotee',desc:'Finish a level on 7 consecutive days.',goal:7,metric:'streak'},
+ {id:'decor',icon:'🎁',name:'Market Stylist',desc:'Collect every market decoration.',goal:4,metric:'decor'}
+];
+function achievementValue(metric){return metric==='levels'?levelsCompleted:metric==='moves'?totalMoves:metric==='coins'?totalCoinsEarned:metric==='streak'?playStreak:ownedDecor.length}
+function renderProfile(){
+ $('profileAvatar').textContent=playerAvatar;$('profileName').textContent=playerName.toUpperCase();$('profileSub').textContent='DAY '+level+' · '+chapterName(level);
+ $('profileHero').textContent=playerAvatar;$('playerNameInput').value=playerName;
+ $('pLevels').textContent=levelsCompleted;$('pMoves').textContent=totalMoves;$('pCoins').textContent=totalCoinsEarned;$('pStreak').textContent=playStreak;
+ const list=$('achievementList');list.innerHTML='';
+ ACHIEVEMENTS.forEach(a=>{const value=achievementValue(a.metric),unlockedNow=value>=a.goal;const el=document.createElement('div');el.className='achievement'+(unlockedNow?'':' locked');const icon=document.createElement('span');icon.textContent=unlockedNow?a.icon:'🔒';const name=document.createElement('b');name.textContent=a.name;const desc=document.createElement('small');desc.textContent=unlockedNow?'UNLOCKED · '+a.desc:a.desc+' ('+Math.min(value,a.goal)+'/'+a.goal+')';el.append(icon,name,desc);list.appendChild(el)});
+ const next=ACHIEVEMENTS.find(a=>achievementValue(a.metric)<a.goal);
+ if(next){const value=achievementValue(next.metric);$('nextAchievement').textContent=next.icon+' '+next.name+' · '+value+'/'+next.goal;$('achievementProgress').style.width=Math.min(100,value/next.goal*100)+'%'}else{$('nextAchievement').textContent='🏆 All achievements unlocked!';$('achievementProgress').style.width='100%'}
+ const av=$('avatarChoices');av.innerHTML='';AVATARS.forEach(emoji=>{const b=document.createElement('button');b.type='button';b.className='avatar-choice'+(emoji===playerAvatar?' active':'');b.textContent=emoji;b.setAttribute('aria-label','Choose avatar '+emoji);b.addEventListener('click',()=>{playerAvatar=emoji;renderProfile();save()});av.appendChild(b)});
+}
+function recordPlayStreak(){const today=todayKey();if(lastFinishDate===today)return;const d=new Date();d.setDate(d.getDate()-1);const y=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');playStreak=lastFinishDate===y?playStreak+1:1;lastFinishDate=today}
+
 function typesForLevel(){return Math.min(7,3+Math.floor((level-1)/4))}
 function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function seededRandom(seed){let h=2166136261;for(let i=0;i<seed.length;i++){h^=seed.charCodeAt(i);h=Math.imul(h,16777619)}return function(){h+=0x6D2B79F5;let t=h;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
@@ -393,8 +443,8 @@ async function moveShelf(from,to){
  if(busy||!started)return;
  if(from<0||to<0)return;
  if(!legalMove(from,to)){selected=to;render();say('That shelf cannot take this item. Match the top product or choose an empty shelf.');tone(240);return}
- snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;selected=-1;busy=true;try{navigator.vibrate?.(22)}catch(e){}render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(470+item*75,'triangle',.11,.035);await sleep(210);busy=false;update();
- if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820,'sine',.22,.05);if(festival!=='bazaar'&&!festivalBonusPaid){festivalBonusPaid=true;coins+=10;save();toast('Festival first-shelf bonus! +10 coins 🎊');update()}if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;coins+=15;save();document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast('Customer order delivered! +15 coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! 15 बोनस सिक्के!');update()}}
+ snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;totalMoves++;selected=-1;busy=true;save();try{navigator.vibrate?.(22)}catch(e){}render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(470+item*75,'triangle',.11,.035);await sleep(210);busy=false;update();
+ if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820,'sine',.22,.05);if(festival!=='bazaar'&&!festivalBonusPaid){festivalBonusPaid=true;earnCoins(10);toast('Festival first-shelf bonus! +10 coins 🎊');update()}if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;earnCoins(15);document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast('Customer order delivered! +15 coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! 15 बोनस सिक्के!');update()}}
  if(sortedCount()===typesForLevel())finishDay();
 }
 function onShelf(i){
@@ -413,7 +463,7 @@ function findHint(){
  say('Every move is possible. Keep sorting!');}
 function undo(){if(!history.length||busy)return;const prev=history.pop();stacks=cloneBoard(prev.stacks);moves=prev.moves;selected=-1;render();update();say('Last move undone. Try another shelf!');tone(330)}
 function mixUp(){if(busy||!started)return;stacks=scramble();selected=-1;history=[];render();update();say('Shelves mixed up. A fresh sorting puzzle is ready!');toast('Fresh market mix!')}
-function finishDay(){started=false;try{navigator.vibrate?.([35,45,35,45,90])}catch(e){}let reward=20+typesForLevel()*10+Math.max(0,30-moves);let extra='';if(dailyMode){const won=moves<=dailyTargetMoves,firstAttempt=!dailyAlreadyClaimed();if(firstAttempt){try{localStorage.setItem('nbsDailyClaim',todayKey())}catch(e){}}if(won&&firstAttempt){const bonus=35+typesForLevel()*5;reward+=bonus;extra=' Daily challenge bonus: '+bonus+' coins!'}else if(!firstAttempt){extra=' Today’s daily reward was already claimed.'}else{extra=' Daily target was '+dailyTargetMoves+' moves; try again tomorrow for the bonus.'}}else{unlocked=Math.max(unlocked,Math.min(100,level+1));best=Math.max(best,level)}coins+=reward;save();celebrate();$('finishIcon').textContent='🎉🏪🪙';$('finishTitle').textContent=dailyMode?'DAILY CHALLENGE COMPLETE!':'DAY '+level+' COMPLETE!';$('finishText').textContent=lastPraise+' All the shelves are sorted! Happy customers earned you '+reward+' coins. '+(specialOrderDone?'Special customer order bonus included! ':'')+extra+' तुम्हारे लिए '+reward+' सिक्के!';$('continue').textContent=dailyMode?'BACK TO BAZAAR':(level>=100?'CELEBRATE YOUR BAZAR ▶':'OPEN NEXT DAY ▶');$('finish').classList.remove('hidden');update()}
+function finishDay(){started=false;try{navigator.vibrate?.([35,45,35,45,90])}catch(e){}let reward=20+typesForLevel()*10+Math.max(0,30-moves);let extra='';if(dailyMode){const won=moves<=dailyTargetMoves,firstAttempt=!dailyAlreadyClaimed();if(firstAttempt){try{localStorage.setItem('nbsDailyClaim',todayKey())}catch(e){}}if(won&&firstAttempt){const bonus=35+typesForLevel()*5;reward+=bonus;extra=' Daily challenge bonus: '+bonus+' coins!'}else if(!firstAttempt){extra=' Today’s daily reward was already claimed.'}else{extra=' Daily target was '+dailyTargetMoves+' moves; try again tomorrow for the bonus.'}}else{unlocked=Math.max(unlocked,Math.min(100,level+1));best=Math.max(best,level)}earnCoins(reward);levelsCompleted++;recordPlayStreak();save();celebrate();$('finishIcon').textContent='🎉🏪🪙';$('finishTitle').textContent=dailyMode?'DAILY CHALLENGE COMPLETE!':'DAY '+level+' COMPLETE!';$('finishText').textContent=lastPraise+' All the shelves are sorted! Happy customers earned you '+reward+' coins. '+(specialOrderDone?'Special customer order bonus included! ':'')+extra+' तुम्हारे लिए '+reward+' सिक्के!';$('continue').textContent=dailyMode?'BACK TO BAZAAR':(level>=100?'CELEBRATE YOUR BAZAR ▶':'OPEN NEXT DAY ▶');$('finish').classList.remove('hidden');update()}
 function drawMap(){const root=$('levelGrid');root.innerHTML='';for(let n=1;n<=100;n++){if((n-1)%10===0){const h=document.createElement('div');h.className='chapter-label';h.textContent='CHAPTER '+(Math.floor((n-1)/10)+1)+' · '+chapterName(n);root.appendChild(h)}const b=document.createElement('button');b.type='button';b.className='level-cell'+(n===level?' current':'');b.textContent=n<=unlocked?'★ '+n:'🔒';b.disabled=n>unlocked;b.addEventListener('click',()=>{level=n;$('map').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newDay()});root.appendChild(b)}}
 // Pointer-first controls: taps select instantly; dragging a picked shelf onto another moves its top item.
 let pointerShelf=-1;
@@ -447,7 +497,12 @@ bind('voiceTest',()=>{const sample='शाबाश नाज़ीफ़! क�
 bind('mapOpen',()=>{drawMap();$('map').classList.remove('hidden')});bind('mapClose',()=>$('map').classList.add('hidden'));
 bind('festivalOpen',()=>{renderFestivals();$('festival').classList.remove('hidden')});bind('festivalClose',()=>{$('festival').classList.add('hidden');if(musicOn&&soundOn)startMarketMusic()});
 bind('albumOpen',()=>{renderAlbum();$('album').classList.remove('hidden')});bind('albumClose',()=>$('album').classList.add('hidden'));
+bind('profileOpen',()=>{renderProfile();$('profile').classList.remove('hidden')});
+bind('profileClose',()=>$('profile').classList.add('hidden'));
+$('playerNameInput').addEventListener('change',()=>{playerName=$('playerNameInput').value.trim().slice(0,18)||'Bazaar Player';save();renderProfile();update()});
+
 updateAudioButtons();
+renderProfile();
 update();
 window.addEventListener('error',()=>{busy=false;say('A small hiccup occurred. Use RESTART DAY to recover.')});
 window.addEventListener('unhandledrejection',()=>{busy=false;say('Move interrupted. You can safely restart this day.')});
