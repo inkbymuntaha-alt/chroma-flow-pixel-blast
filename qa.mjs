@@ -36,12 +36,13 @@ const extract = (pattern, label) => {
 const seedFn = extract(/function seededRandom\(seed\)\{[^\n]*\}/, 'seededRandom');
 const typeFn = extract(/function typesForLevel\(\)\{[^\n]*\}/, 'typesForLevel');
 const scrambleFn = extract(/function scramble\(\)\{[\s\S]*?\n\}/, 'scramble');
+const nl = String.fromCharCode(10);
 const trackedScrambleFn = scrambleFn
-  .replace('function scramble(){', 'function scramble(){\n const reverseMoves=[];')
+  .replace('function scramble(){', 'function scramble(){' + nl + ' const reverseMoves=[];')
   .replace('b[d].push(b[a].pop());', 'reverseMoves.push([a,d]);b[d].push(b[a].pop());')
   .replace('return b;', 'return {board:b,reverseMoves};');
 const generate = new Function('level', 'dailyMode', 'dailySeed', 'scrambleVariant', 'CAP', 'cloneBoard',
-  seedFn + '\n' + typeFn + '\n' + trackedScrambleFn + '\nreturn scramble();');
+  seedFn + nl + typeFn + nl + trackedScrambleFn + nl + 'return scramble();');
 const cloneBoard = board => board.map(stack => stack.slice());
 const seen = new Set();
 let tested = 0;
