@@ -36,15 +36,20 @@ const extract = (pattern, label) => {
 const seedFn = extract(/function seededRandom\(seed\)\{[^\n]*\}/, 'seededRandom');
 const typeFn = extract(/function typesForLevel\(\)\{[^\n]*\}/, 'typesForLevel');
 const scrambleFn = extract(/function scramble\(\)\{[\s\S]*?\n\}/, 'scramble');
+const trackedScrambleFn = scrambleFn
+  .replace('function scramble(){', 'function scramble(){\\n const reverseMoves=[];')
+  .replace('b[d].push(b[a].pop());', 'reverseMoves.push([a,d]);b[d].push(b[a].pop());')
+  .replace('return b;', 'return {board:b,reverseMoves};');
 const generate = new Function('level', 'dailyMode', 'dailySeed', 'scrambleVariant', 'CAP', 'cloneBoard',
-  seedFn + '\n' + typeFn + '\n' + scrambleFn + '\nreturn scramble();');
+  seedFn + '\\n' + typeFn + '\\n' + trackedScrambleFn + '\\nreturn scramble();');
 const cloneBoard = board => board.map(stack => stack.slice());
 const seen = new Set();
 let tested = 0;
 for (let level = 1; level <= 100; level++) {
   const typeCount = Math.min(10, 3 + Math.floor((level - 1) / 4));
   for (let variation = 0; variation < 3; variation++) {
-    const board = generate(level, false, '', variation, 4, cloneBoard);
+    const generated = generate(level, false, '', variation, 4, cloneBoard);
+    const board = generated.board;
     const flat = board.flat();
     assert.equal(board.length, typeCount + 1, 'Shelf count at level ' + level);
     assert.ok(board.every(stack => stack.length <= 4), 'Shelf capacity at level ' + level);
@@ -57,6 +62,17 @@ for (let level = 1; level <= 100; level++) {
     const key = JSON.stringify(board);
     assert.ok(!seen.has(key), 'Seeded layouts should vary across tested mixes');
     seen.add(key);
+    const solved = cloneBoard(board);
+    for (const [source, destination] of generated.reverseMoves.slice().reverse()) {
+      const from = destination, to = source;
+      assert.ok(solved[from].length > 0, 'Solution path source must not be empty');
+      const item = solved[from][solved[from].length - 1];
+      assert.ok(solved[to].length < 4, 'Solution path destination must have space');
+      assert.ok(solved[to].length === 0 || solved[to][solved[to].length - 1] === item, 'Solution path must obey matching rules');
+      solved[from].pop(); solved[to].push(item);
+    }
+    assert.ok(solved.slice(0, typeCount).every((stack, index) => stack.length === 4 && stack.every(value => value === index)), 'Every generated puzzle must have a legal solution at level ' + level);
+    assert.equal(solved[typeCount].length, 0, 'The spare shelf must be empty after solving');
     tested++;
   }
 }
