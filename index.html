@@ -30,7 +30,7 @@ button{font:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transp
 .celebrate{position:fixed;inset:0;z-index:25;pointer-events:none;overflow:hidden}.spark{position:absolute;font-size:24px;animation:burst 1.3s ease-out forwards}@keyframes burst{0%{transform:translateY(15vh) scale(.2) rotate(0);opacity:0}20%{opacity:1}100%{transform:translateY(-75vh) scale(1.4) rotate(280deg);opacity:0}}
 @media(max-height:740px){.app{gap:7px;padding-top:7px}.item{height:37px}.shelf{min-height:58px;padding:5px 7px}.board-wrap{padding:8px}.market{padding:6px 9px}}
 /* Premium interaction polish */
-.shelf{position:relative;overflow:hidden;min-height:70px;border:1px solid #a9854d;background:linear-gradient(115deg,#59452b 0%,#392a19 48%,#241a10 100%);box-shadow:inset 0 1px 0 #fff3,inset 0 -5px 12px #100b07aa,0 5px 12px #0007;transition:transform .16s cubic-bezier(.2,.8,.2,1),border-color .16s,box-shadow .16s,background .16s}
+.shelf{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;position:relative;overflow:hidden;min-height:70px;border:1px solid #a9854d;background:linear-gradient(115deg,#59452b 0%,#392a19 48%,#241a10 100%);box-shadow:inset 0 1px 0 #fff3,inset 0 -5px 12px #100b07aa,0 5px 12px #0007;transition:transform .16s cubic-bezier(.2,.8,.2,1),border-color .16s,box-shadow .16s,background .16s}
 .shelf:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(#ffe5a0,#9c6827);opacity:.65}
 .shelf:active{transform:scale(.975);filter:brightness(1.12)}
 .shelf.selected{border:2px solid #ffe39a;background:linear-gradient(115deg,#80602f,#4b351c);box-shadow:0 0 0 3px #f6cf7140,0 0 23px #f6cf7160,inset 0 1px #fff6;animation:chosen .24s ease-out}
@@ -571,7 +571,7 @@ async function moveShelf(from,to){
  if(busy||!started)return;
  if(from<0||to<0)return;
  if(!legalMove(from,to)){selected=to;render();say('That shelf cannot take this item. Match the top product or choose an empty shelf.');tone(240);return}
- snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;totalMoves++;selected=-1;busy=true;save();if(goldenBasketEvent()&&to===stacks.length-1&&!goldenBasketPaid){goldenBasketPaid=true;goldenBasketClaims.add(goldenBasketKey());try{localStorage.setItem('nbsGoldenBasketClaims',JSON.stringify([...goldenBasketClaims]))}catch(e){}const basketReward=specialBasketType()==='rainbow'?20:10;earnCoins(basketReward);toast((specialBasketType()==='rainbow'?'Rainbow':'Golden')+' Basket bonus! +'+basketReward+' coins 🌟')}try{navigator.vibrate?.(22)}catch(e){}render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(470+item*75,'triangle',.11,.035);await sleep(210);busy=false;update();
+ snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;totalMoves++;selected=-1;busy=true;save();if(goldenBasketEvent()&&to===stacks.length-1&&!goldenBasketPaid){goldenBasketPaid=true;goldenBasketClaims.add(goldenBasketKey());try{localStorage.setItem('nbsGoldenBasketClaims',JSON.stringify([...goldenBasketClaims]))}catch(e){}const basketReward=specialBasketType()==='rainbow'?20:10;earnCoins(basketReward);toast((specialBasketType()==='rainbow'?'Rainbow':'Golden')+' Basket bonus! +'+basketReward+' coins 🌟')}try{navigator.vibrate?.(22)}catch(e){}render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(470+item*75,'triangle',.11,.035);await sleep(75);busy=false;update();
  if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820,'sine',.22,.05);if(festival!=='bazaar'&&!festivalBonusPaid){festivalBonusPaid=true;earnCoins(10);toast('Festival first-shelf bonus! +10 coins 🎊');update()}if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;const orderBonus=vipCustomerRush()?30:15;earnCoins(orderBonus);document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast((vipCustomerRush()?'VIP rush order':'Customer order')+' delivered! +'+orderBonus+' coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! '+orderBonus+' बोनस सिक्के!');update()}}
  if(sortedCount()===typesForLevel())finishDay();
 }
@@ -593,30 +593,39 @@ function undo(){if(!history.length||busy)return;const prev=history.pop();stacks=
 function mixUp(){if(busy||!started)return;scrambleVariant++;stacks=scramble();selected=-1;history=[];render();update();say('Shelves mixed up. A fresh sorting puzzle is ready!');toast('Fresh market mix!')}
 function finishDay(){started=false;try{navigator.vibrate?.([35,45,35,45,90])}catch(e){}let reward=20+typesForLevel()*10+Math.max(0,30-moves);let extra='';if(chapterChallenge()&&moves<=chapterMoveTarget()){const chapterBonus=25+chapterNumber()*5;reward+=chapterBonus;extra+=' Chapter '+chapterNumber()+' challenge cleared! +'+chapterBonus+' coins.'}else if(chapterChallenge()){extra+=' Chapter challenge target was '+chapterMoveTarget()+' moves; keep practising!'}if(dailyMode){const won=moves<=dailyTargetMoves,firstAttempt=!dailyAlreadyClaimed();if(won&&firstAttempt){try{localStorage.setItem('nbsDailyClaim',todayKey())}catch(e){}const bonus=35+typesForLevel()*5;reward+=bonus;extra=' Daily challenge bonus: '+bonus+' coins!'}else if(!firstAttempt){extra=' Today’s daily reward was already claimed.'}else{extra=' Daily target was '+dailyTargetMoves+' moves. You can try this challenge again today!'}}else{unlocked=Math.max(unlocked,Math.min(100,level+1));best=Math.max(best,level)}earnCoins(reward);levelsCompleted++;recordPlayStreak();save();celebrate();$('finishIcon').textContent='🎉🏪🪙';$('finishTitle').textContent=dailyMode?'DAILY CHALLENGE COMPLETE!':'DAY '+level+' COMPLETE!';$('finishText').textContent=lastPraise+' All the shelves are sorted! Happy customers earned you '+reward+' coins. '+(specialOrderDone?'Special customer order bonus included! ':'')+extra+' तुम्हारे लिए '+reward+' सिक्के!';$('continue').textContent=dailyMode?'BACK TO BAZAAR':(level>=100?'CELEBRATE YOUR BAZAR ▶':'OPEN NEXT DAY ▶');$('finish').classList.remove('hidden');update()}
 function drawMap(){const root=$('levelGrid');root.innerHTML='';for(let n=1;n<=100;n++){if((n-1)%10===0){const h=document.createElement('div');h.className='chapter-label';h.textContent='CHAPTER '+(Math.floor((n-1)/10)+1)+' · '+chapterName(n);root.appendChild(h)}const b=document.createElement('button');b.type='button';b.className='level-cell'+(n===level?' current':'');b.textContent=n<=unlocked?'★ '+n:'🔒';b.disabled=n>unlocked;b.addEventListener('click',()=>{level=n;$('map').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newDay()});root.appendChild(b)}}
-// Pointer-first controls: taps select instantly; dragging a picked shelf onto another moves its top item.
-let pointerShelf=-1;
-$('shelves').addEventListener('pointerdown',e=>{
- const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b)||!started||busy)return;
- // Record the origin only. Re-rendering here can cancel Android's pressed pointer.
- pointerShelf=Number(b.dataset.shelf);
+// Fast Android controls: track the finger globally and resolve the shelf under its release point.
+let pointerShelf=-1,pointerId=null,pointerStartX=0,pointerStartY=0,pointerDragged=false;
+const shelfRoot=$('shelves');
+shelfRoot.addEventListener('pointerdown',e=>{
+ const b=e.target.closest('button.shelf');if(!b||!shelfRoot.contains(b)||!started||busy)return;
+ pointerShelf=Number(b.dataset.shelf);pointerId=e.pointerId;pointerStartX=e.clientX;pointerStartY=e.clientY;pointerDragged=false;
+ try{b.setPointerCapture(e.pointerId)}catch(_){}
 });
-$('shelves').addEventListener('pointerup',e=>{
- const b=e.target.closest('button.shelf'),down=pointerShelf;pointerShelf=-1;
- if(!b||!$('shelves').contains(b)){if(down>=0&&selected<0)onShelf(down);return}
- const dest=Number(b.dataset.shelf);
+shelfRoot.addEventListener('pointermove',e=>{
+ if(pointerId!==e.pointerId||pointerShelf<0)return;
+ if(Math.hypot(e.clientX-pointerStartX,e.clientY-pointerStartY)>9)pointerDragged=true;
+});
+function finishShelfPointer(e){
+ if(pointerId===null||e.pointerId!==pointerId)return;
+ const from=pointerShelf,dragged=pointerDragged;pointerShelf=-1;pointerId=null;pointerDragged=false;
+ if(from<0||!started||busy)return;
+ const under=document.elementFromPoint(e.clientX,e.clientY);
+ const target=under?.closest?.('button.shelf');
+ const dest=target&&shelfRoot.contains(target)?Number(target.dataset.shelf):from;
  if(selected>=0){
   if(selected===dest){onShelf(dest);return}
-  if(legalMove(selected,dest))moveShelf(selected,dest);else onShelf(dest);
-  return;
+  if(legalMove(selected,dest)){moveShelf(selected,dest);return}
+  onShelf(dest);return;
  }
- if(down>=0&&down!==dest&&legalMove(down,dest)){moveShelf(down,dest);return}
+ if(dragged&&from!==dest&&legalMove(from,dest)){moveShelf(from,dest);return}
  onShelf(dest);
-});
-$('shelves').addEventListener('pointercancel',()=>{pointerShelf=-1});
-$('shelves').addEventListener('click',e=>{
+}
+document.addEventListener('pointerup',finishShelfPointer,{passive:true});
+document.addEventListener('pointercancel',()=>{pointerShelf=-1;pointerId=null;pointerDragged=false},{passive:true});
+shelfRoot.addEventListener('click',e=>{
  // Pointer taps are handled on pointerup; retain keyboard activation.
  if(e.detail!==0)return;
- const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b))return;onShelf(Number(b.dataset.shelf));
+ const b=e.target.closest('button.shelf');if(!b||!shelfRoot.contains(b))return;onShelf(Number(b.dataset.shelf));
 });
 bind('start',()=>{$('welcome').classList.add('hidden');newDay();if(musicOn&&soundOn)startMarketMusic()});
 bind('continue',()=>{if(dailyMode){dailyMode=false}else{level=level>=100?1:Math.min(100,level+1);unlocked=Math.max(unlocked,level)}save();$('finish').classList.add('hidden');newDay();if(musicOn&&soundOn)startMarketMusic()});
