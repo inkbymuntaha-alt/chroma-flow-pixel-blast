@@ -189,7 +189,7 @@ function typesForLevel(){return Math.min(7,3+Math.floor((level-1)/4))}
 function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function seededRandom(seed){let h=2166136261;for(let i=0;i<seed.length;i++){h^=seed.charCodeAt(i);h=Math.imul(h,16777619)}return function(){h+=0x6D2B79F5;let t=h;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
 function dailyAlreadyClaimed(){try{return localStorage.getItem('nbsDailyClaim')===todayKey()}catch(e){return false}}
-function refreshDailyCard(){const b=$('dailyStart'),d=$('dailyDescription');if(!b||!d)return;const claimed=dailyAlreadyClaimed();b.disabled=claimed||busy; b.textContent=claimed?'COMPLETED ✓':'PLAY TODAY ▶';d.textContent=claimed?'Today’s challenge is complete. Come back tomorrow!':'Beat the move target for a '+(35+typesForLevel()*5)+' coin bonus.';}
+function refreshDailyCard(){const b=$('dailyStart'),d=$('dailyDescription');if(!b||!d)return;const claimed=dailyAlreadyClaimed();b.disabled=claimed||busy; b.textContent=claimed?'COMPLETED ✓':'PLAY TODAY ▶';d.textContent=claimed?'Today’s challenge is complete. Come back tomorrow!':'Finish within '+(dailyTargetMoves||20+typesForLevel()*7)+' moves for '+(35+typesForLevel()*5)+' bonus coins.';}
 function shelfCount(){return typesForLevel()+1}
 function cloneBoard(b=stacks){return b.map(s=>s.slice())}
 function scramble(){
@@ -317,7 +317,7 @@ async function moveShelf(from,to){
  if(from<0||to<0)return;
  if(!legalMove(from,to)){selected=to;render();say('That shelf cannot take this item. Match the top product or choose an empty shelf.');tone(240);return}
  snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;selected=-1;busy=true;try{navigator.vibrate?.(22)}catch(e){}render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(520+item*80);await sleep(210);busy=false;update();
- if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820);if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;coins+=15;save();$('order').classList.add('mission-flash');setTimeout(()=>$('order').classList.remove('mission-flash'),650);toast('Customer order delivered! +15 coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! 15 बोनस सिक्के!');update()}}
+ if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820);if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;coins+=15;save();document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast('Customer order delivered! +15 coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! 15 बोनस सिक्के!');update()}}
  if(sortedCount()===typesForLevel())finishDay();
 }
 function onShelf(i){
