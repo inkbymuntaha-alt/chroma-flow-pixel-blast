@@ -171,7 +171,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 #music.music-muted{opacity:.62;color:#c5b58f}
 .audio-note{font-size:9px;color:#bda779;text-align:center;margin-top:-2px}
 
-</style>
+.backup-tools,.cloud-actions{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}.backup-tools .secondary,.cloud-actions .secondary{flex:1;min-width:125px;margin:3px;font-size:10px}.backup-note{font-size:10px!important;color:#d6bd8e!important}.cloud-box{display:grid;gap:7px;text-align:left;border:1px solid #a9824b;border-radius:14px;padding:12px;background:#120d08aa;margin:8px 0 14px}.cloud-box>b{color:#ffe2a0;font-size:12px}.cloud-box input{width:100%;min-width:0;border:1px solid #92703f;border-radius:9px;padding:11px;background:#170f09;color:#fff0ce;font:inherit;font-size:12px}.cloud-box input::placeholder{color:#b8a27e}.cloud-box>small{color:#d4c19b;font-size:10px;line-height:1.5}.cloud-guide{border-top:1px solid #80633c;padding-top:8px;color:#f0d9a8;font-size:11px}.cloud-guide summary{cursor:pointer;font-weight:900}.cloud-guide ol{padding-left:19px;line-height:1.5}.cloud-guide pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0b0906;padding:9px;border-radius:8px;color:#d9e8bd;font-size:9px}.cloud-guide small{display:block;color:#cdbb99;line-height:1.5}</style>
 </head>
 <body>
 <main class="app">
@@ -200,7 +200,37 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 <div class="overlay hidden" id="festival"><div class="panel"><div class="hero" id="festivalHero">🎊🏮✨</div><h1>BAZAR <span>FESTIVALS</span></h1><p>Choose a celebration to decorate your market. Every festival has its own colours, lights and atmosphere.</p><div class="festival-row" id="festivalChoices"></div><div class="festival-banner" id="festivalStatus">Your market, your celebration!</div><button class="secondary" id="festivalClose">BACK TO MARKET</button></div></div>
 <div class="overlay hidden" id="profile"><div class="panel"><div class="hero" id="profileHero">🧑🏽‍🌾</div><h1>PLAYER <span>PROFILE</span></h1><p>Your bazaar story, milestones and rewards are saved on this device.</p>
 <div class="profile-fields"><label>PLAYER NICKNAME<input id="playerNameInput" maxlength="18" autocomplete="nickname" placeholder="Enter nickname"></label><label>CHOOSE YOUR AVATAR<div class="avatar-choices" id="avatarChoices"></div></label></div>
-<div class="profile-section-title">YOUR PROGRESS</div><div class="profile-metrics"><div class="profile-metric"><b id="pLevels">0</b><small>LEVELS COMPLETED</small></div><div class="profile-metric"><b id="pMoves">0</b><small>TOTAL MOVES</small></div><div class="profile-metric"><b id="pCoins">0</b><small>COINS EARNED</small></div><div class="profile-metric"><b id="pStreak">0</b><small>DAY STREAK 🔥</small></div></div>
+<div class="profile-section-title">BACKUP & CLOUD SAVE</div>
+<div class="backup-tools">
+ <button class="secondary" id="backupExport" type="button">⬇ EXPORT BACKUP</button>
+ <button class="secondary" id="backupImport" type="button">⬆ RESTORE BACKUP</button>
+ <input id="backupFile" type="file" accept="application/json,.json" hidden>
+</div>
+<p class="backup-note">Keep a backup file somewhere safe. Restore replaces the progress currently on this device.</p>
+<div class="cloud-box">
+ <b>☁️ CLOUD SAVE · SUPABASE</b>
+ <input id="cloudUrl" type="url" placeholder="Supabase Project URL (https://….supabase.co)" autocomplete="url">
+ <input id="cloudKey" type="password" placeholder="Supabase publishable / anon key" autocomplete="off">
+ <input id="cloudEmail" type="email" placeholder="Account email" autocomplete="email">
+ <input id="cloudPassword" type="password" placeholder="Account password" autocomplete="current-password">
+ <div class="cloud-actions"><button class="secondary" id="cloudSignup" type="button">CREATE ACCOUNT</button><button class="secondary" id="cloudLogin" type="button">SIGN IN</button></div>
+ <div class="cloud-actions"><button class="secondary" id="cloudSave" type="button">☁ SAVE TO CLOUD</button><button class="secondary" id="cloudRestore" type="button">↻ RESTORE FROM CLOUD</button></div>
+ <small id="cloudStatus" aria-live="polite">Cloud needs your own free Supabase project setup. See setup guide below.</small>
+ <details class="cloud-guide"><summary>One-time free setup instructions</summary>
+ <ol><li>Create a free project at Supabase.</li><li>Copy its Project URL and publishable (anon) key into the fields above.</li><li>In Supabase SQL Editor, run this SQL:</li></ol>
+ <pre>create table if not exists public.player_saves (
+ user_id uuid primary key references auth.users(id) on delete cascade,
+ save_data jsonb not null,
+ updated_at timestamptz not null default now()
+);
+alter table public.player_saves enable row level security;
+create policy "Players manage their own save"
+on public.player_saves for all to authenticated
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);</pre>
+ <small>Use only the publishable/anon key in this browser game. Never paste a service-role or secret key. Enable email/password sign-in in Supabase Auth. If email confirmation is enabled, confirm the signup email before signing in.</small>
+ </details>
+</div><div class="profile-section-title">YOUR PROGRESS</div><div class="profile-metrics"><div class="profile-metric"><b id="pLevels">0</b><small>LEVELS COMPLETED</small></div><div class="profile-metric"><b id="pMoves">0</b><small>TOTAL MOVES</small></div><div class="profile-metric"><b id="pCoins">0</b><small>COINS EARNED</small></div><div class="profile-metric"><b id="pStreak">0</b><small>DAY STREAK 🔥</small></div></div>
 <div class="profile-section-title">NEXT MILESTONE</div><div id="nextAchievement">Complete your first day to earn a badge.</div><div class="profile-progress"><i id="achievementProgress"></i></div>
 <div class="profile-section-title">ACHIEVEMENT COLLECTION</div><div class="achievement-list" id="achievementList"></div><button class="secondary" id="profileClose">BACK TO MARKET</button></div></div>
 <div class="overlay hidden" id="album"><div class="panel"><div class="hero">🏆🎁🪙</div><h1>MARKET <span>COLLECTION</span></h1><p>Collect decorations with your earned coins. Your collection stays saved on this device.</p><div class="album-grid" id="albumGrid"></div><button class="secondary" id="albumClose">BACK TO MARKET</button></div></div>
@@ -500,6 +530,29 @@ bind('albumOpen',()=>{renderAlbum();$('album').classList.remove('hidden')});bind
 bind('profileOpen',()=>{renderProfile();$('profile').classList.remove('hidden')});
 bind('profileClose',()=>$('profile').classList.add('hidden'));
 $('playerNameInput').addEventListener('change',()=>{playerName=$('playerNameInput').value.trim().slice(0,18)||'Bazaar Player';save();renderProfile();update()});
+
+
+// Portable local backup: only this game's namespaced progress keys are exported.
+const BACKUP_KEYS=['nbsLevel','nbsUnlocked','nbsCoins','nbsBest','nbsDecor','nbsFestival','nbsTotalMoves','nbsLevelsCompleted','nbsTotalCoinsEarned','nbsPlayStreak','nbsLastFinishDate','nbsPlayerName','nbsPlayerAvatar','nbsDailyClaim'];
+function makeBackup(){const data={};BACKUP_KEYS.forEach(k=>{const v=localStorage.getItem(k);if(v!==null)data[k]=v});return {app:'Nazeef Bazar Sort Stories',format:1,createdAt:new Date().toISOString(),data};}
+function exportBackup(){try{const blob=new Blob([JSON.stringify(makeBackup(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='nazeef-bazar-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);$('cloudStatus').textContent='Backup file exported. Keep it somewhere safe.'}catch(e){$('cloudStatus').textContent='Could not export backup on this browser.'}}
+function restoreBackupObject(obj){if(!obj||obj.app!=='Nazeef Bazar Sort Stories'||obj.format!==1||!obj.data||typeof obj.data!=='object'||Array.isArray(obj.data))throw new Error('This is not a supported Nazeef Bazar backup.');const allowed=new Set(BACKUP_KEYS);for(const [k,v] of Object.entries(obj.data)){if(!allowed.has(k)||typeof v!=='string'||v.length>200000)throw new Error('Backup contains invalid data.');}if(!obj.data.nbsLevel||!obj.data.nbsCoins)throw new Error('Backup is incomplete.');if(!confirm('Restore this backup? Your current device progress will be replaced.'))return false;BACKUP_KEYS.forEach(k=>{if(Object.prototype.hasOwnProperty.call(obj.data,k))localStorage.setItem(k,obj.data[k]);else localStorage.removeItem(k)});location.reload();return true;}
+$('backupExport').addEventListener('click',exportBackup);
+$('backupImport').addEventListener('click',()=>$('backupFile').click());
+$('backupFile').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{const obj=JSON.parse(await f.text());restoreBackupObject(obj)}catch(err){$('cloudStatus').textContent=err.message||'Could not read that backup file.'}e.target.value=''});
+function cloudConfig(){const url=$('cloudUrl').value.trim().replace(/\/$/,'');const key=$('cloudKey').value.trim();if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)||!key)throw new Error('Enter a valid Supabase Project URL and publishable/anon key.');localStorage.setItem('nbsCloudUrl',url);localStorage.setItem('nbsCloudKey',key);return {url,key};}
+function cloudHeaders(cfg,token){return {'apikey':cfg.key,'Authorization':'Bearer '+(token||cfg.key),'Content-Type':'application/json'};}
+function cloudSession(){try{return JSON.parse(localStorage.getItem('nbsCloudSession')||'null')}catch(e){return null}}
+async function cloudAuth(mode){const cfg=cloudConfig(),email=$('cloudEmail').value.trim(),password=$('cloudPassword').value;if(!email||!password)throw new Error('Enter your email and password.');const endpoint=mode==='signup'?'signup':'token?grant_type=password';const res=await fetch(cfg.url+'/auth/v1/'+endpoint,{method:'POST',headers:cloudHeaders(cfg),body:JSON.stringify({email,password})});const data=await res.json();if(!res.ok)throw new Error(data.msg||data.message||data.error_description||'Account request failed.');if(data.access_token){localStorage.setItem('nbsCloudSession',JSON.stringify({access_token:data.access_token,refresh_token:data.refresh_token,user:data.user}));$('cloudStatus').textContent='Signed in as '+(data.user?.email||email)+'.'}else{$('cloudStatus').textContent='Account created. Check your email if confirmation is enabled, then sign in.'}}
+async function cloudRequest(path,options={}){const cfg=cloudConfig(),session=cloudSession();if(!session?.access_token||!session?.user?.id)throw new Error('Sign in to your cloud account first.');const res=await fetch(cfg.url+'/rest/v1/'+path,{...options,headers:{...cloudHeaders(cfg,session.access_token),'Prefer':'resolution=merge-duplicates,return=minimal',...(options.headers||{})}});if(!res.ok){const body=await res.text();throw new Error('Cloud request failed ('+res.status+'): '+body.slice(0,240));}return res;}
+async function cloudSave(){const session=cloudSession();if(!session?.user?.id)throw new Error('Sign in to your cloud account first.');await cloudRequest('player_saves?on_conflict=user_id',{method:'POST',body:JSON.stringify({user_id:session.user.id,save_data:makeBackup(),updated_at:new Date().toISOString()})});$('cloudStatus').textContent='☁️ Cloud save complete · '+new Date().toLocaleString();}
+async function cloudRestore(){const session=cloudSession();if(!session?.user?.id)throw new Error('Sign in to your cloud account first.');const res=await cloudRequest('player_saves?select=save_data&user_id=eq.'+encodeURIComponent(session.user.id),{method:'GET',headers:{'Prefer':'return=representation'}});const rows=await res.json();if(!rows.length)throw new Error('No cloud backup found for this account yet.');restoreBackupObject(rows[0].save_data);}
+async function cloudAction(fn){$('cloudStatus').textContent='Connecting securely…';try{await fn()}catch(e){$('cloudStatus').textContent=e.message||'Cloud operation failed.'}}
+$('cloudSignup').addEventListener('click',()=>cloudAction(()=>cloudAuth('signup')));
+$('cloudLogin').addEventListener('click',()=>cloudAction(()=>cloudAuth('login')));
+$('cloudSave').addEventListener('click',()=>cloudAction(cloudSave));
+$('cloudRestore').addEventListener('click',()=>cloudAction(cloudRestore));
+try{$('cloudUrl').value=localStorage.getItem('nbsCloudUrl')||'';$('cloudKey').value=localStorage.getItem('nbsCloudKey')||'';const cs=cloudSession();if(cs?.user?.email)$('cloudStatus').textContent='Cloud account: '+cs.user.email+' · Ready to sync.'}catch(e){}
 
 updateAudioButtons();
 renderProfile();
