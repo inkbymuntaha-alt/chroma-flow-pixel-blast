@@ -233,6 +233,13 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
  .market-upgraded .stall-dress span,.stall-dress span{filter:none!important}
  .progress i{transition:none!important}
 }
+
+/* Smart touch polish: fast visual guidance with short, non-blocking feedback. */
+.shelf.invalid-move{animation:invalid-nudge .28s ease-out;border-color:#ff9a82!important;box-shadow:0 0 0 2px #ff806655,0 0 15px #ff806644!important}
+@keyframes invalid-nudge{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.shelf.just-moved{animation:shelf-arrive .24s ease-out}
+.item.arriving{animation:item-arrive .28s cubic-bezier(.2,.8,.2,1)}
+@media(prefers-reduced-motion:reduce){.shelf.invalid-move,.shelf.just-moved,.item.arriving{animation:none!important}}
 </style>
 </head>
 <body>
@@ -511,6 +518,16 @@ function renderMove(from,to){
  ensureShelfNodes();
  // Product art is regenerated only for the two shelves whose contents changed.
  for(let i=0;i<stacks.length;i++)renderShelf(i,i===from||i===to);
+ const source=$('shelves').children[from],destination=$('shelves').children[to];
+ source.classList.add('just-moved');destination.classList.add('just-moved');
+ const arriving=destination.querySelector('.item.top-item');
+ if(arriving)arriving.classList.add('arriving');
+ setTimeout(()=>{source.classList.remove('just-moved');destination.classList.remove('just-moved');if(arriving)arriving.classList.remove('arriving')},300);
+}
+function showInvalidMove(i){
+ const shelf=$('shelves').children[i];if(!shelf)return;
+ shelf.classList.remove('invalid-move');void shelf.offsetWidth;shelf.classList.add('invalid-move');
+ setTimeout(()=>shelf.classList.remove('invalid-move'),320);
 }
 function sortedCount(){return stacks.filter(s=>s.length===CAP&&s.every(v=>v===s[0])).length}
 function applyLevelPalette(){
@@ -626,7 +643,7 @@ function celebrate(){
 }
 function moveShelf(from,to){
  if(busy||!started||from<0||to<0)return;
- if(!legalMove(from,to)){selected=to;render();say('That shelf cannot take this item. Match the top product or choose an empty shelf.');tone(240);return}
+ if(!legalMove(from,to)){selected=to;renderSelection();showInvalidMove(to);say('That shelf cannot take this item. Match the top product or choose an empty shelf.');return}
  snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;totalMoves++;selected=-1;save();
  if(goldenBasketEvent()&&to===stacks.length-1&&!goldenBasketPaid){goldenBasketPaid=true;goldenBasketClaims.add(goldenBasketKey());try{localStorage.setItem('nbsGoldenBasketClaims',JSON.stringify([...goldenBasketClaims]))}catch(e){}const basketReward=specialBasketType()==='rainbow'?20:10;earnCoins(basketReward);toast((specialBasketType()==='rainbow'?'Rainbow':'Golden')+' Basket bonus! +'+basketReward+' coins 🌟')}
 
@@ -642,7 +659,7 @@ function onShelf(i){
  const from=selected;
  if(legalMove(from,i)){moveShelf(from,i);return}
  if(stacks[i].length){selected=i;renderSelection();say('New shelf selected. Its top product is '+PRODUCTS[stacks[i][stacks[i].length-1]].n+'.')}
- else{say('That move is not available. Try an empty shelf or matching goods.')}
+ else{showInvalidMove(i);say('That move is not available. Try an empty shelf or matching goods.')}
 }
 function findHint(){
  if(!started||busy)return;
