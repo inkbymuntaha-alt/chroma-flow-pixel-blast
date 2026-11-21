@@ -77,7 +77,7 @@ bindTap($('again'),()=>{$('finish').classList.add('hidden');newLevel()});
 bindTap($('restart'),()=>{if(!busy)newLevel()});
 bindTap($('sound'),()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'🔊 SOUND ON':'🔇 SOUND OFF';if(soundOn)tone()});
 bindTap($('shuffle'),()=>{if(busy||!started)return;makeBoard();say('Fresh gems! Find a matching line.');tone(500)});
-bindTap($('hint'),()=>{if(busy||!started)return;for(let i=0;i<N*N;i++)for(let j=i+1;j<N*N;j++){if(!neighbours(i,j))continue;[board[i],board[j]]=[board[j],board[i]];let ok=findMatches().length>0;[board[i],board[j]]=[board[j],board[i]];if(ok){selected=i;render();setTimeout(()=>{selected=-1;render()},1000);say('Try swapping the selected gem with its neighbour!');tone(800);return}}say('Try shuffling for a fresh board!')};
+bindTap($('hint'),()=>{if(busy||!started)return;for(let i=0;i<N*N;i++)for(let j=i+1;j<N*N;j++){if(!neighbours(i,j))continue;[board[i],board[j]]=[board[j],board[i]];let ok=findMatches().length>0;[board[i],board[j]]=[board[j],board[i]];if(ok){selected=i;render();setTimeout(()=>{selected=-1;render()},1000);say('Try swapping the selected gem with its neighbour!');tone(800);return}}say('Try shuffling for a fresh board!')});
 makeBoard();updateHUD();
 window.addEventListener('error',e=>{try{say('A game hiccup occurred. Tap RESTART LEVEL to recover.')}catch(_){}});window.addEventListener('unhandledrejection',()=>{try{busy=false;say('A move was interrupted. Tap RESTART LEVEL to continue.')}catch(_){}});
 })();
