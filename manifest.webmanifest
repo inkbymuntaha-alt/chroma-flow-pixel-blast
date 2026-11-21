@@ -1,0 +1,19 @@
+{
+  "name": "Nazeef Bazar Sort Stories",
+  "short_name": "Nazeef Bazar",
+  "description": "Sort goods, serve happy customers and grow your neighbourhood bazaar.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#17120b",
+  "theme_color": "#17120b",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
