@@ -99,6 +99,30 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 .market-scene{font-size:clamp(22px,6vw,29px);min-width:86px;text-align:center;line-height:1.3;white-space:normal}
 .market-copy small{display:block;line-height:1.35}
 .board-wrap{transition:background .45s ease,border-color .45s ease}
+
+/* Living bazaar: lightweight animated market life */
+.living-bazaar{position:relative;overflow:hidden;border:1px solid #94713b;border-radius:15px;padding:9px 10px;background:linear-gradient(135deg,#342819,#21180f 70%);box-shadow:inset 0 1px #fff2}
+.stall-dress{display:flex;align-items:center;justify-content:space-between;gap:5px;padding:0 3px 8px;border-bottom:1px solid #a17a3b55;margin-bottom:8px}
+.stall-dress span{font-size:clamp(17px,5vw,23px);filter:drop-shadow(0 2px 2px #0008);animation:stall-sway 3.8s ease-in-out infinite;transform-origin:50% 100%}
+.stall-dress span:nth-child(2){animation-delay:-1.1s}.stall-dress span:nth-child(3){animation-delay:-2.2s}.stall-dress span:nth-child(4){animation-delay:-.6s}
+.customer-row{display:flex;align-items:center;gap:9px;min-height:49px;position:relative;z-index:1}
+.customer-queue{display:flex;align-items:center;gap:3px;flex:none}
+.customer{width:34px;height:37px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,#6a4b2c,#342318);border:1px solid #bd9450;font-size:23px;box-shadow:0 3px 5px #0006;animation:customer-bob 2.4s ease-in-out infinite}
+.customer:nth-child(2){animation-delay:-.8s;opacity:.88}.customer:nth-child(3){animation-delay:-1.5s;opacity:.72}
+.customer-copy{min-width:0;flex:1}.customer-copy b{display:block;color:#ffe5a6;font-size:11px;letter-spacing:.3px}.customer-copy small{display:block;color:#d5c29b;font-size:10px;line-height:1.3;margin-top:2px}
+.customer-mood{font-size:20px;flex:none;animation:mood-pop .45s ease-out}
+.weather-particle{position:absolute;pointer-events:none;opacity:.65;animation:petal-drift 8s linear infinite;top:8px;right:13%;font-size:13px}
+.weather-particle.p2{right:38%;top:24px;animation-delay:-3.5s}.weather-particle.p3{right:68%;top:4px;animation-delay:-5.7s}
+.living-bazaar[data-weather="rain"] .weather-particle{animation-name:rain-drop;animation-duration:1.5s}
+.living-bazaar[data-weather="night"]{background:linear-gradient(135deg,#302746,#191626 70%);border-color:#9880bd}
+.living-bazaar[data-weather="sun"] .stall-dress span:nth-child(3){filter:drop-shadow(0 0 7px #ffd66b)}
+@keyframes customer-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes stall-sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes mood-pop{0%{transform:scale(.65) rotate(-12deg)}75%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes petal-drift{0%{transform:translate(0,-8px) rotate(0);opacity:0}15%{opacity:.7}100%{transform:translate(-44px,58px) rotate(180deg);opacity:0}}
+@keyframes rain-drop{0%{transform:translateY(-8px);opacity:0}30%{opacity:.7}100%{transform:translateY(48px);opacity:0}}
+@media(prefers-reduced-motion:reduce){.stall-dress span,.customer,.customer-mood,.weather-particle{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -106,6 +130,11 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 <header class="top"><div class="brand">NAZEEF <span>BAZAR</span><small>SORT STORIES · NEIGHBORHOOD MARKET</small></div><div class="levelpill"><b id="level">1</b><small>DAY / LEVEL</small></div></header>
 <section class="stats"><div class="stat"><b id="moves">0</b><small>MOVES</small></div><div class="stat"><b id="sorted">0/4</b><small>SHELVES SORTED</small></div><div class="stat"><b id="best">0</b><small>BEST DAY</small></div></section>
 <section class="market"><div class="market-scene" id="marketScene">🏪🥬🧺</div><div class="market-copy"><b id="marketName">NAZEEF'S CORNER BAZAR</b><small id="marketRank">A little shop with big dreams</small></div><div class="coins">🪙 <span id="coins">0</span></div></section>
+<section class="living-bazaar" id="livingBazaar" data-weather="sun" aria-label="Living neighborhood bazaar">
+ <div class="stall-dress" aria-hidden="true"><span>🏮</span><span>🎏</span><span>🧺</span><span>🌼</span></div>
+ <span class="weather-particle" aria-hidden="true">🌸</span><span class="weather-particle p2" aria-hidden="true">✨</span><span class="weather-particle p3" aria-hidden="true">🍃</span>
+ <div class="customer-row"><div class="customer-queue" aria-hidden="true"><span class="customer" id="customerOne">🧑🏽</span><span class="customer" id="customerTwo">👩🏻</span><span class="customer" id="customerThree">🧒🏽</span></div><div class="customer-copy" aria-live="polite"><b id="customerTitle">NEIGHBOURHOOD CUSTOMERS</b><small id="customerLine">Your first shoppers are arriving. Make them smile!</small></div><span class="customer-mood" id="customerMood" aria-hidden="true">😊</span></div>
+</section>
 <section class="order"><div><b id="orderTitle">CUSTOMER ORDER</b><small id="orderText">Sort every shelf to serve the neighborhood.</small></div><strong id="orderProgress">0 / 4</strong></section>
 <div class="progress"><i id="progressFill"></i></div>
 <section class="board-wrap"><div class="board-head"><b>🧺 MARKET SHELVES</b><small id="boardTip">Tap a shelf, then tap where its top item goes</small></div><div class="shelves" id="shelves" aria-label="Sorting shelves"></div></section>
@@ -192,14 +221,31 @@ function applyLevelPalette(){
  const env=environments[(level-1)%environments.length];
  app.style.setProperty('--scene-h',String((hue+18)%360));
  app.dataset.environment=env[0].toLowerCase();
+ const living=$('livingBazaar');if(living){living.dataset.weather=env[0]==='Lavender'||env[0]==='Plum'?'night':env[0]==='Mint'?'rain':'sun';}
  $('marketScene').textContent=env[2]+' '+env[1];
  $('marketName').textContent=env[3];
  $('marketRank').textContent='DAY '+level+' · '+env[4];
  $('boardTip').textContent=env[0]+' bazaar · Level '+level+' · Tap a shelf, then its destination';
  document.querySelector('.board-head b').textContent='🧺 '+env[0].toUpperCase()+' MARKET SHELVES';
 }
+
+function refreshBazaarLife(){
+ const done=sortedCount(),total=typesForLevel();
+ const title=$('customerTitle'),line=$('customerLine'),mood=$('customerMood');
+ const one=$('customerOne'),two=$('customerTwo'),three=$('customerThree');
+ if(!title||!line||!mood)return;
+ if(!started){title.textContent='THE NEIGHBOURHOOD IS CHEERING!';line.textContent='Every customer is happy. Your bazaar is growing!';mood.textContent='🥳';one.textContent='🧑🏽‍🦱';two.textContent='👩🏽';three.textContent='🧒🏻';return}
+ if(done>=total-1){title.textContent='ONE LAST ORDER!';line.textContent='Almost there — one more shelf will make the day!';mood.textContent='🤩'}
+ else if(done>0){title.textContent='CUSTOMERS ARE SMILING';line.textContent=done+' shelf'+(done===1?'':'es')+' sorted. The queue is getting happier!';mood.textContent='😄'}
+ else if(moves>0){title.textContent='SHOPPERS ARE WAITING';line.textContent='Nice start! Keep matching the goods to fill their baskets.';mood.textContent='🛍️'}
+ else{title.textContent='NEIGHBOURHOOD CUSTOMERS';line.textContent='Your first shoppers are arriving. Make them smile!';mood.textContent='😊'}
+ const faces=[['🧑🏽','👩🏻','🧒🏽'],['👨🏽','👩🏾','👦🏻'],['🧔🏽','👩🏻‍🦱','👧🏽'],['👳🏽','👩🏽‍🦰','🧒🏻']];
+ const set=faces[(level-1)%faces.length];one.textContent=set[0];two.textContent=set[1];three.textContent=set[2];
+}
+
 function update(){
  applyLevelPalette();
+ refreshBazaarLife();
  $('level').textContent=level;$('moves').textContent=moves;$('sorted').textContent=sortedCount()+'/'+typesForLevel();$('best').textContent=best;$('coins').textContent=coins;
 
  $('orderTitle').textContent='CUSTOMER ORDER · DAY '+level;$('orderText').textContent='Sort '+typesForLevel()+' shelves of four matching goods.';$('orderProgress').textContent=sortedCount()+' / '+typesForLevel();$('progressFill').style.width=(sortedCount()/typesForLevel()*100)+'%';
