@@ -77,7 +77,22 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 @keyframes produce-breathe{from{transform:translateY(-1px) scale(1.025)}to{transform:translateY(-3px) scale(1.055)}}
 @keyframes market-float{from{transform:translateY(0)}to{transform:translateY(-2px)}}
 
-.produce-art{width:100%;height:100%;max-width:42px;max-height:42px;overflow:visible;filter:drop-shadow(0 3px 2px #130a05)}.item.top-item .produce-art{transform:scale(1.08)}.item .tiny{z-index:2;background:#24170d99;border-radius:4px;padding:0 2px}.shelf .item{overflow:visible}\n</style>
+.produce-art{width:100%;height:100%;max-width:42px;max-height:42px;overflow:visible;filter:drop-shadow(0 3px 2px #130a05)}.item.top-item .produce-art{transform:scale(1.08)}.item .tiny{z-index:2;background:#24170d99;border-radius:4px;padding:0 2px}.shelf .item{overflow:visible}\n/* Per-level colour identity: a fresh hue and coordinated bazaar palette for every day. */
+.app{--level-h:38;--level-accent:hsl(var(--level-h) 78% 70%);--level-deep:hsl(var(--level-h) 42% 22%);--level-mid:hsl(var(--level-h) 38% 31%);--level-glow:hsl(var(--level-h) 90% 62% / .22)}
+.levelpill{border-color:var(--level-accent)!important;box-shadow:0 0 14px var(--level-glow)}
+.brand span,.board-head b{color:var(--level-accent)}
+.market,.order,.board-wrap{border-color:hsl(var(--level-h) 48% 48% / .75)!important}
+.market{background:linear-gradient(125deg,var(--level-deep),#211a10 78%)}
+.order{background:linear-gradient(115deg,var(--level-mid),#241c12 85%)}
+.board-wrap{background:linear-gradient(155deg,var(--level-deep),#21190f 72%)}
+.progress{background:hsl(var(--level-h) 28% 16%)}
+.progress i{background:linear-gradient(90deg,hsl(var(--level-h) 82% 48%),var(--level-accent))}
+.shelf{border-color:hsl(var(--level-h) 45% 48%);background:linear-gradient(180deg,var(--level-mid),var(--level-deep));box-shadow:inset 0 1px #fff2,0 4px 7px #0006,0 0 0 1px var(--level-glow)}
+.shelf-label{color:var(--level-accent)}
+.shelf.selected{border-color:var(--level-accent);background:linear-gradient(180deg,hsl(var(--level-h) 48% 39%),hsl(var(--level-h) 44% 24%));box-shadow:0 0 0 2px var(--level-glow),0 0 18px var(--level-glow)}
+.shelf.target{border-color:#8ee4a0}
+.tool:focus-visible,.footer button:focus-visible{outline:2px solid var(--level-accent);outline-offset:2px}
+</style>
 </head>
 <body>
 <main class="app">
@@ -149,7 +164,17 @@ function render(){
  });
 }
 function sortedCount(){return stacks.filter(s=>s.length===CAP&&s.every(v=>v===s[0])).length}
+function applyLevelPalette(){
+ const hue=(Math.round((level-1)*137.508+24)%360);
+ const app=document.querySelector('.app');
+ app.style.setProperty('--level-h',String(hue));
+ const names=['Saffron','Lagoon','Rose','Jade','Lavender','Citrus','Coral','Sky','Plum','Mint','Ruby','Aqua'];
+ const theme=names[(level-1)%names.length];
+ $('boardTip').textContent=theme+' bazaar · Level '+level+' colour theme · Tap a shelf, then its destination';
+ document.querySelector('.board-head b').textContent='🧺 '+theme.toUpperCase()+' MARKET SHELVES';
+}
 function update(){
+ applyLevelPalette();
  $('level').textContent=level;$('moves').textContent=moves;$('sorted').textContent=sortedCount()+'/'+typesForLevel();$('best').textContent=best;$('coins').textContent=coins;
  const rank=STALLS[Math.min(STALLS.length-1,Math.floor((level-1)/4))];$('marketScene').textContent=rank[0];$('marketName').textContent=rank[1];$('marketRank').textContent=rank[2];
  $('orderTitle').textContent='CUSTOMER ORDER · DAY '+level;$('orderText').textContent='Sort '+typesForLevel()+' shelves of four matching goods.';$('orderProgress').textContent=sortedCount()+' / '+typesForLevel();$('progressFill').style.width=(sortedCount()/typesForLevel()*100)+'%';
