@@ -134,6 +134,25 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 @keyframes mission-flash{0%{box-shadow:0 0 0 0 #ffe08b99}100%{box-shadow:0 0 0 12px #ffe08b00}}
 @media(max-width:370px){.daily-card{padding:8px}.daily-card button{padding:8px;font-size:9px}.daily-copy small{font-size:9px}}
 
+
+/* Festival routes, collection album and chapter map */
+.festival-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}
+.festival-choice{border:1px solid #98733a;border-radius:13px;padding:11px 8px;background:linear-gradient(145deg,#382919,#21170d);color:#f6dfb1;font-weight:900;font-size:12px;min-height:66px}
+.festival-choice span{display:block;font-size:22px;margin-bottom:4px}
+.festival-choice.active{border:2px solid #ffe08c;background:linear-gradient(145deg,#755022,#3a2915);box-shadow:0 0 14px #f5c96b44}
+.album-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}
+.album-item{border:1px solid #8e6b32;border-radius:13px;padding:11px 8px;background:#21190f;color:#f6dfb1}
+.album-item .art{font-size:27px}.album-item b{display:block;font-size:11px;margin:4px 0}.album-item small{display:block;color:#cdb98e;font-size:10px;min-height:25px}
+.album-item button{margin-top:7px;border:1px solid #c49a50;border-radius:9px;padding:7px 9px;background:#745025;color:#fff0c5;font-weight:900;font-size:10px}
+.album-item button:disabled{opacity:.45}
+.chapter-label{grid-column:1/-1;text-align:left;color:#f4d995;font-size:11px;font-weight:1000;letter-spacing:.7px;padding:8px 3px 2px;border-bottom:1px solid #94713b66}
+.festival-banner{font-size:10px;color:#ffe5a2;text-align:center;letter-spacing:.6px;margin-top:3px}
+.living-bazaar[data-festival="diwali"]{background:linear-gradient(135deg,#493019,#24140c 75%)}
+.living-bazaar[data-festival="holi"]{background:linear-gradient(135deg,#452344,#1f172e 75%)}
+.living-bazaar[data-festival="eid"]{background:linear-gradient(135deg,#173e3b,#14221e 75%)}
+.living-bazaar[data-festival="monsoon"]{background:linear-gradient(135deg,#1d3949,#14232b 75%)}
+@media(max-width:360px){.festival-choice{font-size:11px;min-height:60px;padding:8px 5px}}
+
 </style>
 </head>
 <body>
@@ -152,12 +171,16 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 <section class="daily-card" id="dailyCard"><div class="daily-copy"><b>🌟 DAILY BAZAAR CHALLENGE</b><small id="dailyDescription">A fresh puzzle and bonus coins every day.</small></div><button id="dailyStart" type="button">PLAY TODAY ▶</button></section>
 <section class="controls"><button class="tool" id="hint">💡 HINT</button><button class="tool" id="undo">↶ UNDO</button><button class="tool" id="shuffle">🔀 MIX UP</button></section>
 <div class="message" id="message">Choose a shelf to pick up its top product.</div>
-<footer class="footer"><button id="sound">🔊 SOUND ON</button><button id="voiceTest">🎙️ TEST HINDI VOICE</button><button id="restart">↻ RESTART DAY</button><button id="mapOpen">🗺️ MARKET MAP</button></footer>
+<footer class="footer"><button id="sound">🔊 SOUND ON</button><button id="voiceTest">🎙️ TEST HINDI VOICE</button><button id="restart">↻ RESTART DAY</button><button id="mapOpen">🗺️ MARKET MAP</button><button id="festivalOpen">🎊 FESTIVALS</button><button id="albumOpen">🏆 COLLECTION</button></footer>
 </main>
 <div class="toast" id="toast">Lovely sorting!</div>
 <div class="overlay" id="welcome"><div class="panel"><div class="hero">🏪🥭🧺</div><h1>NAZEEF <span>BAZAR</span><br>SORT STORIES</h1><p>Welcome to your little neighborhood market! Sort fruits, vegetables and treats, serve happy customers, earn coins and grow your bazaar one shelf at a time.</p><div class="steps"><div class="step"><b>1</b><span>Tap a shelf to pick up its top item.</span></div><div class="step"><b>2</b><span>Tap another shelf to place it. Match the item on top, or use an empty shelf.</span></div><div class="step"><b>3</b><span>Make every shelf hold four matching products to finish the day.</span></div></div><button class="primary" id="start">OPEN THE BAZAR ▶</button></div></div>
 <div class="overlay hidden" id="finish"><div class="panel"><div class="hero" id="finishIcon">🎉🏪</div><h1 id="finishTitle">ORDER COMPLETE!</h1><p id="finishText">The neighborhood is happy!</p><button class="primary" id="continue">OPEN NEXT DAY ▶</button><br><button class="secondary" id="again">PLAY THIS DAY AGAIN</button></div></div>
 <div class="overlay hidden" id="map"><div class="panel"><div class="hero">🛍️🏘️</div><h1>BAZAR <span>JOURNEY</span></h1><p>Choose a day you have unlocked.</p><div id="levelGrid" class="level-grid"></div><button class="secondary" id="mapClose">BACK TO MARKET</button></div></div>
+
+<div class="overlay hidden" id="festival"><div class="panel"><div class="hero" id="festivalHero">🎊🏮✨</div><h1>BAZAR <span>FESTIVALS</span></h1><p>Choose a celebration to decorate your market. Every festival has its own colours, lights and atmosphere.</p><div class="festival-row" id="festivalChoices"></div><div class="festival-banner" id="festivalStatus">Your market, your celebration!</div><button class="secondary" id="festivalClose">BACK TO MARKET</button></div></div>
+<div class="overlay hidden" id="album"><div class="panel"><div class="hero">🏆🎁🪙</div><h1>MARKET <span>COLLECTION</span></h1><p>Collect decorations with your earned coins. Your collection stays saved on this device.</p><div class="album-grid" id="albumGrid"></div><button class="secondary" id="albumClose">BACK TO MARKET</button></div></div>
+
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
@@ -179,12 +202,23 @@ function productArt(v){
 const STALLS=[['🏪🥬🧺',"NAZEEF'S CORNER BAZAR",'A little shop with big dreams'],['🍎🥕🏬','FRESH PRODUCE STALL','The neighborhood favourite'],['🥐🍋🛍️','THE BUSY MARKET','More customers are coming'],['🌼🍇🏘️','GOLDEN BAZAR STREET','A beautiful market street'],['🎪🧺✨','THE GRAND BAZAR','Your market is shining']];
 let level=1,coins=0,best=0,unlocked=1,stacks=[],selected=-1,moves=0,history=[],busy=false,started=false,soundOn=true;
 let dailyMode=false,dailySeed='',dailyTargetMoves=0,orderProduct=0,specialOrderDone=false;
+const FESTIVALS=[{id:'bazaar',name:'Classic Bazar',icon:'🏪',scene:'🏪 🧺 🌼',tag:'Warm neighborhood market',faces:['🏮','🎏','🌼','🧺']},{id:'diwali',name:'Diwali Lights',icon:'🪔',scene:'🪔 ✨ 🏮',tag:'A glowing festival of lights',faces:['🪔','✨','🏮','🎆']},{id:'holi',name:'Holi Colours',icon:'🎨',scene:'🎨 🌈 🎊',tag:'A joyful splash of colours',faces:['🎨','🌈','🎊','💜']},{id:'eid',name:'Eid Celebration',icon:'🌙',scene:'🌙 ⭐ 🕌',tag:'A moonlit celebration',faces:['🌙','⭐','✨','🕌']},{id:'monsoon',name:'Monsoon Mela',icon:'☔',scene:'☔ 🌧️ 🌿',tag:'A cool rainy-day market',faces:['☔','🌧️','🌿','💧']}];
+let festival='bazaar',festivalBonusPaid=false;
+const DECORATIONS=[{id:'lantern',name:'Golden Lanterns',icon:'🏮',cost:50,desc:'A glowing stall decoration.'},{id:'bunting',name:'Festival Bunting',icon:'🎏',cost:75,desc:'Colourful flags for your market.'},{id:'flower',name:'Flower Garland',icon:'🌼',cost:100,desc:'A cheerful floral touch.'},{id:'fountain',name:'Lucky Fountain',icon:'⛲',cost:150,desc:'A special centerpiece.'}];
+function readSet(key){try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return []}}
+let ownedDecor=readSet('nbsDecor');
+try{festival=localStorage.getItem('nbsFestival')||'bazaar'}catch(e){}
+function saveFestival(){try{localStorage.setItem('nbsFestival',festival);localStorage.setItem('nbsDecor',JSON.stringify(ownedDecor))}catch(e){}}
+function chapterName(n){return ['Little Corner','Fruit Lane','Flower Courtyard','River Walk','Lantern Street','Grand Festival','Garden Quarter','Old Town','Rooftop Market','Royal Bazaar'][Math.floor((n-1)/10)%10]}
+function renderFestivals(){const root=$('festivalChoices');root.innerHTML='';FESTIVALS.forEach(f=>{const b=document.createElement('button');b.type='button';b.className='festival-choice'+(festival===f.id?' active':'');b.innerHTML='<span>'+f.icon+'</span>'+f.name;b.addEventListener('click',()=>{festival=f.id;saveFestival();renderFestivals();applyLevelPalette();toast(f.name+' selected!');});root.appendChild(b)});const chosen=FESTIVALS.find(f=>f.id===festival)||FESTIVALS[0];$('festivalHero').textContent=chosen.scene;$('festivalStatus').textContent=chosen.tag+' · +10 coins for your first sorted shelf in each day.'}
+function renderAlbum(){const root=$('albumGrid');root.innerHTML='';DECORATIONS.forEach(d=>{const owned=ownedDecor.includes(d.id);const item=document.createElement('div');item.className='album-item';const art=document.createElement('div');art.className='art';art.textContent=d.icon;const name=document.createElement('b');name.textContent=d.name;const desc=document.createElement('small');desc.textContent=d.desc;const btn=document.createElement('button');btn.type='button';btn.textContent=owned?'COLLECTED ✓':'UNLOCK · '+d.cost+' 🪙';btn.disabled=owned||coins<d.cost;btn.addEventListener('click',()=>{if(ownedDecor.includes(d.id)||coins<d.cost)return;coins-=d.cost;ownedDecor.push(d.id);save();saveFestival();renderAlbum();update();toast(d.name+' added to your collection!')});item.append(art,name,desc,btn);root.appendChild(item)});}
+
 try{level=Math.max(1,Number(localStorage.getItem('nbsLevel'))||1);unlocked=Math.max(1,Number(localStorage.getItem('nbsUnlocked'))||1);coins=Math.max(0,Number(localStorage.getItem('nbsCoins'))||0);best=Math.max(0,Number(localStorage.getItem('nbsBest'))||0)}catch(e){}
 const say=t=>{$('message').textContent=t};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function tone(freq=620){if(!soundOn)return;try{const A=window.AudioContext||window.webkitAudioContext;if(!window.ac)window.ac=new A();if(window.ac.state==='suspended')window.ac.resume();let o=window.ac.createOscillator(),g=window.ac.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(.04,window.ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,window.ac.currentTime+.13);o.connect(g);g.connect(window.ac.destination);o.start();o.stop(window.ac.currentTime+.14)}catch(e){}}
 function bind(id,fn){$(id).addEventListener('click',e=>{e.preventDefault();fn(e)})}
-function save(){try{localStorage.setItem('nbsLevel',String(level));localStorage.setItem('nbsUnlocked',String(unlocked));localStorage.setItem('nbsCoins',String(coins));localStorage.setItem('nbsBest',String(best))}catch(e){}}
+function save(){try{localStorage.setItem('nbsLevel',String(level));localStorage.setItem('nbsUnlocked',String(unlocked));localStorage.setItem('nbsCoins',String(coins));localStorage.setItem('nbsBest',String(best));localStorage.setItem('nbsDecor',JSON.stringify(ownedDecor));localStorage.setItem('nbsFestival',festival)}catch(e){}}
 function typesForLevel(){return Math.min(7,3+Math.floor((level-1)/4))}
 function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function seededRandom(seed){let h=2166136261;for(let i=0;i<seed.length;i++){h^=seed.charCodeAt(i);h=Math.imul(h,16777619)}return function(){h+=0x6D2B79F5;let t=h;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
@@ -208,7 +242,7 @@ function scramble(){
  if(b.slice(0,n).every(s=>s.length===CAP&&s.every(x=>x===s[0]))){b[count-1].push(b[0].pop())}
  return b;
 }
-function newDay(){stacks=scramble();selected=-1;moves=0;history=[];busy=false;started=true;specialOrderDone=false;orderProduct=dailyMode?((Number(dailySeed.replace(/-/g,''))||1)%typesForLevel()):((level*3+1)%typesForLevel());dailyTargetMoves=20+typesForLevel()*7;render();update();say(dailyMode?'Daily challenge: complete the customer order within '+dailyTargetMoves+' moves for bonus coins!':'Tap a shelf to pick up its top product. Match it with the same product or an empty shelf.');}
+function newDay(){stacks=scramble();selected=-1;moves=0;history=[];busy=false;started=true;specialOrderDone=false;festivalBonusPaid=false;orderProduct=dailyMode?((Number(dailySeed.replace(/-/g,''))||1)%typesForLevel()):((level*3+1)%typesForLevel());dailyTargetMoves=20+typesForLevel()*7;render();update();say(dailyMode?'Daily challenge: complete the customer order within '+dailyTargetMoves+' moves for bonus coins!':'Tap a shelf to pick up its top product. Match it with the same product or an empty shelf.');}
 function render(){
  const root=$('shelves');root.innerHTML='';
  stacks.forEach((s,i)=>{
@@ -243,9 +277,11 @@ function applyLevelPalette(){
  app.style.setProperty('--scene-h',String((hue+18)%360));
  app.dataset.environment=env[0].toLowerCase();
  const living=$('livingBazaar');if(living){living.dataset.weather=env[0]==='Lavender'||env[0]==='Plum'?'night':env[0]==='Mint'?'rain':'sun';}
- $('marketScene').textContent=env[2]+' '+env[1];
- $('marketName').textContent=env[3];
- $('marketRank').textContent='DAY '+level+' · '+env[4];
+ const fest=FESTIVALS.find(f=>f.id===festival)||FESTIVALS[0];
+ const livingScene=$('livingBazaar');if(livingScene){livingScene.dataset.festival=festival;}
+ $('marketScene').textContent=festival==='bazaar'?env[2]+' '+env[1]:fest.scene;
+ $('marketName').textContent=festival==='bazaar'?env[3]:fest.name.toUpperCase()+' · '+env[3];
+ $('marketRank').textContent='CHAPTER '+(Math.floor((level-1)/10)+1)+' · '+chapterName(level)+' · DAY '+level+' · '+(festival==='bazaar'?env[4]:fest.tag);
  $('boardTip').textContent=env[0]+' bazaar · Level '+level+' · Tap a shelf, then its destination';
  document.querySelector('.board-head b').textContent='🧺 '+env[0].toUpperCase()+' MARKET SHELVES';
 }
@@ -270,7 +306,8 @@ function update(){
  $('level').textContent=level;$('moves').textContent=moves;$('sorted').textContent=sortedCount()+'/'+typesForLevel();$('best').textContent=best;$('coins').textContent=coins;
 
  $('orderTitle').textContent=(dailyMode?'🌟 DAILY MISSION':'🛍️ CUSTOMER ORDER')+' · '+PRODUCTS[orderProduct].e+' '+PRODUCTS[orderProduct].n;
- $('orderText').textContent=specialOrderDone?'Special order delivered! Bonus earned.':'First complete the '+PRODUCTS[orderProduct].n+' shelf for a 15-coin tip.';
+ $('orderText').textContent=(specialOrderDone?'Special order delivered! Bonus earned.':'First complete the '+PRODUCTS[orderProduct].n+' shelf for a 15-coin tip.')+(festival!=='bazaar'?' Festival first-shelf bonus: '+(festivalBonusPaid?'claimed':'10 coins')+'.':'');
+
  $('orderProgress').textContent=specialOrderDone?'DONE ✓':(sortedCount()+'/'+typesForLevel());$('progressFill').style.width=(sortedCount()/typesForLevel()*100)+'%';
  refreshDailyCard();
  $('hint').disabled=busy||!started;$('undo').disabled=busy||!started||history.length===0;$('shuffle').disabled=busy||!started;
@@ -317,7 +354,7 @@ async function moveShelf(from,to){
  if(from<0||to<0)return;
  if(!legalMove(from,to)){selected=to;render();say('That shelf cannot take this item. Match the top product or choose an empty shelf.');tone(240);return}
  snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;selected=-1;busy=true;try{navigator.vibrate?.(22)}catch(e){}render();const movedShelf=$('shelves').querySelector('[data-shelf=\"'+to+'\"]');if(movedShelf){movedShelf.classList.add('just-moved');const arriving=movedShelf.querySelector('.item.top-item');if(arriving)arriving.classList.add('arriving')}update();tone(520+item*80);await sleep(210);busy=false;update();
- if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820);if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;coins+=15;save();document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast('Customer order delivered! +15 coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! 15 बोनस सिक्के!');update()}}
+ if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820);if(festival!=='bazaar'&&!festivalBonusPaid){festivalBonusPaid=true;coins+=10;save();toast('Festival first-shelf bonus! +10 coins 🎊');update()}if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;coins+=15;save();document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast('Customer order delivered! +15 coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! 15 बोनस सिक्के!');update()}}
  if(sortedCount()===typesForLevel())finishDay();
 }
 function onShelf(i){
@@ -337,7 +374,7 @@ function findHint(){
 function undo(){if(!history.length||busy)return;const prev=history.pop();stacks=cloneBoard(prev.stacks);moves=prev.moves;selected=-1;render();update();say('Last move undone. Try another shelf!');tone(330)}
 function mixUp(){if(busy||!started)return;stacks=scramble();selected=-1;history=[];render();update();say('Shelves mixed up. A fresh sorting puzzle is ready!');toast('Fresh market mix!')}
 function finishDay(){started=false;try{navigator.vibrate?.([35,45,35,45,90])}catch(e){}let reward=20+typesForLevel()*10+Math.max(0,30-moves);let extra='';if(dailyMode){const won=moves<=dailyTargetMoves;try{localStorage.setItem('nbsDailyClaim',todayKey())}catch(e){}if(won){const bonus=35+typesForLevel()*5;reward+=bonus;extra=' Daily challenge bonus: '+bonus+' coins!'}else{extra=' Daily target was '+dailyTargetMoves+' moves; try again tomorrow for the bonus.'}}else{unlocked=Math.max(unlocked,Math.min(100,level+1));best=Math.max(best,level)}coins+=reward;save();celebrate();$('finishIcon').textContent='🎉🏪🪙';$('finishTitle').textContent=dailyMode?'DAILY CHALLENGE COMPLETE!':'DAY '+level+' COMPLETE!';$('finishText').textContent=lastPraise+' All the shelves are sorted! Happy customers earned you '+reward+' coins. '+(specialOrderDone?'Special customer order bonus included! ':'')+extra+' तुम्हारे लिए '+reward+' सिक्के!';$('continue').textContent=dailyMode?'BACK TO BAZAAR':(level>=100?'CELEBRATE YOUR BAZAR ▶':'OPEN NEXT DAY ▶');$('finish').classList.remove('hidden');update()}
-function drawMap(){const root=$('levelGrid');root.innerHTML='';for(let n=1;n<=100;n++){const b=document.createElement('button');b.type='button';b.className='level-cell'+(n===level?' current':'');b.textContent=n<=unlocked?'★ '+n:'🔒';b.disabled=n>unlocked;b.addEventListener('click',()=>{level=n;$('map').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newDay()});root.appendChild(b)}}
+function drawMap(){const root=$('levelGrid');root.innerHTML='';for(let n=1;n<=100;n++){if((n-1)%10===0){const h=document.createElement('div');h.className='chapter-label';h.textContent='CHAPTER '+(Math.floor((n-1)/10)+1)+' · '+chapterName(n);root.appendChild(h)}const b=document.createElement('button');b.type='button';b.className='level-cell'+(n===level?' current':'');b.textContent=n<=unlocked?'★ '+n:'🔒';b.disabled=n>unlocked;b.addEventListener('click',()=>{level=n;$('map').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newDay()});root.appendChild(b)}}
 // Pointer-first controls: taps select instantly; dragging a picked shelf onto another moves its top item.
 let pointerShelf=-1;
 $('shelves').addEventListener('pointerdown',e=>{
@@ -367,6 +404,8 @@ bind('hint',findHint);bind('undo',undo);bind('shuffle',mixUp);
 bind('sound',()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'🔊 SOUND ON':'🔇 SOUND OFF';if(soundOn)tone()});
 bind('voiceTest',()=>{const sample='शाबाश नाज़ीफ़! क्या कमाल कर दिया!';if(speakHindi(sample))say('Hindi voice test playing. If it sounds robotic, choose a higher-quality Hindi voice in Android Text-to-speech settings.');});
 bind('mapOpen',()=>{drawMap();$('map').classList.remove('hidden')});bind('mapClose',()=>$('map').classList.add('hidden'));
+bind('festivalOpen',()=>{renderFestivals();$('festival').classList.remove('hidden')});bind('festivalClose',()=>$('festival').classList.add('hidden'));
+bind('albumOpen',()=>{renderAlbum();$('album').classList.remove('hidden')});bind('albumClose',()=>$('album').classList.add('hidden'));
 update();
 window.addEventListener('error',()=>{busy=false;say('A small hiccup occurred. Use RESTART DAY to recover.')});
 window.addEventListener('unhandledrejection',()=>{busy=false;say('Move interrupted. You can safely restart this day.')});
