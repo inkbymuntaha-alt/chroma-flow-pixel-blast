@@ -61,6 +61,6 @@ for(let o of world)if(o.kind==='star'){o.mesh.position.z+=travel*.22;if(o.mesh.p
 function pause(){if(!running)return;paused=true;running=false;$('pause').classList.remove('hidden')}
 $('play').onclick=()=>{start()};$('resume').onclick=()=>{paused=false;running=true;$('pause').classList.add('hidden');clock.getDelta()};$('pauseBtn').onclick=pause;$('restart').onclick=()=>start();$('retry').onclick=()=>start();$('next').onclick=()=>{if($('resultTitle').textContent.startsWith('LEVEL'))level++;start()};
 $('jump').addEventListener('pointerdown',e=>{e.preventDefault();jump()});$('switch').addEventListener('pointerdown',e=>{e.preventDefault();switchColor()});$('lane').addEventListener('pointerdown',e=>{e.preventDefault();lane=1-lane});
-addEventListener('keydown',e=>{if(e.code==='Space'||e.code==='ArrowUp'||e.code==='KeyW'){e.preventDefault();jump()}if(e.code==='ArrowLeft'||e.code==='KeyA')lane=0;if(e.code==='ArrowRight'||e.code==='KeyD')lane=1;if(e.code==='KeyC')switchColor()if(e.code==='Escape')pause()});
+addEventListener('keydown',e=>{if(e.code==='Space'||e.code==='ArrowUp'||e.code==='KeyW'){e.preventDefault();jump()}if(e.code==='ArrowLeft'||e.code==='KeyA')lane=0;if(e.code==='ArrowRight'||e.code==='KeyD')lane=1;if(e.code==='KeyC')switchColor();if(e.code==='Escape')pause()});
 init();$('level').textContent=level;
 </script></body></html>
