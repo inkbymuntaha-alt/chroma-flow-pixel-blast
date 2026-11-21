@@ -388,7 +388,7 @@ function readSet(key){try{return JSON.parse(localStorage.getItem(key)||'[]')}cat
 let ownedDecor=readSet('nbsDecor');
 try{festival=localStorage.getItem('nbsFestival')||'bazaar'}catch(e){}
 function saveFestival(){try{localStorage.setItem('nbsFestival',festival);localStorage.setItem('nbsDecor',JSON.stringify(ownedDecor))}catch(e){}}
-function chapterName(n){return ['Little Corner','Fruit Lane','Flower Courtyard','River Walk','Lantern Street','Grand Festival','Garden Quarter','Old Town','Rooftop Market','Royal Bazaar'][Math.floor((n-1)/10)%10]}
+function chapterName(n){return ['Sunrise Spice Lane','Riverside Fresh Market','Blossom Courtyard','Green Garden Bazar','Lantern Night Market','Sunny Fruit Square','Colourful Canal Walk','Breezy Rooftop Bazar','Twilight Old Town','Monsoon Street Market'][Math.floor((n-1)/10)%10]}
 function renderFestivals(){const root=$('festivalChoices');root.innerHTML='';FESTIVALS.forEach(f=>{const b=document.createElement('button');b.type='button';b.className='festival-choice'+(festival===f.id?' active':'');b.innerHTML='<span>'+f.icon+'</span>'+f.name;b.addEventListener('click',()=>{festival=f.id;saveFestival();renderFestivals();applyLevelPalette();toast(f.name+' selected!');});root.appendChild(b)});const chosen=FESTIVALS.find(f=>f.id===festival)||FESTIVALS[0];$('festivalHero').textContent=chosen.scene;$('festivalStatus').textContent=chosen.tag+' · +10 coins for your first sorted shelf in each day.'}
 
 
