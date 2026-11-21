@@ -219,11 +219,19 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 
 /* Android performance mode: keep input and board updates ahead of decoration. */
 @media (pointer:coarse){
+ /* Prioritise touch latency and low-end Android GPU fill-rate over decorative effects. */
  .app,.board-wrap,.market,.living-bazaar,.panel{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
  .app:before,body:before{display:none!important}
- .item.top-item,.market-scene,.stall-dress span,.customer,.weather-particle{animation:none!important}
+ .item.top-item,.market-scene,.stall-dress span,.customer,.weather-particle,.spark{animation:none!important}
  .shelf,.item,.tool,.primary,.secondary,.footer button{transition:none!important}
  .shelf:active{transform:none!important;filter:none!important}
+ .board-wrap,.shelf,.item,.tool,.stat,.market,.order,.living-bazaar,.fruit-lane{box-shadow:none!important}
+ .shelf{background:#302316!important}
+ .item{background:#30271c!important}
+ .item.top-item{filter:none!important}
+ .market,.order,.stat{background:#21180f!important}
+ .market-upgraded .stall-dress span,.stall-dress span{filter:none!important}
+ .progress i{transition:none!important}
 }
 </style>
 </head>
@@ -644,7 +652,7 @@ shelfRoot.addEventListener('pointerdown',e=>{
 });
 shelfRoot.addEventListener('pointermove',e=>{
  if(pointerId!==e.pointerId||pointerShelf<0)return;
- if(Math.hypot(e.clientX-pointerStartX,e.clientY-pointerStartY)>9)pointerDragged=true;
+ const dx=e.clientX-pointerStartX,dy=e.clientY-pointerStartY;if(dx*dx+dy*dy>64)pointerDragged=true;
 });
 function finishShelfPointer(e){
  if(pointerId===null||e.pointerId!==pointerId)return;
