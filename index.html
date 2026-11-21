@@ -1,120 +1,142 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#100d35"><title>Nazeef Gems Garden — Match & Shine</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#17120b">
+<meta name="description" content="Nazeef Bazar Sort Stories — a cozy 2D market sorting puzzle. Sort goods, serve customers and grow your neighborhood bazaar.">
+<title>Nazeef Bazar Sort Stories</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(ellipse at 50% -10%,#453c9a 0,#19154b 42%,#0b0928 100%);color:#fff;font-family:system-ui,sans-serif;overscroll-behavior:none}body{min-height:100dvh;display:flex;justify-content:center;padding:env(safe-area-inset-top) 12px env(safe-area-inset-bottom)}.app{width:min(100%,520px);min-height:100dvh;display:flex;flex-direction:column;padding:12px 0 16px;gap:12px}.top{display:flex;justify-content:space-between;align-items:center}.brand{font-size:clamp(23px,6vw,30px);font-weight:1000;line-height:.95;letter-spacing:-1px}.brand span{color:#70efff}.brand small{display:block;font-size:9px;letter-spacing:3px;color:#c3baff;margin-top:7px}.levelpill{background:#ffffff18;border:1px solid #ffffff35;border-radius:14px;padding:8px 12px;text-align:center}.levelpill b{display:block;font-size:19px}.levelpill small{font-size:9px;color:#d6d0ff}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:linear-gradient(145deg,#30286fdd,#1b174ddd);border:1px solid #ffffff25;border-radius:15px;padding:9px;text-align:center}.stat b{font-size:20px;display:block}.stat small{font-size:9px;color:#c8c2f4;letter-spacing:1px}.goal{display:flex;justify-content:space-between;background:#ffffff12;border:1px solid #ffffff24;border-radius:14px;padding:10px 13px;font-size:12px}.goal strong{color:#ffe27a}.progressbar{height:7px;background:#ffffff20;border-radius:9px;overflow:hidden;margin-top:-7px}.progressbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#75efff,#a5ff9c);border-radius:9px;transition:width .25s}.board-wrap{background:linear-gradient(145deg,#3d3489,#211b5c);border:1px solid #a59aff77;border-radius:22px;padding:9px;box-shadow:0 16px 35px #05041d99}.board{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.tile{touch-action:manipulation;pointer-events:auto;-webkit-user-select:none;user-select:none;appearance:none;border:1px solid #ffffff35;border-radius:12px;aspect-ratio:1;min-width:0;padding:0;display:grid;place-items:center;box-shadow:inset 0 2px 4px #ffffff25,0 3px 4px #07051d66;font-size:clamp(21px,6.3vw,34px);line-height:1;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}.tile:active{transform:scale(.9)}.primary,.tool,.secondary,.footer button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}.tile.selected{outline:3px solid white;outline-offset:1px;transform:scale(.91);filter:brightness(1.3)}.tile.special-gem{border:2px solid #ffe9a0;box-shadow:0 0 14px #f4d77f,inset 0 2px 8px #fff9;animation:specialPulse 1.2s ease-in-out infinite alternate}@keyframes specialPulse{to{filter:brightness(1.25);box-shadow:0 0 22px #ffe28a,inset 0 2px 8px #fff}}.tools{display:grid;grid-template-columns:1fr 1fr;gap:9px}.tool{border:1px solid #ffffff35;border-radius:14px;padding:12px 8px;color:#fff;background:linear-gradient(145deg,#443b99,#292365);font-weight:800;font-size:12px}.hint{text-align:center;color:#c6c0f2;font-size:11px;line-height:1.5}.footer{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}.footer button{background:#ffffff12;color:#dcd7ff;border:1px solid #ffffff28;border-radius:12px;padding:8px 12px;font-size:11px;font-weight:700}.overlay{position:fixed;inset:0;z-index:10;display:grid;place-items:center;padding:20px;background:#090725df;backdrop-filter:blur(10px)}.panel{width:min(100%,420px);border:1px solid #ffffff48;border-radius:26px;padding:27px 22px;text-align:center;background:linear-gradient(145deg,#393080,#171447);box-shadow:0 25px 80px #0009}.hero{font-size:56px}.panel h1{font-size:clamp(28px,8vw,38px);margin:8px 0;line-height:1}.panel h1 span{color:#76edff}.panel p{color:#d2cdf5;font-size:13px;line-height:1.6}.primary{border:0;border-radius:15px;padding:15px 24px;background:linear-gradient(100deg,#78f1ff,#b5ffb0);color:#151044;font-size:15px;font-weight:1000;min-width:190px}.steps{display:grid;gap:10px;text-align:left;margin:18px 0}.step{display:flex;gap:12px;align-items:center;background:#ffffff12;border:1px solid #ffffff25;border-radius:14px;padding:10px;font-size:12px;color:#eeeaff}.step b{display:grid;place-items:center;flex:0 0 30px;height:30px;border-radius:50%;background:#83edff;color:#171044;font-size:15px}.demo{font-size:23px;letter-spacing:4px;white-space:nowrap}.secondary{border:1px solid #ffffff38;border-radius:13px;padding:11px 17px;background:#ffffff13;color:#fff;font-weight:800;margin:8px}.hidden{display:none!important}.toast{position:fixed;left:50%;top:16%;transform:translate(-50%,-10px);z-index:8;background:#fff;color:#21164f;border-radius:30px;padding:10px 18px;font-weight:1000;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}@media(min-height:800px){.app{justify-content:center}.board-wrap{padding:12px}.board{gap:7px}.tile{border-radius:14px}}
-
-/* PREMIUM NOIR / MAFIA-LUXE THEME */
-:root{color-scheme:dark}
-html,body{background:radial-gradient(ellipse at 50% -15%,#34302a 0,#151515 42%,#050505 100%);color:#f7edcf}
-.brand{color:#f4e5b5;text-shadow:0 2px 18px #d6a94b35;letter-spacing:.4px}
-.brand span{color:#d9b45b}
-.brand small{color:#bba779;letter-spacing:3.4px}
-.levelpill{background:linear-gradient(145deg,#28251f,#0d0d0c);border:1px solid #b9964b88;box-shadow:inset 0 1px #fff2,0 5px 18px #0008}
-.levelpill b{color:#f4d47f}
-.levelpill small{color:#bca875}
-.stat{background:linear-gradient(145deg,#292720,#11110f);border:1px solid #a9874780;border-radius:13px;box-shadow:inset 0 1px #fff2,0 8px 20px #0007}
-.stat b{color:#f4d47f;text-shadow:0 0 15px #d8ae4a35}
-.stat small{color:#bcae8c}
-.goal{background:linear-gradient(100deg,#26231c,#11110f);border:1px solid #a9874780;color:#f2e8cd}
-.goal strong{color:#f3ce70}
-.progressbar{background:#ffffff17}
-.progressbar i{background:linear-gradient(90deg,#8e6827,#f6d77c,#b78b37);box-shadow:0 0 12px #d9b45b88}
-.board-wrap{background:linear-gradient(145deg,#292720,#11110f 65%,#211b12);border:1px solid #c6a65d;border-radius:20px;padding:9px;box-shadow:0 18px 38px #000c,inset 0 1px #fff3,0 0 0 3px #8c6a2c22}
-.board{gap:5px}
-.tile{border:1px solid #c5a45b66;border-radius:11px;background:linear-gradient(145deg,#37332a,#151513)!important;box-shadow:inset 0 2px 5px #fff2,inset 0 -5px 12px #0008,0 4px 7px #000b;text-shadow:0 2px 5px #0009;filter:saturate(.9)}
-.tile.selected{outline:3px solid #f4d47f;outline-offset:1px;box-shadow:0 0 0 4px #d4a94333,0 0 22px #e5bd5b88;filter:brightness(1.25) saturate(1.1)}
-.tile:active{transform:scale(.91)}
-.tool{border:1px solid #c4a45c;background:linear-gradient(145deg,#80602b,#3b2b13 55%,#17130d);color:#fff1c8;box-shadow:inset 0 1px #fff4,0 7px 16px #0009;text-shadow:0 1px #000}
-.tool:active{transform:translateY(1px);filter:brightness(1.2)}
-.hint{color:#c9b98e}
-.footer button{background:linear-gradient(145deg,#292720,#11110f);color:#e8d7aa;border:1px solid #a9874777;box-shadow:inset 0 1px #fff2}
-.panel{border:1px solid #c6a65d;border-radius:22px;background:linear-gradient(145deg,#292720,#11110f 70%,#20190e);box-shadow:0 25px 80px #000e,inset 0 1px #fff3}
-.panel h1{color:#f5e6bd}
-.panel h1 span{color:#e0bb66}
-.panel p{color:#d2c5a3}
-.primary{background:linear-gradient(100deg,#f5df9b,#bd8d35 52%,#f2d47c);color:#211707;box-shadow:inset 0 1px #fff9,0 5px 18px #0009;border:1px solid #f9e6a9}
-.step{background:#ffffff0b;border:1px solid #b9974e55;color:#eee2c5}
-.step b{background:linear-gradient(145deg,#f4d77f,#a97827);color:#211707}
-.demo{filter:drop-shadow(0 2px 5px #000)}
-.level-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;max-height:42vh;overflow:auto;margin:14px 0;padding:3px}.level-cell{min-height:42px;border:1px solid #b9974e88;border-radius:11px;background:linear-gradient(145deg,#30291d,#111);color:#f3d47e;font-weight:900}.level-cell:disabled{opacity:.3;filter:grayscale(1)}.level-cell.current{background:linear-gradient(145deg,#f5df9b,#bd8d35);color:#211707;box-shadow:0 0 15px #e6bd5b66}.tile{transform:translateZ(0);box-shadow:inset 0 2px 5px #fff3,inset 0 -7px 10px #0008,0 5px 8px #000b;will-change:transform}.board{contain:layout paint;touch-action:none;user-select:none;-webkit-user-select:none}.tile{touch-action:none;user-select:none;-webkit-user-select:none;pointer-events:auto}.board-wrap{contain:layout paint}.celebrate{position:fixed;inset:0;z-index:9;pointer-events:none;overflow:hidden}.spark{position:absolute;font-size:25px;animation:burst 1.2s ease-out forwards}@keyframes burst{0%{transform:translateY(20vh) scale(.2) rotate(0);opacity:0}20%{opacity:1}100%{transform:translateY(-75vh) scale(1.5) rotate(300deg);opacity:0}}
-.secondary{border:1px solid #b9974e88;background:#ffffff0b;color:#ead8ad}
-.toast{background:linear-gradient(100deg,#f6e4a9,#c3923b);color:#211707;box-shadow:0 8px 24px #000b}
-@media(min-height:800px){.board-wrap{padding:11px}.board{gap:6px}.tile{border-radius:12px}}
-
-</style></head><body><main class="app">
-<header class="top"><div class="brand">NAZEEF <span>GEMS GARDEN</span><small>THE GOLDEN COLLECTION</small></div><div class="levelpill"><b id="level">1</b><small>LEVEL</small></div></header>
-<section class="stats"><div class="stat"><b id="score">0</b><small>SCORE</small></div><div class="stat"><b id="moves">25</b><small>MOVES LEFT</small></div><div class="stat"><b id="target">500</b><small>GOAL</small></div></section>
-<div class="goal"><span id="goalLabel">✨ Reach the score goal</span><strong id="progress">0 / 500</strong></div><div class="progressbar" aria-label="Level progress"><i id="progressFill"></i></div><section class="board-wrap"><div class="board" id="board" aria-label="Gem matching puzzle board"></div></section>
-<div class="tools"><button class="tool" id="hint">💡 SHOW A HINT</button><button class="tool" id="shuffle">🔀 SHUFFLE BOARD</button><button class="tool" id="bomb">💣 GOLDEN BOMB · 3</button><button class="tool" id="line">⚡ GOLDEN BLAST · 3</button></div><div class="hint" id="message">Swap two gems to make a line of 3 or more matching gems.</div><footer class="footer"><button id="sound">🔊 SOUND ON</button><button id="restart">↻ RESTART LEVEL</button><button id="best">🏅 BEST: 0</button><button id="mapOpen">🗺️ LEVEL MAP</button></footer></main>
-<div class="toast" id="toast">Wonderful!</div><div class="overlay" id="welcome"><div class="panel"><div class="hero">💎🌸✨</div><h1>NAZEEF <span>GEMS GARDEN</span></h1><p>A sparkling match-3 adventure! Swap colourful gems, make big matches, earn stars and unlock new levels.</p><p>💡 Make a row or column of 3 or more matching gems.<br>🌟 Reach the score goal before your moves run out.</p><button class="primary" id="start">LET’S PLAY! ▶</button></div></div>
-<div class="overlay hidden" id="tutorial"><div class="panel"><div class="hero">🎓💎</div><h1>HOW TO <span>PLAY</span></h1><p>Let’s learn together! Your first level is a practice level.</p><div class="steps"><div class="step"><b>1</b><span><strong>Pick a gem.</strong><br>Tap any gem on the board, or swipe it to a neighbour.</span></div><div class="step"><b>2</b><span><strong>Swap with a neighbour.</strong><br>Swipe to a gem directly above, below, left or right — or tap two neighbours.</span></div><div class="step"><b>3</b><span><strong>Match 3 or more!</strong><br>Make a row or column of the same gems to score points.</span></div><div class="step"><b>4</b><span><strong>Reach the goal.</strong><br>Keep matching until you reach 500 points before your moves run out.</span></div></div><div class="demo">💎 💎 💎 = ✨</div><p>Need help? Tap <strong>SHOW A HINT</strong> anytime.</p><button class="primary" id="tutorialDone">GOT IT! LET’S PRACTISE ▶</button></div></div><div class="overlay hidden" id="finish"><div class="panel"><div class="hero" id="finishIcon">🏆</div><h1 id="finishTitle">LEVEL COMPLETE!</h1><p id="finishText">You made the garden sparkle!</p><button class="primary" id="continue">NEXT LEVEL ▶</button><br><button class="secondary" id="again">PLAY THIS LEVEL AGAIN</button></div></div>
-<div class="overlay hidden" id="map"><div class="panel"><div class="hero">🏰🌟</div><h1>GOLDEN <span>GARDENS</span></h1><p>Choose an unlocked level. Complete levels to open new gardens!</p><div id="levelGrid" class="level-grid"></div><button class="secondary" id="mapClose">BACK TO GAME</button></div></div>
+:root{color-scheme:dark;--gold:#f2ce79;--gold2:#a9792d;--ink:#17130d;--cream:#f8edcf;--muted:#c5b58e;--panel:#282116;--line:#8e6b32}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(ellipse at 50% -10%,#564324 0,#211a10 42%,#0c0a07 100%);color:var(--cream);font-family:system-ui,-apple-system,Segoe UI,sans-serif;overscroll-behavior:none}
+body{min-height:100dvh;display:flex;justify-content:center;padding:env(safe-area-inset-top) 12px env(safe-area-inset-bottom)}
+button{font:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}
+.app{width:min(100%,500px);min-height:100dvh;display:flex;flex-direction:column;gap:10px;padding:12px 0 16px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}.brand{font-size:clamp(19px,5.7vw,27px);font-weight:1000;line-height:.98;letter-spacing:-.6px;color:#ffe9b0;text-shadow:0 2px 16px #e6b85a35}.brand span{color:var(--gold)}.brand small{display:block;font-size:9px;letter-spacing:2.7px;color:#c5a86b;margin-top:6px}.levelpill{border:1px solid #b78d48;border-radius:14px;padding:7px 12px;text-align:center;background:linear-gradient(145deg,#33291a,#14100b);min-width:66px}.levelpill b{display:block;color:var(--gold);font-size:20px}.levelpill small{font-size:9px;color:var(--muted);letter-spacing:1px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{background:linear-gradient(145deg,#302719,#17120c);border:1px solid #8c6b35;border-radius:13px;text-align:center;padding:8px 5px;box-shadow:inset 0 1px #fff2}.stat b{display:block;color:var(--gold);font-size:19px}.stat small{font-size:9px;letter-spacing:1px;color:var(--muted)}
+.market{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #92703a;border-radius:15px;padding:8px 11px;background:linear-gradient(100deg,#342818,#17120c)}.market-scene{font-size:25px;letter-spacing:2px}.market-copy{min-width:0;flex:1}.market-copy b{display:block;font-size:12px;color:#ffe6a4}.market-copy small{font-size:10px;color:var(--muted)}.coins{white-space:nowrap;color:#ffdc82;font-weight:900;font-size:13px}
+.order{border:1px solid #8e6b32;border-radius:14px;padding:9px 11px;background:#20190f;display:flex;align-items:center;justify-content:space-between;gap:8px}.order b{font-size:12px;color:#ffe6a4}.order small{display:block;font-size:10px;color:var(--muted);margin-top:2px}.order strong{font-size:12px;color:var(--gold);white-space:nowrap}
+.progress{height:6px;background:#ffffff18;border-radius:9px;overflow:hidden;margin-top:-6px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#a8782d,#ffe49a);transition:width .2s}
+.board-wrap{border:1px solid #b18a47;border-radius:19px;padding:10px;background:linear-gradient(145deg,#342819,#17120d 70%);box-shadow:0 15px 32px #0009,inset 0 1px #fff2}.board-head{display:flex;justify-content:space-between;align-items:center;margin:0 2px 8px}.board-head b{font-size:12px;color:#f7dfaa}.board-head small{font-size:10px;color:#bda779}.shelves{display:grid;gap:8px}
+.shelf{width:100%;border:1px solid #80612e;border-radius:13px;background:linear-gradient(180deg,#4a3923,#2b2115);padding:7px 8px 8px;display:grid;grid-template-columns:54px 1fr;gap:7px;align-items:center;min-height:66px;box-shadow:inset 0 1px #fff2,0 4px 7px #0006;text-align:left;color:var(--cream);transition:border-color .12s,transform .12s,background .12s}
+.shelf:active{transform:scale(.99)}.shelf.selected{border:2px solid #ffe39a;background:linear-gradient(180deg,#69502a,#382817);box-shadow:0 0 0 2px #e8bb5a33,0 0 16px #e8bb5a33}.shelf.target{border-color:#8ee4a0}.shelf-label{font-size:10px;color:#e5c989;font-weight:900;line-height:1.2}.shelf-label span{display:block;font-size:18px;margin-bottom:2px}.slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;min-width:0}.item{height:43px;min-width:0;border-radius:9px;display:grid;place-items:center;font-size:clamp(19px,5.7vw,27px);background:linear-gradient(145deg,#59462d,#21190f);border:1px solid #b08a4d88;box-shadow:inset 0 2px 4px #fff2,0 3px 5px #0007;position:relative}.item.top-item{border-color:#ffe29a;filter:brightness(1.18);box-shadow:0 0 10px #e8bb5a44,inset 0 2px 4px #fff3}.item.empty{border:1px dashed #9a7845;background:#17120d66;box-shadow:none}.item .tiny{position:absolute;right:2px;bottom:0;font-size:7px;color:#ffe5a5}
+.shelf-foot{grid-column:2;font-size:9px;color:#bda779;text-align:right;margin-top:-4px}
+.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.tool{border:1px solid #a47b38;border-radius:12px;padding:11px 5px;background:linear-gradient(145deg,#715026,#382710);color:#ffedc2;font-size:11px;font-weight:900;box-shadow:inset 0 1px #fff3,0 4px 8px #0007}.tool:active{filter:brightness(1.2);transform:translateY(1px)}.tool:disabled{opacity:.4;cursor:not-allowed}
+.message{text-align:center;color:#ddc99e;font-size:11px;line-height:1.45;min-height:17px}.footer{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}.footer button{border:1px solid #76592e;border-radius:10px;background:#ffffff0c;color:#d9c59a;padding:8px 10px;font-size:10px;font-weight:800}
+.toast{position:fixed;z-index:20;top:12%;left:50%;transform:translate(-50%,-8px);opacity:0;pointer-events:none;border-radius:30px;background:linear-gradient(100deg,#ffefbd,#c18e3c);color:#241707;font-weight:1000;padding:10px 17px;box-shadow:0 8px 25px #000b;transition:.2s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
+.overlay{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:18px;background:#090704df;backdrop-filter:blur(9px)}.hidden{display:none!important}.panel{width:min(100%,420px);max-height:90dvh;overflow:auto;border:1px solid #c49a50;border-radius:23px;padding:23px 19px;text-align:center;background:linear-gradient(145deg,#382b1a,#17120c 75%);box-shadow:0 24px 70px #000d,inset 0 1px #fff3}.hero{font-size:49px}.panel h1{font-size:clamp(25px,7vw,34px);line-height:1.05;color:#ffedc2;margin:8px 0}.panel h1 span{color:var(--gold)}.panel p{font-size:13px;line-height:1.55;color:#d8c7a4}.primary{border:1px solid #ffe9ac;border-radius:14px;padding:14px 22px;background:linear-gradient(100deg,#ffedb3,#c18c35);color:#241707;font-weight:1000;font-size:14px;min-width:190px;box-shadow:0 5px 17px #0008}.secondary{border:1px solid #a47b38;border-radius:12px;padding:10px 16px;background:#ffffff0e;color:#f1dfb7;font-weight:800;margin:7px}.steps{display:grid;gap:8px;text-align:left;margin:15px 0}.step{display:flex;gap:10px;align-items:center;padding:9px;border:1px solid #9a763d66;border-radius:12px;background:#ffffff09;color:#e9d9b5;font-size:12px}.step b{width:27px;height:27px;flex:0 0 27px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#ffe7a1,#b9822c);color:#251707}.level-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;max-height:40vh;overflow:auto;margin:14px 0}.level-cell{border:1px solid #a47b38;border-radius:10px;min-height:40px;background:#21190f;color:#ffdf91;font-weight:900}.level-cell:disabled{opacity:.25}.level-cell.current{background:linear-gradient(145deg,#ffe7a1,#b9822c);color:#241707}
+.celebrate{position:fixed;inset:0;z-index:25;pointer-events:none;overflow:hidden}.spark{position:absolute;font-size:24px;animation:burst 1.3s ease-out forwards}@keyframes burst{0%{transform:translateY(15vh) scale(.2) rotate(0);opacity:0}20%{opacity:1}100%{transform:translateY(-75vh) scale(1.4) rotate(280deg);opacity:0}}
+@media(max-height:740px){.app{gap:7px;padding-top:7px}.item{height:37px}.shelf{min-height:58px;padding:5px 7px}.board-wrap{padding:8px}.market{padding:6px 9px}}
+@media(min-height:850px){.app{justify-content:center}.item{height:47px}.shelf{min-height:72px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="top"><div class="brand">NAZEEF <span>BAZAR</span><small>SORT STORIES · NEIGHBORHOOD MARKET</small></div><div class="levelpill"><b id="level">1</b><small>DAY / LEVEL</small></div></header>
+<section class="stats"><div class="stat"><b id="moves">0</b><small>MOVES</small></div><div class="stat"><b id="sorted">0/4</b><small>SHELVES SORTED</small></div><div class="stat"><b id="best">0</b><small>BEST DAY</small></div></section>
+<section class="market"><div class="market-scene" id="marketScene">🏪🥬🧺</div><div class="market-copy"><b id="marketName">NAZEEF'S CORNER BAZAR</b><small id="marketRank">A little shop with big dreams</small></div><div class="coins">🪙 <span id="coins">0</span></div></section>
+<section class="order"><div><b id="orderTitle">CUSTOMER ORDER</b><small id="orderText">Sort every shelf to serve the neighborhood.</small></div><strong id="orderProgress">0 / 4</strong></section>
+<div class="progress"><i id="progressFill"></i></div>
+<section class="board-wrap"><div class="board-head"><b>🧺 MARKET SHELVES</b><small id="boardTip">Tap a shelf, then tap where its top item goes</small></div><div class="shelves" id="shelves" aria-label="Sorting shelves"></div></section>
+<section class="controls"><button class="tool" id="hint">💡 HINT</button><button class="tool" id="undo">↶ UNDO</button><button class="tool" id="shuffle">🔀 MIX UP</button></section>
+<div class="message" id="message">Choose a shelf to pick up its top product.</div>
+<footer class="footer"><button id="sound">🔊 SOUND ON</button><button id="restart">↻ RESTART DAY</button><button id="mapOpen">🗺️ MARKET MAP</button></footer>
+</main>
+<div class="toast" id="toast">Lovely sorting!</div>
+<div class="overlay" id="welcome"><div class="panel"><div class="hero">🏪🥭🧺</div><h1>NAZEEF <span>BAZAR</span><br>SORT STORIES</h1><p>Welcome to your little neighborhood market! Sort fruits, vegetables and treats, serve happy customers, earn coins and grow your bazaar one shelf at a time.</p><div class="steps"><div class="step"><b>1</b><span>Tap a shelf to pick up its top item.</span></div><div class="step"><b>2</b><span>Tap another shelf to place it. Match the item on top, or use an empty shelf.</span></div><div class="step"><b>3</b><span>Make every shelf hold four matching products to finish the day.</span></div></div><button class="primary" id="start">OPEN THE BAZAR ▶</button></div></div>
+<div class="overlay hidden" id="finish"><div class="panel"><div class="hero" id="finishIcon">🎉🏪</div><h1 id="finishTitle">ORDER COMPLETE!</h1><p id="finishText">The neighborhood is happy!</p><button class="primary" id="continue">OPEN NEXT DAY ▶</button><br><button class="secondary" id="again">PLAY THIS DAY AGAIN</button></div></div>
+<div class="overlay hidden" id="map"><div class="panel"><div class="hero">🛍️🏘️</div><h1>BAZAR <span>JOURNEY</span></h1><p>Choose a day you have unlocked.</p><div id="levelGrid" class="level-grid"></div><button class="secondary" id="mapClose">BACK TO MARKET</button></div></div>
 <script>
 (()=>{'use strict';
-const $=id=>document.getElementById(id),N=7,TYPES=['💎','🔷','🟣','🌟','❤️','🍀'],COLORS=['#42cfff','#8c82ff','#dc83ff','#ffd45c','#ff7fae','#76e6a3'];
-let board=[],specials=Array(49).fill(0),selected=-1,level=1,score=0,moves=25,target=500,busy=false,soundOn=true,started=false,best=0,unlocked=1,pendingSpecial=-1,pendingSpecialType=0,pendingActivation=[],boosterMode='',objectiveType='score',objectiveGem=0,collected=0;
-try{best=Math.max(0,Number(localStorage.getItem('gemGardenBest'))||0);unlocked=Math.max(1,Math.floor(Number(localStorage.getItem('gemGardenUnlocked'))||1));level=unlocked}catch(e){best=0;unlocked=1;level=1}
+const $=id=>document.getElementById(id);
+const CAP=4,PRODUCTS=[{e:'🍎',n:'Apples'},{e:'🥕',n:'Carrots'},{e:'🍋',n:'Lemons'},{e:'🍇',n:'Grapes'},{e:'🥐',n:'Pastries'}];
+const STALLS=[['🏪🥬🧺',"NAZEEF'S CORNER BAZAR",'A little shop with big dreams'],['🍎🥕🏬','FRESH PRODUCE STALL','The neighborhood favourite'],['🥐🍋🛍️','THE BUSY MARKET','More customers are coming'],['🌼🍇🏘️','GOLDEN BAZAR STREET','A beautiful market street'],['🎪🧺✨','THE GRAND BAZAR','Your market is shining']];
+let level=1,coins=0,best=0,unlocked=1,stacks=[],selected=-1,moves=0,history=[],busy=false,started=false,soundOn=true;
+try{level=Math.max(1,Number(localStorage.getItem('nbsLevel'))||1);unlocked=Math.max(1,Number(localStorage.getItem('nbsUnlocked'))||1);coins=Math.max(0,Number(localStorage.getItem('nbsCoins'))||0);best=Math.max(0,Number(localStorage.getItem('nbsBest'))||0)}catch(e){}
+const say=t=>{$('message').textContent=t};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-// Keep the board responsive while still allowing a brief visual beat for cascades.
-function tone(freq=650){if(!soundOn)return;try{const A=window.AudioContext||window.webkitAudioContext;if(!window.ac)window.ac=new A();if(window.ac.state==='suspended')window.ac.resume();let o=window.ac.createOscillator(),g=window.ac.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(.045,window.ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,window.ac.currentTime+.16);o.connect(g);g.connect(window.ac.destination);o.start();o.stop(window.ac.currentTime+.16)}catch(e){}}
-function bindTap(el,fn){let lastTouch=0;el.addEventListener('pointerup',e=>{if(e.pointerType==='touch'||e.pointerType==='pen'){e.preventDefault();lastTouch=Date.now();fn(e)}},{passive:false});el.addEventListener('click',e=>{if(Date.now()-lastTouch<700){e.preventDefault();return}fn(e)});}
-let bombs=3,blasts=3;
-function speakWin(){if(!soundOn||!('speechSynthesis'in window))return;const lines=['Well done, Nazeef! Kya baat hai!','Amazing work, Nazeef!','Shabash! You are a gem champion!','Fantastic matching! Keep shining!','Wah Nazeef, brilliant!','You did it! What a superstar!'];try{speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(lines[Math.floor(Math.random()*lines.length)]);u.rate=.92;u.pitch=1.08;u.volume=.9;speechSynthesis.speak(u)}catch(e){}}
-function celebrate(){const layer=document.createElement('div');layer.className='celebrate';document.body.appendChild(layer);const icons=['✨','🎉','💎','⭐','🎊'];for(let i=0;i<24;i++){let p=document.createElement('span');p.className='spark';p.textContent=icons[i%icons.length];p.style.left=(Math.random()*100)+'%';p.style.bottom=(-10+Math.random()*25)+'%';p.style.animationDelay=(Math.random()*.35)+'s';layer.appendChild(p)}setTimeout(()=>layer.remove(),1800);speakWin();tone(880);setTimeout(()=>tone(1100),130)}
-function drawMap(){const grid=$('levelGrid');grid.innerHTML='';for(let n=1;n<=100;n++){let b=document.createElement('button');b.className='level-cell'+(n===level?' current':'');b.textContent=n<=unlocked?'★ '+n:'🔒';b.disabled=n>unlocked;b.type='button';b.addEventListener('click',()=>{level=n;$('map').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newLevel()});grid.appendChild(b)}}
-function spendBooster(kind){if(!started||busy)return;let count=kind==='bomb'?bombs:blasts;if(count<=0){say('No boosters left. Keep matching gems to play!');return}boosterMode=kind;selected=-1;render();say(kind==='bomb'?'GOLDEN BOMB: tap the centre gem to clear a 3×3 area.':'GOLDEN BLAST: tap any gem to clear its whole row.');}
-async function useBoosterAt(i){const kind=boosterMode;boosterMode='';if(kind==='bomb'){bombs--;$('bomb').textContent='💣 GOLDEN BOMB · '+bombs}else{blasts--;$('line').textContent='⚡ GOLDEN BLAST · '+blasts}let cells=[];if(kind==='bomb'){let r=Math.floor(i/N),c=i%N;for(let y=Math.max(0,r-1);y<=Math.min(N-1,r+1);y++)for(let x=Math.max(0,c-1);x<=Math.min(N-1,c+1);x++)cells.push(y*N+x)}else{let row=Math.floor(i/N);for(let c=0;c<N;c++)cells.push(row*N+c)}if(objectiveType==='collect')for(const k of cells)if(board[k]===objectiveGem)collected++;cells.forEach(k=>{board[k]=-1;specials[k]=0});score+=cells.length*15;busy=true;selected=-1;render();updateHUD();tone(980);for(let c=0;c<N;c++){let vals=[];for(let r=N-1;r>=0;r--){let k=r*N+c,v=board[k];if(v>=0)vals.push({v,sp:specials[k]})}while(vals.length<N)vals.push({v:randomGem(),sp:0});for(let r=N-1;r>=0;r--){let q=vals[N-1-r],k=r*N+c;board[k]=q.v;specials[k]=q.sp}}render();await resolve();busy=false;checkEnd();say(kind==='bomb'?'Bullseye! Golden bomb cleared your chosen area!':'Perfect aim! Your chosen row is clear!')}
-function randomGem(){return Math.floor(Math.random()*TYPES.length)}
-function findMatches(){let set=new Set();for(let r=0;r<N;r++)for(let c=0;c<N;c++){let v=board[r*N+c];if(v<0||specials[r*N+c])continue;if(c<N-2&&!specials[r*N+c+1]&&!specials[r*N+c+2]&&v===board[r*N+c+1]&&v===board[r*N+c+2]){let k=c+3;while(k<N&&!specials[r*N+k]&&board[r*N+k]===v)k++;for(let x=c;x<k;x++)set.add(r*N+x)}if(r<N-2&&!specials[(r+1)*N+c]&&!specials[(r+2)*N+c]&&v===board[(r+1)*N+c]&&v===board[(r+2)*N+c]){let k=r+3;while(k<N&&!specials[k*N+c]&&board[k*N+c]===v)k++;for(let x=r;x<k;x++)set.add(x*N+c)}}return [...set]}
-function hasMove(){for(let i=0;i<N*N;i++){let right=i%N<N-1?i+1:-1,down=i+N<N*N?i+N:-1;for(let j of [right,down])if(j>=0){[board[i],board[j]]=[board[j],board[i]];let ok=findMatches().length>0;[board[i],board[j]]=[board[j],board[i]];if(ok)return true}}return false}
-function makeBoard(){let tries=0;do{board=Array.from({length:N*N},randomGem);specials=Array(49).fill(0);tries++}while((findMatches().length||!hasMove())&&tries<500);selected=-1;pendingSpecial=-1;pendingSpecialType=0;pendingActivation=[];boosterMode='';render()}
-function render(){let el=$('board');el.innerHTML='';board.forEach((v,i)=>{let b=document.createElement('button');b.className='tile'+(i===selected?' selected':'')+(specials[i]?' special-gem':'');b.type='button';b.textContent=specials[i]===1?'🚀':specials[i]===2?'💣':specials[i]===3?'🌈':TYPES[v];b.style.background=specials[i]?'linear-gradient(145deg,#f7df8b,#8e5b1b)':'linear-gradient(145deg,'+COLORS[v]+'77,#160f48)';b.setAttribute('aria-label',TYPES[v]+' gem, row '+(Math.floor(i/N)+1)+', column '+(i%N+1));b.setAttribute('aria-pressed',i===selected?'true':'false');b.dataset.index=String(i);el.appendChild(b)})}
-let lastBoardPointer=0,boardPress=-1,boardPointerId=null,boardStartX=0,boardStartY=0;const boardEl=$('board');
-function tileIndex(node){const tile=node&&node.closest?node.closest('button.tile'):null;if(!tile||!boardEl.contains(tile))return -1;const i=Number(tile.dataset.index);return Number.isInteger(i)&&i>=0&&i<N*N?i:-1}
-function finishBoardGesture(e){
-  if(boardPointerId!==null&&e.pointerId!==boardPointerId)return;
-  const from=boardPress;boardPress=-1;boardPointerId=null;
-  const target=document.elementFromPoint(e.clientX,e.clientY);
-  let to=tileIndex(target);if(to<0){let best=Infinity;boardEl.querySelectorAll('button.tile').forEach(tile=>{const r=tile.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),d=dx*dx+dy*dy;if(d<best){best=d;to=Number(tile.dataset.index)}});if(best>Math.pow(boardEl.getBoundingClientRect().width/2.8,2))to=-1}
-  if(from<0&&to<0)return;
-  e.preventDefault();lastBoardPointer=Date.now();
-  const dx=e.clientX-boardStartX,dy=e.clientY-boardStartY;
-  const dragged=Math.hypot(dx,dy)>12;
-  if(dragged&&from>=0&&to>=0&&from!==to&&neighbours(from,to)){
-    if(selected!==-1&&selected!==from){selected=-1;render()}
-    tap(from);tap(to);
-  }else if(!dragged&&to>=0){tap(to)}
-  else if(!dragged&&from>=0){tap(from)}
+function tone(freq=620){if(!soundOn)return;try{const A=window.AudioContext||window.webkitAudioContext;if(!window.ac)window.ac=new A();if(window.ac.state==='suspended')window.ac.resume();let o=window.ac.createOscillator(),g=window.ac.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(.04,window.ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,window.ac.currentTime+.13);o.connect(g);g.connect(window.ac.destination);o.start();o.stop(window.ac.currentTime+.14)}catch(e){}}
+function bind(id,fn){$(id).addEventListener('click',e=>{e.preventDefault();fn(e)})}
+function save(){try{localStorage.setItem('nbsLevel',String(level));localStorage.setItem('nbsUnlocked',String(unlocked));localStorage.setItem('nbsCoins',String(coins));localStorage.setItem('nbsBest',String(best))}catch(e){}}
+function typesForLevel(){return Math.min(5,3+Math.floor((level-1)/4))}
+function shelfCount(){return typesForLevel()+1}
+function cloneBoard(b=stacks){return b.map(s=>s.slice())}
+function scramble(){
+ const n=typesForLevel(),count=n+1,goal=Array.from({length:count},(_,i)=>i<n?Array(CAP).fill(i):[]);
+ let b=cloneBoard(goal),steps=16+level*3;
+ for(let z=0;z<steps;z++){
+  let choices=[];
+  for(let a=0;a<count;a++)if(b[a].length&& (b[a].length===1||b[a][b[a].length-2]===b[a][b[a].length-1])){
+   const item=b[a][b[a].length-1];
+   for(let d=0;d<count;d++)if(d!==a&&b[d].length<CAP&&b[d][b[d].length-1]!==item)choices.push([a,d]);
+  }
+  if(!choices.length)break;
+  const [a,d]=choices[Math.floor(Math.random()*choices.length)];
+  b[d].push(b[a].pop());
+ }
+ if(b.slice(0,n).every(s=>s.length===CAP&&s.every(x=>x===s[0]))){return scramble()}
+ return b;
 }
-boardEl.addEventListener('pointerdown',e=>{
-  const i=tileIndex(e.target);if(i<0)return;
-  boardPress=i;boardPointerId=e.pointerId;boardStartX=e.clientX;boardStartY=e.clientY;
-  try{boardEl.setPointerCapture(e.pointerId)}catch(_){}
-  e.preventDefault();
-},{passive:false});
-boardEl.addEventListener('pointerup',finishBoardGesture,{passive:false});
-boardEl.addEventListener('pointercancel',()=>{boardPress=-1;boardPointerId=null},{passive:true});
-boardEl.addEventListener('lostpointercapture',()=>{boardPress=-1;boardPointerId=null},{passive:true});
-boardEl.addEventListener('click',e=>{if(Date.now()-lastBoardPointer<800){e.preventDefault();return}const i=tileIndex(e.target);if(i>=0)tap(i)});
-function updateHUD(){$('level').textContent=level;$('score').textContent=score;$('moves').textContent=moves;$('target').textContent=target;let progress=objectiveType==='collect'?collected:score;$('goalLabel').textContent=objectiveType==='collect'?'💎 Collect '+TYPES[objectiveGem]+' gems':'✨ Reach the score goal';$('progress').textContent=Math.min(progress,target)+' / '+target;$('progressFill').style.width=Math.min(100,progress/target*100)+'%';$('best').textContent='🏅 BEST: '+best}
-function say(t){$('message').textContent=t}
-function toast(t){let e=$('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),900)}
-function neighbours(a,b){return Math.abs(Math.floor(a/N)-Math.floor(b/N))+Math.abs(a%N-b%N)===1}
-async function tap(i){if(busy||!started)return;if(boosterMode){useBoosterAt(i);return}if(selected<0){selected=i;render();return}if(selected===i){selected=-1;render();return}if(!neighbours(selected,i)){selected=i;render();return}let a=selected,b=i;selected=-1;[board[a],board[b]]=[board[b],board[a]];[specials[a],specials[b]]=[specials[b],specials[a]];let matches=findMatches();if(specials[a]||specials[b]){pendingActivation=[specials[a]?a:b];matches.push(pendingActivation[0])}if(!matches.length){[board[a],board[b]]=[board[b],board[a]];[specials[a],specials[b]]=[specials[b],specials[a]];render();say('That swap does not make a match. Try a glowing hint!');tone(240);return}if(matches.length>=4&&!specials[a]&&!specials[b]){const cross=matches.some(i=>matches.some(j=>j!==i&&Math.floor(j/N)===Math.floor(i/N))&&matches.some(k=>k!==i&&k%N===i%N));const spawn=matches.includes(b)?b:matches.includes(a)?a:matches[0];pendingSpecial=spawn;pendingSpecialType=cross?2:matches.length>=5?3:1;specials[spawn]=pendingSpecialType}moves--;busy=true;render();updateHUD();await resolve();busy=false;checkEnd()}
-async function resolve(){let chain=0;while(true){let m=findMatches();if(pendingActivation.length){m.push(...pendingActivation);pendingActivation=[]}if(!m.length)break;chain++;let clear=new Set(m);for(const i of m){if(specials[i]===1){let r=Math.floor(i/N);for(let c=0;c<N;c++)clear.add(r*N+c)}else if(specials[i]===2){let r=Math.floor(i/N),c=i%N;for(let y=Math.max(0,r-1);y<=Math.min(N-1,r+1);y++)for(let x=Math.max(0,c-1);x<=Math.min(N-1,c+1);x++)clear.add(y*N+x)}else if(specials[i]===3){let color=board[i];for(let j=0;j<N*N;j++)if(board[j]===color)clear.add(j)}}let cells=[...clear];if(objectiveType==='collect')for(const i of cells)if(board[i]===objectiveGem)collected++;score+=cells.length*20*(chain>1?chain:1);cells.forEach(i=>{board[i]=-1;specials[i]=0});render();tone(600+Math.min(cells.length,8)*65);say(chain>1?'COMBO x'+chain+'! Brilliant!':'Lovely match!');await sleep(70);for(let c=0;c<N;c++){let vals=[];for(let r=N-1;r>=0;r--){let k=r*N+c,v=board[k];if(v>=0)vals.push({v,sp:specials[k]})}while(vals.length<N)vals.push({v:randomGem(),sp:0});for(let r=N-1;r>=0;r--){let item=vals[N-1-r],k=r*N+c;board[k]=item.v;specials[k]=item.sp}}render();await sleep(35)}updateHUD();if(score>best){best=score;try{localStorage.setItem('gemGardenBest',String(best))}catch(e){}}if(!hasMove()){say('A fresh garden is ready!');makeBoard();toast('FRESH GEMS! 🌈')}if(chain>=2)toast('AMAZING COMBO! ✨')}
-function checkEnd(){updateHUD();let progress=objectiveType==='collect'?collected:score;if(progress>=target)showFinish(true);else if(moves<=0)showFinish(false)}
-function showFinish(win){started=false;if(win){unlocked=Math.min(100,Math.max(unlocked,level+1));try{localStorage.setItem('gemGardenUnlocked',String(unlocked))}catch(e){}celebrate()}$('finishIcon').textContent=win?'🏆🌈':'🌱💖';$('finishTitle').textContent=win?'LEVEL '+level+' COMPLETE!':'GREAT TRY!';$('finishText').textContent=win?'You made the garden sparkle! Score: '+score+'. Ready for the next garden?':'So close! You scored '+score+'. Try again and make even more matches.';$('continue').textContent=win?'NEXT LEVEL ▶':'TRY AGAIN';$('finish').classList.remove('hidden')}
-function newLevel(){score=0;collected=0;moves=25;objectiveType=level%3===0?'collect':'score';objectiveGem=Math.floor(level/3)%TYPES.length;target=objectiveType==='collect'?12+Math.min(12,Math.floor(level/6)):500+Math.floor((level-1)/3)*80;specials=Array(49).fill(0);pendingSpecial=-1;pendingSpecialType=0;pendingActivation=[];boosterMode='';bombs=3;blasts=3;$('bomb').textContent='💣 GOLDEN BOMB · '+bombs;$('line').textContent='⚡ GOLDEN BLAST · '+blasts;started=true;busy=false;makeBoard();updateHUD();say('Swap two gems to make a line of 3 or more matching gems.');try{localStorage.setItem('gemGardenUnlocked',String(Math.max(unlocked,level)));unlocked=Math.max(unlocked,level)}catch(e){}}
-bindTap($('start'),()=>{if(started)return;$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newLevel();if(level===1)$('tutorial').classList.remove('hidden')});
-bindTap($('tutorialDone'),()=>{$('tutorial').classList.add('hidden');say('Step 1: tap any gem. Step 2: tap a neighbour to swap. Match 3!')});
-bindTap($('continue'),()=>{if((objectiveType==='collect'?collected:score)>=target){level=Math.min(100,level+1);unlocked=Math.min(100,Math.max(unlocked,level));try{localStorage.setItem('gemGardenUnlocked',String(unlocked))}catch(e){}}$('finish').classList.add('hidden');newLevel()});
-bindTap($('again'),()=>{$('finish').classList.add('hidden');newLevel()});
-bindTap($('restart'),()=>{if(!busy)newLevel()});
-bindTap($('sound'),()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'🔊 SOUND ON':'🔇 SOUND OFF';if(soundOn)tone()});
-bindTap($('shuffle'),()=>{if(busy||!started)return;makeBoard();say('Fresh gems! Find a matching line.');tone(500)});
-bindTap($('bomb'),()=>spendBooster('bomb'));bindTap($('line'),()=>spendBooster('line'));bindTap($('mapOpen'),()=>{drawMap();$('map').classList.remove('hidden')});bindTap($('mapClose'),()=>{$('map').classList.add('hidden')});
-bindTap($('hint'),()=>{if(busy||!started)return;for(let i=0;i<N*N;i++)for(let j=i+1;j<N*N;j++){if(!neighbours(i,j))continue;[board[i],board[j]]=[board[j],board[i]];let ok=findMatches().length>0;[board[i],board[j]]=[board[j],board[i]];if(ok){selected=i;render();setTimeout(()=>{selected=-1;render()},1000);say('Try swapping the selected gem with its neighbour!');tone(800);return}}say('Try shuffling for a fresh board!')});
-makeBoard();updateHUD();
-window.addEventListener('error',e=>{try{say('A game hiccup occurred. Tap RESTART LEVEL to recover.')}catch(_){}});window.addEventListener('unhandledrejection',()=>{try{busy=false;say('A move was interrupted. Tap RESTART LEVEL to continue.')}catch(_){}});
+function newDay(){stacks=scramble();selected=-1;moves=0;history=[];busy=false;started=true;render();update();say('Tap a shelf to pick up its top product. Match it with the same product or an empty shelf.');}
+function render(){
+ const root=$('shelves');root.innerHTML='';
+ stacks.forEach((s,i)=>{
+  const b=document.createElement('button');b.type='button';b.className='shelf'+(i===selected?' selected':'')+(selected>=0&&i!==selected&&(s.length===0||s[s.length-1]===stacks[selected]?.[stacks[selected].length-1]&&s.length<CAP)?' target':'');
+  b.dataset.shelf=String(i);b.setAttribute('aria-label','Shelf '+(i+1)+', '+s.length+' of 4 items');
+  const lab=document.createElement('span');lab.className='shelf-label';lab.innerHTML='<span>'+(i===stacks.length-1?'🧺':'🪵')+'</span>SHELF '+(i+1);
+  const slots=document.createElement('span');slots.className='slots';
+  for(let k=0;k<CAP;k++){const item=document.createElement('span');const v=s[k];item.className='item'+(v===undefined?' empty':k===s.length-1?' top-item':'');item.textContent=v===undefined?'':PRODUCTS[v].e;if(v!==undefined&&k===s.length-1){const t=document.createElement('i');t.className='tiny';t.textContent='TOP';item.appendChild(t)}slots.appendChild(item)}
+  b.append(lab,slots);root.appendChild(b);
+ });
+}
+function sortedCount(){return stacks.filter(s=>s.length===CAP&&s.every(v=>v===s[0])).length}
+function update(){
+ $('level').textContent=level;$('moves').textContent=moves;$('sorted').textContent=sortedCount()+'/'+typesForLevel();$('best').textContent=best;$('coins').textContent=coins;
+ const rank=STALLS[Math.min(STALLS.length-1,Math.floor((level-1)/4))];$('marketScene').textContent=rank[0];$('marketName').textContent=rank[1];$('marketRank').textContent=rank[2];
+ $('orderTitle').textContent='CUSTOMER ORDER · DAY '+level;$('orderText').textContent='Sort '+typesForLevel()+' shelves of four matching goods.';$('orderProgress').textContent=sortedCount()+' / '+typesForLevel();$('progressFill').style.width=(sortedCount()/typesForLevel()*100)+'%';
+ $('hint').disabled=busy||!started;$('undo').disabled=busy||!started||history.length===0;$('shuffle').disabled=busy||!started;
+}
+function legalMove(a,d){if(a===d||!stacks[a]||!stacks[a].length||stacks[d].length>=CAP)return false;const item=stacks[a][stacks[a].length-1];return stacks[d].length===0||stacks[d][stacks[d].length-1]===item}
+function snapshot(){history.push({stacks:cloneBoard(),moves});if(history.length>30)history.shift()}
+function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1000)}
+function celebrate(){const layer=document.createElement('div');layer.className='celebrate';document.body.appendChild(layer);const icons=['✨','🎉','🪙','🥭','⭐','🎊'];for(let i=0;i<28;i++){const p=document.createElement('span');p.className='spark';p.textContent=icons[i%icons.length];p.style.left=Math.random()*100+'%';p.style.bottom=(-10+Math.random()*20)+'%';p.style.animationDelay=Math.random()*.35+'s';layer.appendChild(p)}setTimeout(()=>layer.remove(),1800);if(soundOn&&'speechSynthesis'in window){const lines=['Well done, Nazeef! Kya baat hai!','Shabash Nazeef! The bazar is beautiful!','Amazing work! Happy customers everywhere!','Wah Nazeef, brilliant sorting!'];try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lines[Math.floor(Math.random()*lines.length)]);u.rate=.94;u.pitch=1.05;speechSynthesis.speak(u)}catch(e){}}tone(880);setTimeout(()=>tone(1080),140)}
+async function moveShelf(from,to){
+ if(busy||!started)return;
+ if(from<0||to<0)return;
+ if(!legalMove(from,to)){selected=to;render();say('That shelf cannot take this item. Match the top product or choose an empty shelf.');tone(240);return}
+ snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;selected=-1;busy=true;render();update();tone(520+item*80);await sleep(100);busy=false;update();
+ if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820)}
+ if(sortedCount()===typesForLevel())finishDay();
+}
+function onShelf(i){
+ if(busy||!started)return;
+ if(selected<0){if(!stacks[i].length){say('That shelf is empty. Choose a shelf with products first.');return}selected=i;render();say('Picked up '+PRODUCTS[stacks[i][stacks[i].length-1]].n+'. Now choose a matching shelf or an empty shelf.');tone(420);return}
+ if(selected===i){selected=-1;render();say('Selection cleared. Choose a shelf.');return}
+ const from=selected;
+ if(legalMove(from,i)){moveShelf(from,i);return}
+ if(stacks[i].length){selected=i;render();say('New shelf selected. Its top product is '+PRODUCTS[stacks[i][stacks[i].length-1]].n+'.');tone(360)}
+ else{say('That move is not available. Try an empty shelf or matching goods.')}
+}
+function findHint(){
+ if(!started||busy)return;
+ for(let a=0;a<stacks.length;a++)if(stacks[a].length){const item=stacks[a][stacks[a].length-1];for(let d=0;d<stacks.length;d++)if(legalMove(a,d)&&stacks[d].length&&stacks[d][stacks[d].length-1]===item){selected=a;render();say('Hint: move '+PRODUCTS[item].n+' from shelf '+(a+1)+' to shelf '+(d+1)+'.');toast('Try shelf '+(d+1));return}}
+ for(let a=0;a<stacks.length;a++)if(stacks[a].length){for(let d=0;d<stacks.length;d++)if(legalMove(a,d)&&!stacks[d].length){selected=a;render();say('Hint: move the top item from shelf '+(a+1)+' to the empty shelf '+(d+1)+'.');return}}
+ say('Every move is possible. Keep sorting!');}
+function undo(){if(!history.length||busy)return;const prev=history.pop();stacks=cloneBoard(prev.stacks);moves=prev.moves;selected=-1;render();update();say('Last move undone. Try another shelf!');tone(330)}
+function mixUp(){if(busy||!started)return;stacks=scramble();selected=-1;history=[];render();update();say('Shelves mixed up. A fresh sorting puzzle is ready!');toast('Fresh market mix!')}
+function finishDay(){started=false;const reward=20+typesForLevel()*10+Math.max(0,30-moves);coins+=reward;unlocked=Math.max(unlocked,Math.min(100,level+1));best=Math.max(best,level);save();celebrate();$('finishIcon').textContent='🎉🏪🪙';$('finishTitle').textContent='DAY '+level+' COMPLETE!';$('finishText').textContent='All the shelves are sorted! Happy customers earned you '+reward+' coins. Your neighborhood bazaar is growing!';$('continue').textContent=level>=100?'CELEBRATE YOUR BAZAR ▶':'OPEN NEXT DAY ▶';$('finish').classList.remove('hidden');update()}
+function drawMap(){const root=$('levelGrid');root.innerHTML='';for(let n=1;n<=100;n++){const b=document.createElement('button');b.type='button';b.className='level-cell'+(n===level?' current':'');b.textContent=n<=unlocked?'★ '+n:'🔒';b.disabled=n>unlocked;b.addEventListener('click',()=>{level=n;$('map').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newDay()});root.appendChild(b)}}
+$('shelves').addEventListener('click',e=>{const b=e.target.closest('button.shelf');if(!b||!$('shelves').contains(b))return;onShelf(Number(b.dataset.shelf))});
+bind('start',()=>{$('welcome').classList.add('hidden');newDay()});
+bind('continue',()=>{level=level>=100?1:Math.min(100,level+1);unlocked=Math.max(unlocked,level);save();$('finish').classList.add('hidden');newDay()});
+bind('again',()=>{$('finish').classList.add('hidden');newDay()});
+bind('restart',()=>{if(!busy)newDay()});
+bind('hint',findHint);bind('undo',undo);bind('shuffle',mixUp);
+bind('sound',()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'🔊 SOUND ON':'🔇 SOUND OFF';if(soundOn)tone()});
+bind('mapOpen',()=>{drawMap();$('map').classList.remove('hidden')});bind('mapClose',()=>$('map').classList.add('hidden'));
+update();
+window.addEventListener('error',()=>{busy=false;say('A small hiccup occurred. Use RESTART DAY to recover.')});
+window.addEventListener('unhandledrejection',()=>{busy=false;say('Move interrupted. You can safely restart this day.')});
 })();
-</script></body></html>
+</script>
+</body></html>
