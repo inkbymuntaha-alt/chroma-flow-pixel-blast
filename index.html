@@ -445,8 +445,10 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
  .app.playing .living-bazaar,
  .app.playing .market-hub-actions,
  .app.playing .daily-card,
- .app.playing .stats,
- .app.playing .footer{display:none!important}
+ .app.playing .stats{display:none!important}
+ .app.playing .footer{display:flex!important;justify-content:flex-end;flex:0 0 22px;gap:0!important;min-height:22px!important}
+ .app.playing .footer button{display:none!important}
+ .app.playing .footer #restart{display:block!important;min-height:22px!important;padding:2px 9px!important;font-size:8px!important;border-radius:7px!important}
  .app.playing .top{flex:0 0 auto;min-height:32px}
  .app.playing .brand{font-size:clamp(17px,4.8vw,23px)}
  .app.playing .brand small{font-size:7px;letter-spacing:1.5px;margin-top:2px}
