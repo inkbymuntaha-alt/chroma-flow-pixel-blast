@@ -1,23 +1,13 @@
 {
-  "name": "Nazeef Bazar: Market Rush",
-  "short_name": "Market Rush",
-  "description": "Dash through lively bazaar streets, collect customer orders and dodge obstacles in a fast-paced market adventure.",
+  "name": "Nazeef GP Motorcycle Racing",
+  "short_name": "Nazeef GP",
+  "description": "Race superbikes through high-speed circuits, overtake rival riders and win the championship.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#173d35",
-  "theme_color": "#173d35",
-  "icons": [
-    {
-      "src": "./icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ],
-  "display_override": [
-    "fullscreen",
-    "standalone"
-  ]
+  "background_color": "#101a25",
+  "theme_color": "#101a25",
+  "icons": [{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}],
+  "display_override": ["fullscreen","standalone"]
 }
