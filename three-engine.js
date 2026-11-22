@@ -35,7 +35,7 @@ async function init(host,oldCanvas){
  camera=new T.PerspectiveCamera(66,host.clientWidth/host.clientHeight,.1,1100);
  renderer=new T.WebGLRenderer({antialias:false,alpha:false,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(host.clientWidth,host.clientHeight,false);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;renderer.shadowMap.enabled=false;
- const cv=renderer.domElement;cv.id='world3d';cv.setAttribute('aria-label','Real-time 3D motorcycle racing');cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:1;display:block;touch-action:none';host.insertBefore(cv,host.firstChild);oldCanvas.style.display='none';
+ const cv=renderer.domElement;cv.id='world3d';cv.setAttribute('aria-label','Real-time 3D motorcycle racing');cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:1;display:block;touch-action:none;pointer-events:none';host.insertBefore(cv,host.firstChild);oldCanvas.style.display='none';
  scene.add(new T.HemisphereLight(0xe9f6ff,0x4b5139,2.1));
  const sun=new T.DirectionalLight(0xffe4c2,2.6);sun.position.set(-65,110,45);scene.add(sun);
  const fill=new T.DirectionalLight(0x9bc6ff,.75);fill.position.set(55,40,-80);scene.add(fill);
