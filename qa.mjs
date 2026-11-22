@@ -38,7 +38,7 @@ const typeFn = extract(/function typesForLevel\(\)\{[^\n]*\}/, 'typesForLevel');
 const scrambleFn = extract(/function scramble\(\)\{[\s\S]*?\n\}/, 'scramble');
 const nl = String.fromCharCode(10);
 const trackedScrambleFn = scrambleFn
-  .replace('function scramble(){', 'function scramble(){' + nl + ' const reverseMoves=[];')
+  .replace('function scramble(){', 'function scramble(){')
   .replace('b[d].push(b[a].pop());', 'reverseMoves.push([a,d]);b[d].push(b[a].pop());')
   .replace('return b;', 'return {board:b,reverseMoves};');
 const generate = new Function('level', 'dailyMode', 'dailySeed', 'scrambleVariant', 'CAP', 'cloneBoard',
@@ -54,6 +54,9 @@ for (let level = 1; level <= 100; level++) {
     const flat = board.flat();
     assert.equal(board.length, typeCount + 1, 'Shelf count at level ' + level);
     assert.ok(board.every(stack => stack.length <= 4), 'Shelf capacity at level ' + level);
+    assert.equal(board[typeCount].length, 0, 'The dedicated spare shelf must start empty at level ' + level);
+    const hasLegalMove = board.some((stack, from) => stack.length > 0 && board.some((target, to) => to !== from && target.length < 4 && (target.length === 0 || target[target.length - 1] === stack[stack.length - 1])));
+    assert.ok(hasLegalMove, 'Every generated puzzle must have a legal opening move at level ' + level);
     assert.equal(flat.length, typeCount * 4, 'Item count at level ' + level);
     for (let item = 0; item < typeCount; item++) {
       assert.equal(flat.filter(value => value === item).length, 4, 'Four copies of product ' + item + ' at level ' + level);
