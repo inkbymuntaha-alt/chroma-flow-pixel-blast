@@ -142,6 +142,7 @@ window.addEventListener('keyup',e=>{if(e.key==='ArrowLeft'||e.key==='a')state.st
 window.addEventListener('blur',()=>{state.throttle=false;state.brake=false;state.steerLeft=false;state.steerRight=false;if(state.mode==='race')pause()});
 window.__bikeRaceTest={state,start,pause,resume,update,draw,finish,TRACKS};
 draw();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 })();
 </script>
 </body></html>
