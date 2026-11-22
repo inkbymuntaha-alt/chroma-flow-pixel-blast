@@ -16,6 +16,6 @@ for(const term of ['WebGLRenderer','PerspectiveCamera','CatmullRomCurve3','MeshS
 assert.ok(!html.includes('MARKET RUSH')&&!html.includes('shelves')&&!html.includes('function scramble()'),'Old game must be removed');
 assert.equal(manifest.name,'Nazeef GP Motorcycle Racing');
 assert.equal(manifest.orientation,'portrait');
-assert.ok(sw.includes('nazeef-gp-3d-racing-v3'),'Service worker cache must be versioned for bike racing');
+assert.ok(sw.includes('nazeef-gp-3d-racing-v4'),'Service worker cache must be versioned for bike racing');
 assert.ok(sw.includes('./index.html')&&sw.includes('./manifest.webmanifest'));
 console.log('PASS: Nazeef GP syntax, racing UI, motorcycle drawing, throttle/brake/steering, rival bikes, laps, finish, mobile input, PWA metadata and cache version.');
