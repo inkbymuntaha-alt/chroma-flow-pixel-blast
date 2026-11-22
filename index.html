@@ -85,7 +85,7 @@ function drawScene(dt){
  ctx.fillStyle=t.ground;ctx.fillRect(0,330,W,H-330);
  for(let y=345;y<H;y+=44){let k=(y-345)/(H-345),shift=(state.roadOffset*.7*k)%44;for(let side of [-1,1]){let x=W/2+side*(125+shift*.25);ctx.fillStyle=track===2?'#263d46':track===1?'#9b704b':'#46775c';ctx.fillRect(x,y,24+24*k,18+12*k)}}
  // perspective road
- let top=330,bottom=H+30,roadTop=65,roadBottom=500;
+ let top=330,bottom=H+30,roadTop=65,roadBottom=320;
  const curveTop=roadCurve(top),curveBottom=roadCurve(bottom);
  poly([[240+curveTop*roadTop,top],[240+roadTop+curveTop*roadTop,top],[240+roadBottom+curveBottom*roadBottom,bottom],[240-roadBottom+curveBottom*roadBottom,bottom]],t.road);
  // shoulders and edge stripes
@@ -127,8 +127,8 @@ function bike(x,y,scale,color,lean=0,player=false){
  ctx.strokeStyle='#f4f7fa';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-7,-21);ctx.lineTo(7,-21);ctx.stroke();
  ctx.restore()
 }
-function drawOpponents(){for(const o of state.opponents){let depth=clamp(1-(o.p-state.progress)/170,0,1);if(depth<=0)continue;let y=330+depth*400,scale=.24+depth*.72,half=65+depth*435,x=240+roadCurve(y)*half+o.x*half*.48;bike(x,y,scale,o.color,0,false)}}
-function drawPlayer(){let x=240+state.playerX*125,y=735;bike(x,y,1.13,'#ffb52e',state.lean,true);if(state.speed>80){ctx.strokeStyle='#ffffff25';ctx.lineWidth=3;for(let i=0;i<5;i++){let xx=x+(i-2)*12;ctx.beginPath();ctx.moveTo(xx,790);ctx.lineTo(xx+(i-2)*3,842);ctx.stroke()}}if(state.drift>.22){ctx.fillStyle='#f3e7c8aa';for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(x+(i%2?1:-1)*18,790+i*8,3+i,0,Math.PI*2);ctx.fill()}}}
+function drawOpponents(){for(const o of state.opponents){let depth=clamp(1-(o.p-state.progress)/170,0,1);if(depth<=0)continue;let y=330+depth*400,scale=.24+depth*.72,half=65+depth*255,x=240+roadCurve(y)*half+o.x*half*.48;bike(x,y,scale,o.color,0,false)}}
+function drawPlayer(){let x=240+state.playerX*250,y=735;bike(x,y,1.13,'#ffb52e',state.lean,true);if(state.speed>80){ctx.strokeStyle='#ffffff25';ctx.lineWidth=3;for(let i=0;i<5;i++){let xx=x+(i-2)*12;ctx.beginPath();ctx.moveTo(xx,790);ctx.lineTo(xx+(i-2)*3,842);ctx.stroke()}}if(state.drift>.22){ctx.fillStyle='#f3e7c8aa';for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(x+(i%2?1:-1)*18,790+i*8,3+i,0,Math.PI*2);ctx.fill()}}}
 function draw(){drawScene();drawOpponents();drawPlayer();ctx.fillStyle='#fff';ctx.font='900 12px system-ui';ctx.textAlign='center';ctx.fillText('🏁',240,316);if(state.offTrack){ctx.fillStyle='#ffcf4b';ctx.font='1000 13px system-ui';ctx.fillText('OFF TRACK  •  FIND THE RACING LINE',240,180)}if(state.drift>.3){ctx.fillStyle='#ffcf4b';ctx.font='1000 12px system-ui';ctx.fillText('DRIFT',240,205)}}
 function update(dt){
  if(state.mode!=='race')return;
