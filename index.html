@@ -436,6 +436,69 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 }
 @media (pointer:coarse) and (max-height:600px){.app.playing .market{display:none!important}.app.playing .order small{display:none!important}.app.playing .tool{min-height:24px!important}}
 
+
+/* Board-first Android/tablet gameplay layout v3: fit every shelf without shrinking the produce into icons. */
+@media (pointer:coarse) and (max-height:1100px){
+ .app.playing{height:100dvh;min-height:0;overflow:hidden;gap:4px;padding:4px 0 max(4px,env(safe-area-inset-bottom))}
+ .app.playing .profile-card,
+ .app.playing .login-reward,
+ .app.playing .living-bazaar,
+ .app.playing .market-hub-actions,
+ .app.playing .daily-card,
+ .app.playing .stats,
+ .app.playing .footer{display:none!important}
+ .app.playing .top{flex:0 0 auto;min-height:32px}
+ .app.playing .brand{font-size:clamp(17px,4.8vw,23px)}
+ .app.playing .brand small{font-size:7px;letter-spacing:1.5px;margin-top:2px}
+ .app.playing .levelpill{padding:2px 8px}
+ .app.playing .levelpill b{font-size:16px}
+ .app.playing .market{flex:0 0 auto;min-height:31px;padding:3px 7px;border-radius:9px}
+ .app.playing .market-scene{font-size:17px;letter-spacing:0}
+ .app.playing .market-copy b{font-size:9px;line-height:1.1}
+ .app.playing .market-copy small{font-size:7px;line-height:1.1}
+ .app.playing .coins{font-size:10px}
+ .app.playing .order{flex:0 0 auto;min-height:31px;padding:4px 7px;border-radius:9px}
+ .app.playing .order b{font-size:10px}
+ .app.playing .order small{display:none!important}
+ .app.playing .order strong{font-size:11px}
+ .app.playing .progress{flex:0 0 3px;height:3px;margin:0}
+ .app.playing .board-wrap{flex:1 1 0!important;height:0!important;min-height:0!important;max-height:none!important;display:flex;flex-direction:column;overflow:hidden;padding:4px;border-radius:12px}
+ .app.playing .board-head{flex:0 0 17px;min-height:17px;margin:0 2px 3px;gap:4px}
+ .app.playing .board-head b{font-size:10px}
+ .app.playing .board-head small{font-size:8px}
+ .app.playing .shelves{display:grid!important;flex:1 1 0!important;height:0!important;min-height:0!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:repeat(var(--shelf-count,4),minmax(0,1fr))!important;grid-auto-rows:unset!important;gap:3px!important;overflow:hidden!important;align-content:stretch}
+ .app.playing .shelf{height:100%!important;min-height:0!important;max-height:none!important;grid-template-columns:clamp(34px,10vw,43px) minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important;gap:3px!important;padding:1px 3px!important;border-radius:8px!important;overflow:hidden!important;box-shadow:inset 0 1px #fff2,0 1px 3px #0006!important;transition:border-color .08s,background .08s!important}
+ .app.playing .shelf:active{transform:none;filter:brightness(1.08)}
+ .app.playing .shelf-label{font-size:clamp(7px,2.1vw,9px)!important;line-height:1.05!important;white-space:nowrap}
+ .app.playing .shelf-label span{font-size:clamp(10px,3vw,14px)!important;line-height:1!important;margin:0 0 1px!important}
+ .app.playing .slots{height:100%!important;min-height:0!important;max-height:none!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:minmax(0,1fr)!important;gap:3px!important;overflow:hidden!important}
+ .app.playing .item{height:100%!important;min-height:0!important;max-height:none!important;min-width:0!important;padding:0!important;border-radius:6px!important;font-size:clamp(17px,5.8vw,27px)!important;overflow:hidden!important;box-shadow:inset 0 1px 3px #fff2,0 1px 3px #0006!important}
+ .app.playing .item.top-item{transform:none!important;filter:brightness(1.13)!important}
+ .app.playing .item .produce-art{display:block;width:clamp(22px,7vw,32px)!important;height:clamp(22px,7vw,32px)!important;max-width:90%!important;max-height:90%!important;filter:drop-shadow(0 2px 2px #0008)}
+ .app.playing .item .tiny{font-size:5px!important;right:1px!important;bottom:0!important}
+ .app.playing .controls{flex:0 0 auto!important;gap:4px!important}
+ .app.playing .tool{min-height:36px!important;padding:5px 3px!important;font-size:clamp(9px,2.7vw,11px)!important;border-radius:9px!important}
+ .app.playing .message{flex:0 0 auto!important;min-height:13px!important;padding:0!important;margin:0!important;font-size:9px!important;line-height:1.2!important}
+}
+@media (pointer:coarse) and (max-height:600px){
+ .app.playing .market{display:none!important}
+ .app.playing .top{min-height:27px}
+ .app.playing .board-head{flex-basis:14px;min-height:14px}
+ .app.playing .shelves{gap:2px!important}
+ .app.playing .shelf{grid-template-columns:32px minmax(0,1fr)!important}
+ .app.playing .item .produce-art{width:clamp(19px,6vw,26px)!important;height:clamp(19px,6vw,26px)!important}
+ .app.playing .tool{min-height:32px!important}
+}
+@media (pointer:coarse) and (min-width:600px) and (min-height:700px){
+ .app.playing{width:min(100%,680px)}
+ .app.playing .board-wrap{padding:8px}
+ .app.playing .shelves{gap:5px!important}
+ .app.playing .shelf{grid-template-columns:52px minmax(0,1fr)!important;padding:3px 6px!important}
+ .app.playing .shelf-label{font-size:10px!important}
+ .app.playing .shelf-label span{font-size:16px!important}
+ .app.playing .slots{gap:5px!important}
+ .app.playing .item .produce-art{width:clamp(28px,4.5vw,40px)!important;height:clamp(28px,4.5vw,40px)!important}
+}
 </style>
 </head>
 <body>
