@@ -643,15 +643,71 @@ html,body{background:#100b07 url("./assets/kenney/colored_desert.png") center bo
 @media(pointer:coarse){.shelf,.item,.tool{transition:none!important;animation:none!important}.shelf:active{transform:none!important;filter:none!important}.item.top-item{transform:none!important;filter:none!important}.board-wrap,.market,.stat,.order{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}}
 @media(prefers-reduced-motion:reduce){.shelf,.item,.tool{animation:none!important;transition:none!important}}
 
+
+/* NAZEEF WORLD OF WONDERS — free-asset redesign v11 */
+:root{--cream:#fff8e9;--ink:#26332d;--gold:#ffc75e;--level-h:32}
+html{background:#172d28}
+body{background:radial-gradient(ellipse at 50% -12%,#f8d99a 0,#b9d6b1 32%,#507e68 72%,#203d36 100%);color:var(--cream)}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,#f7e9c355,#183c3344),url("./assets/kenney/colored_desert.png") center bottom/auto 42vh repeat-x;opacity:.42}
+.app{width:min(100%,560px);gap:11px;padding:14px 12px 22px;isolation:isolate}
+.top{padding:3px 2px 7px;align-items:center}
+.brand{font-size:clamp(22px,6vw,30px);letter-spacing:-1px;color:#fff9e8;text-shadow:0 2px 0 #315c48,0 5px 14px #17372d88}
+.brand span{color:#ffcf70;text-shadow:0 2px 0 #9a5a2d}
+.brand small{font-size:9px;letter-spacing:2px;color:#e4f0d8}
+.levelpill{min-width:76px;border:1px solid #f7d58b;border-radius:17px;padding:7px 13px;background:linear-gradient(145deg,#fff3d6,#d8a957);box-shadow:0 4px 0 #9c6938,0 8px 16px #193c3155;color:#60452a}
+.levelpill b{color:#744a26;text-shadow:none;font-size:22px}.levelpill small{color:#80603d;font-weight:900}
+.profile-card{border:1px solid #f4e0b4;border-radius:19px;padding:10px 12px;background:linear-gradient(110deg,#fff5dc,#d9edcf);box-shadow:0 5px 0 #7a9b6c,0 10px 20px #173b3150;color:#294638}
+.profile-avatar{border-radius:16px;background:linear-gradient(145deg,#ffe7a1,#e6a64b);box-shadow:inset 0 2px #fff9,0 3px 7px #8a5d3155}
+.profile-copy b{color:#294638;font-size:12px}.profile-copy small{color:#577666}
+.profile-open{border:1px solid #a5c79b;border-radius:12px;background:linear-gradient(#fef4d8,#e5bc71);color:#654321;box-shadow:0 3px 0 #b07a42}
+.login-reward{border:1px solid #f5d98e!important;border-radius:15px!important;background:linear-gradient(100deg,#fff0c8,#f4cf83)!important;color:#664421!important;box-shadow:0 4px 0 #ad793e,0 8px 16px #17372d44!important}
+.login-reward b{color:#704a24!important}.login-reward small{color:#85633c!important}.login-reward button{background:#fff9e9!important;color:#704a24!important;border:1px solid #d7a45b!important;border-radius:10px!important}
+.stats{gap:8px}.stat{border:1px solid #d8e7c7;border-radius:15px;background:linear-gradient(155deg,#f8f3dd,#d8e8ca);box-shadow:0 4px 0 #739779,0 8px 13px #163b3044,inset 0 1px #fff;color:#2e4a3c}
+.stat b{color:#b56c32;font-size:21px}.stat small{color:#557363;font-weight:900}
+.market{position:relative;overflow:hidden;border:1px solid #f1d18b;border-radius:18px;padding:10px 13px;background:linear-gradient(105deg,#315d49ed,#214638eF),url("./assets/kenney/colored_forest.png") center/cover;box-shadow:0 5px 0 #173d32,0 10px 18px #15382e55}
+.market:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,#fff1 48%,transparent);opacity:.6}
+.market-scene{font-size:29px;filter:drop-shadow(0 3px 2px #102e2788)}
+.market-copy b{font-size:13px;color:#fff0c5;letter-spacing:.3px}.market-copy small{color:#d8e9d2}.coins{color:#ffdf8d}
+.living-bazaar{border:1px solid #f3d89c;border-radius:19px;padding:10px 12px;background:linear-gradient(135deg,#fff1ce,#e7c17f 48%,#f5e3b5);box-shadow:0 5px 0 #a76e3e,0 10px 20px #163b3044;color:#35503e}
+.stall-dress{border-bottom:1px solid #a66e3d55}.stall-dress span{filter:drop-shadow(0 3px 2px #78502b55)}
+.customer{background:linear-gradient(145deg,#fff9e8,#e2edcf);box-shadow:inset 0 1px #fff,0 3px 6px #72522c44}
+.customer-copy b{color:#315642}.customer-copy small{color:#6d674b}.customer-mood{color:#b86b35}
+.order{border:1px solid #f0d89c;border-radius:15px;background:linear-gradient(100deg,#fff5db,#e8efcf);box-shadow:0 3px 0 #8ba17a;color:#31513e}
+.order b{color:#355b42}.order small{color:#71816a}.order strong{color:#a95d2c}
+.progress{height:8px;border:1px solid #f4e3bc;background:#284c3c88;border-radius:20px;overflow:hidden}.progress i{border-radius:20px;background:linear-gradient(90deg,#f8bc55,#f47d4f,#efc85f);box-shadow:0 0 9px #ffe08b}
+.board-wrap{position:relative;overflow:hidden;border:1px solid #f4d99c;border-radius:22px;padding:12px;background:linear-gradient(145deg,#fff0ce,#e6c486 35%,#d3a86d);box-shadow:0 7px 0 #98643b,0 14px 24px #14362d66,inset 0 2px #fff9}
+.board-wrap:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;background:linear-gradient(180deg,#315640d9,#254333e8),url("./assets/kenney/colored_forest.png") center/cover;opacity:.94}
+.board-head,.shelves{position:relative;z-index:1}.board-head{margin:0 2px 10px;align-items:center}.board-head b{font-size:13px;letter-spacing:.4px;color:#fff0c6;text-shadow:0 1px 3px #173a2e}.board-head small{color:#e1eccc;font-weight:700}
+.shelves{gap:9px}
+.shelf{min-height:72px;border:1px solid #e9c47c;border-radius:15px;padding:8px 9px;background:linear-gradient(110deg,#f8e6bc,#d7b17a 45%,#b88754);color:#4a3927;box-shadow:inset 0 2px #fff9,inset 0 -5px 9px #81512b33,0 4px 0 #8a5d37,0 7px 10px #112e2555;grid-template-columns:59px 1fr;gap:8px}
+.shelf:before{width:5px;background:linear-gradient(#fff0b5,#b36a32);opacity:.95}
+.shelf.selected{border:2px solid #fff1a8;background:linear-gradient(110deg,#fff1b9,#f0c36d);box-shadow:0 0 0 3px #ffe58b66,0 0 20px #ffe58b66,0 4px 0 #a76c35}
+.shelf.target{border-color:#a8f1ae;background:linear-gradient(110deg,#e9f5c6,#b5d99b)}
+.shelf-label{color:#67462b;font-size:9px;font-weight:1000}.shelf-label span{font-size:20px;filter:drop-shadow(0 2px 1px #79502b55)}
+.slots{gap:5px}.item{height:46px;border-radius:11px;background:linear-gradient(145deg,#fff6df,#d7b77e);border:1px solid #b88b52;box-shadow:inset 0 2px 4px #fff9,0 3px 5px #6d4b2d66;font-size:clamp(21px,6vw,29px)}
+.item.top-item{border-color:#fff0a1;background:linear-gradient(145deg,#fff5ce,#e6c176);box-shadow:0 0 0 1px #fff2a766,0 0 10px #ffe69a66,inset 0 2px 4px #fff}
+.item.empty{border:1px dashed #a77a4d;background:#78583b22;box-shadow:none}
+.shelf-foot{color:#f9e7bc}
+.controls{gap:8px}.tool{border:1px solid #f2d18b;border-radius:14px;padding:12px 5px;background:linear-gradient(160deg,#fff0c6,#dba45b);color:#674322;box-shadow:0 4px 0 #98643a,0 7px 12px #173a3044,inset 0 1px #fff;font-size:11px}
+.tool:active{filter:brightness(1.04);transform:translateY(2px);box-shadow:0 2px 0 #98643a,0 4px 8px #173a3044}
+.message{color:#fff4d5;font-weight:700;text-shadow:0 1px 3px #163a2e}
+.footer button{border:1px solid #c9dfb7;border-radius:11px;background:#254b3dd9;color:#f4e9c9}
+.market-hub-actions button,.daily-card{border-radius:15px!important}
+@media(min-width:600px){.app{padding-top:20px}.shelf{min-height:76px}.item{height:50px}}
+@media(max-width:380px){.app{padding-inline:8px;gap:8px}.shelf{grid-template-columns:49px 1fr;min-height:64px;padding:6px}.item{height:40px}.board-wrap{padding:9px}.board-head small{font-size:9px}}
+@media(max-height:740px){.app{gap:8px;padding-top:8px}.shelf{min-height:62px}.item{height:39px}.living-bazaar{padding:7px 9px}}
+@media(hover:none),(pointer:coarse){.shelf,.tool{transition:none!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.shelf:active{transform:none}.shelf.selected{box-shadow:0 0 0 2px #ffe58b66,0 4px 0 #a76c35}}
+@media(prefers-reduced-motion:reduce){.stall-dress span{animation:none!important}}
+
 </style>
 </head>
 <body>
 <main class="app">
-<header class="top"><div class="brand">NAZEEF <span>BAZAR</span><small>SORT STORIES · NEIGHBORHOOD MARKET</small></div><div class="levelpill"><b id="level">1</b><small>DAY / LEVEL</small></div></header>
-<section class="profile-card"><div class="profile-avatar" id="profileAvatar">🧑🏽‍🌾</div><div class="profile-copy"><b id="profileName">BAZAR PLAYER</b><small id="profileSub">Your market adventure starts here</small></div><button class="profile-open" id="profileOpen" type="button">MY PROFILE</button></section>
+<header class="top"><div class="brand">NAZEEF <span>BAZAR</span><small>WORLD OF WONDERS · SORT STORIES</small></div><div class="levelpill"><b id="level">1</b><small>DAY / LEVEL</small></div></header>
+<section class="profile-card"><div class="profile-avatar" id="profileAvatar">🧑🏽‍🌾</div><div class="profile-copy"><b id="profileName">BAZAR PLAYER</b><small id="profileSub">Restore the colours of every market lane</small></div><button class="profile-open" id="profileOpen" type="button">MY PROFILE</button></section>
 <section class="login-reward"><div><b>🎁 DAILY LOGIN GIFT</b><small id="loginRewardText">Your seven-day reward trail is ready.</small></div><button id="loginRewardOpen" type="button">COLLECT GIFT</button></section>
 <section class="stats"><div class="stat"><b id="moves">0</b><small>MOVES</small></div><div class="stat"><b id="sorted">0/4</b><small>SHELVES SORTED</small></div><div class="stat"><b id="best">0</b><small>BEST DAY</small></div></section>
-<section class="market"><div class="market-scene" id="marketScene">🏪🥬🧺</div><div class="market-copy"><b id="marketName">NAZEEF'S CORNER BAZAR</b><small id="marketRank">A little shop with big dreams</small></div><div class="coins">🪙 <span id="coins">0</span></div></section>
+<section class="market"><div class="market-scene" id="marketScene">🏪🥬🧺</div><div class="market-copy"><b id="marketName">NAZEEF BAZAR · WORLD OF WONDERS</b><small id="marketRank">Explore lively lanes, one puzzle at a time</small></div><div class="coins">🪙 <span id="coins">0</span></div></section>
 <section class="living-bazaar" id="livingBazaar" data-weather="sun" aria-label="Living neighborhood bazaar">
  <div class="stall-dress" aria-hidden="true"><span>🏮</span><span>🎏</span><span>🧺</span><span>🌼</span></div>
  <span class="weather-particle" aria-hidden="true">🌸</span><span class="weather-particle p2" aria-hidden="true">✨</span><span class="weather-particle p3" aria-hidden="true">🍃</span>
@@ -659,7 +715,7 @@ html,body{background:#100b07 url("./assets/kenney/colored_desert.png") center bo
 </section>
 <section class="order"><div><b id="orderTitle">CUSTOMER ORDER</b><small id="orderText">Sort every shelf to serve the neighborhood.</small></div><strong id="orderProgress">0 / 4</strong></section>
 <div class="progress"><i id="progressFill"></i></div>
-<section class="board-wrap"><div class="board-head"><b>🧺 MARKET SHELVES</b><small id="boardTip">Tap a shelf, then tap where its top item goes</small></div><div class="shelves" id="shelves" aria-label="Sorting shelves"></div></section>
+<section class="board-wrap"><div class="board-head"><b>THE BAZAAR SORTING BOARD</b><small id="boardTip">Tap a basket, then choose a matching basket</small></div><div class="shelves" id="shelves" aria-label="Sorting shelves"></div></section>
 <section class="market-hub-actions"><button id="marketUpgradeOpen" type="button">🏗️ MARKET MAKEOVER</button><button id="fruitDashOpen" type="button">🍎 FRUIT DASH</button></section>
 <section class="daily-card" id="dailyCard"><div class="daily-copy"><b>🌟 DAILY BAZAAR CHALLENGE</b><small id="dailyDescription">A fresh puzzle and bonus coins every day.</small></div><button id="dailyStart" type="button">PLAY TODAY ▶</button></section>
 <section class="controls"><button class="tool" id="hint">💡 HINT</button><button class="tool" id="undo">↶ UNDO</button><button class="tool" id="shuffle">🔀 MIX UP</button></section>
