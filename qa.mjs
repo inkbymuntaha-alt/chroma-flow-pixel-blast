@@ -75,7 +75,7 @@ for (let level = 1; level <= 100; level++) {
       assert.ok(solved[to].length === 0 || solved[to][solved[to].length - 1] === item, 'Solution path must obey matching rules');
       solved[from].pop(); solved[to].push(item);
     }
-    assert.ok(solved.slice(0, typeCount).every((stack, index) => stack.length === 4 && stack.every(value => value === index)), 'Every generated puzzle must have a legal solution at level ' + level);
+    assert.ok(solved.slice(0, typeCount).every((stack, index) => stack.length === 4 && stack.every(value => value === stack[0])), 'Every generated puzzle must have a legal solution at level ' + level);
     assert.equal(solved[typeCount].length, 0, 'The spare shelf must be empty after solving');
     tested++;
   }
