@@ -39,6 +39,12 @@ assert.ok(artFn.includes('linearGradient') && artFn.includes('radialGradient'), 
 assert.ok(artFn.includes('rx="18" ry="3.2"') && artFn.includes('opacity=".28"'), 'Produce art must sit on a soft painted contact shadow');
 assert.ok(html.includes('repeating-linear-gradient(3deg') && html.includes('Premium hand-painted 2D finish'), 'Shelves must use the lightweight hand-painted timber finish');
 assert.ok(html.includes('@media(pointer:coarse)') && html.includes('.produce-art{filter:none}'), 'Touch devices must avoid decorative produce filters');
+const selectionFn = extract(/function renderSelection\\(\\)\\{[\\s\\S]*?\\n\\}/, 'renderSelection');
+assert.ok(selectionFn.includes('renderShelf(previous,false)') && selectionFn.includes('renderShelf(current,false)'), 'Selection feedback must repaint only the previous and current shelves');
+assert.ok(!selectionFn.includes('for(let i=0;i<stacks.length;i++)renderShelf'), 'Ordinary selection must not repaint every shelf');
+const moveFn = extract(/function renderMove\\(from,to\\)\\{[\\s\\S]*?\\n\\}/, 'renderMove');
+assert.ok(moveFn.includes('renderShelf(from,true);renderShelf(to,true)'), 'A move must repaint only its source and destination shelves');
+assert.ok(html.includes('@media(pointer:coarse){') && html.includes('.shelf:active{transform:none!important'), 'Touch controls must not wait for decorative press animations');
 assert.ok(artFn.includes('stroke-linecap') && artFn.includes('opacity'), 'Produce artwork must include highlight and contour detail');
 assert.ok(!artFn.includes('filter="url('), 'Produce artwork must avoid expensive SVG filter stacks');
 for (const name of ['Apples','Carrots','Lemons','Grapes','Pastries','Mangoes','Watermelons','Oranges','Coconuts','Pineapples']) {
