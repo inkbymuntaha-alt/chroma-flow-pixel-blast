@@ -21,7 +21,7 @@ try{
   const speed=await page.evaluate(()=>window.__bikeRaceTest.state.speed);
   await page.keyboard.down('ArrowDown');await page.waitForTimeout(400);await page.keyboard.up('ArrowDown');
   assert.ok(await page.evaluate(()=>window.__bikeRaceTest.state.speed<speed),'Brake input processed');
-  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.down('ArrowLeft');await page.waitForTimeout(120);await page.keyboard.up('ArrowLeft');
   assert.ok(await page.evaluate(()=>window.__bikeRaceTest.state.playerX<0),'Steering left moves bike');
   await page.locator('#pause').click();await page.locator('#pauseScreen').waitFor({state:'visible'});
   await page.locator('#resume').click();await page.locator('#pauseScreen').waitFor({state:'hidden'});
