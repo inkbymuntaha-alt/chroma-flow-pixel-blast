@@ -36,6 +36,9 @@ const extract = (pattern, label) => {
 const artFn = extract(/function productArt\(v\)\{[\s\S]*?\n\}/, 'productArt');
 assert.equal((artFn.match(/^  \/\/ /gm) || []).length, 10, 'All ten products must have individually art-directed vector illustrations');
 assert.ok(artFn.includes('linearGradient') && artFn.includes('radialGradient'), 'Produce artwork must use lightweight dimensional gradients');
+assert.ok(artFn.includes('rx="18" ry="3.2"') && artFn.includes('opacity=".28"'), 'Produce art must sit on a soft painted contact shadow');
+assert.ok(html.includes('repeating-linear-gradient(3deg') && html.includes('Premium hand-painted 2D finish'), 'Shelves must use the lightweight hand-painted timber finish');
+assert.ok(html.includes('@media(pointer:coarse)') && html.includes('.produce-art{filter:none}'), 'Touch devices must avoid decorative produce filters');
 assert.ok(artFn.includes('stroke-linecap') && artFn.includes('opacity'), 'Produce artwork must include highlight and contour detail');
 assert.ok(!artFn.includes('filter="url('), 'Produce artwork must avoid expensive SVG filter stacks');
 for (const name of ['Apples','Carrots','Lemons','Grapes','Pastries','Mangoes','Watermelons','Oranges','Coconuts','Pineapples']) {
