@@ -599,9 +599,10 @@ function refreshDailyCard(){const b=$('dailyStart'),d=$('dailyDescription');if(!
 function shelfCount(){return typesForLevel()+1}
 function cloneBoard(b=stacks){return b.map(s=>s.slice())}
 function scramble(){
- const n=typesForLevel(),count=n+1,spare=count-1,baseSeed=dailyMode?dailySeed+'-'+level:'nbs-level-'+level+'-layout-v2',rng=seededRandom(baseSeed+(scrambleVariant?'-mix-'+scrambleVariant:''));
+ const n=typesForLevel(),count=n+1,spare=count-1,baseSeed=dailyMode?dailySeed+'-'+level:'nbs-level-'+level+'-layout-v2',rng=seededRandom(baseSeed+(scrambleVariant?'-mix-'+scrambleVariant:'')),productRng=seededRandom(baseSeed+'-products');
  const productOrder=Array.from({length:n},(_,i)=>i);
- for(let i=n-1;i>0;i--){const j=Math.floor(rng()*(i+1));[productOrder[i],productOrder[j]]=[productOrder[j],productOrder[i]]}
+ for(let i=n-1;i>0;i--){const j=Math.floor(productRng()*(i+1));[productOrder[i],productOrder[j]]=[productOrder[j],productOrder[i]]}
+ if(scrambleVariant){const shift=scrambleVariant%n;productOrder.push(...productOrder.splice(0,shift))}
  const goal=Array.from({length:count},(_,i)=>i<n?Array(CAP).fill(productOrder[i]):[]);
  let b=cloneBoard(goal),steps=16+level*3;
  const reverseMoves=[];
