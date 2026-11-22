@@ -359,6 +359,16 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
  .app.playing .item{height:clamp(18px,2.4dvh,27px)!important;font-size:clamp(14px,3.8vw,20px)!important}
  .app.playing .shelf-foot{font-size:6px!important}
 }
+
+/* Preserve complete illustrated fruit at compact Android shelf sizes. */
+@media (pointer:coarse) and (max-height:1100px){
+ .app.playing .shelf{overflow:visible!important;min-height:54px!important}
+ .app.playing .slots{min-height:46px!important;overflow:visible!important;align-items:center}
+ .app.playing .item{height:44px!important;min-height:44px!important;overflow:visible!important;display:grid!important;place-items:center!important}
+ .app.playing .item .produce-art{display:block!important;width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;max-width:40px!important;max-height:40px!important;overflow:visible!important;flex:none!important}
+ .app.playing .item .tiny{z-index:3}
+}
+
 </style>
 </head>
 <body>
