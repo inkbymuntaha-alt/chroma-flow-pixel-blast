@@ -1,13 +1,13 @@
 {
-  "name": "Nazeef Bazar Sort Stories",
-  "short_name": "Nazeef Bazar",
-  "description": "Sort goods, serve happy customers and grow your neighbourhood bazaar.",
+  "name": "Nazeef Bazar: Market Rush",
+  "short_name": "Market Rush",
+  "description": "Dash through lively bazaar streets, collect customer orders and dodge obstacles in a fast-paced market adventure.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#17120b",
-  "theme_color": "#17120b",
+  "background_color": "#173d35",
+  "theme_color": "#173d35",
   "icons": [
     {
       "src": "./icon.svg",
