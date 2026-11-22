@@ -613,16 +613,17 @@ function scramble(){
   reverseMoves.push([a,d]);b[d].push(b[a].pop());
  }
  const hasLegalMove=board=>board.some((stack,from)=>stack.length&&board.some((target,to)=>to!==from&&target.length<CAP&&(!target.length||target[target.length-1]===stack[stack.length-1])));
+ const isSolved=board=>board.slice(0,n).every((stack,index)=>stack.length===CAP&&stack.every(item=>item===index))&&board[spare].length===0;
  // Roll back only the latest scramble moves until the dedicated spare is empty
  // and the displayed puzzle has at least one legal move. The remaining moves
  // are still a complete, verified solution path back to the sorted board.
- while(reverseMoves.length&&(b[spare].length!==0||!hasLegalMove(b))){
+ while(reverseMoves.length&&(b[spare].length!==0||isSolved(b)||!hasLegalMove(b))){
   const [a,d]=reverseMoves.pop();
   const item=b[d].pop();
   b[a].push(item);
  }
  // A valid scramble always retains at least one legal reverse move.
- if(!hasLegalMove(b)||b[spare].length!==0){
+ if(!hasLegalMove(b)||b[spare].length!==0||isSolved(b)){
   b=cloneBoard(goal);
   const a=0,d=1,item=b[a].pop(),other=b[d].pop();
   reverseMoves.push([a,spare]);b[spare].push(item);
