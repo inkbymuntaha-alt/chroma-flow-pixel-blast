@@ -44,9 +44,9 @@ const trackedScrambleFn = scrambleFn
 const generate = new Function('level', 'dailyMode', 'dailySeed', 'scrambleVariant', 'CAP', 'cloneBoard',
   seedFn + nl + typeFn + nl + trackedScrambleFn + nl + 'return scramble();');
 const cloneBoard = board => board.map(stack => stack.slice());
-const seen = new Set();
 let tested = 0;
 for (let level = 1; level <= 100; level++) {
+  const seen = new Set();
   const typeCount = Math.min(10, 3 + Math.floor((level - 1) / 4));
   for (let variation = 0; variation < 3; variation++) {
     const generated = generate(level, false, '', variation, 4, cloneBoard);
@@ -64,7 +64,7 @@ for (let level = 1; level <= 100; level++) {
     assert.ok(!board.slice(0, typeCount).every(stack => stack.length === 4 && stack.every(value => value === stack[0])),
       'Generated board must not already be solved at level ' + level);
     const key = JSON.stringify(board);
-    assert.ok(!seen.has(key), 'Seeded layouts should vary across tested mixes');
+    assert.ok(!seen.has(key), 'Seeded layouts should vary across mixes at level ' + level);
     seen.add(key);
     const solved = cloneBoard(board);
     for (const [source, destination] of generated.reverseMoves.slice().reverse()) {
