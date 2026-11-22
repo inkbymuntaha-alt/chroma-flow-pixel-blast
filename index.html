@@ -346,6 +346,19 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
  .app.playing .item{height:clamp(20px,2.7dvh,30px)!important;font-size:clamp(15px,4.2vw,21px)!important}
 }
 
+
+/* Fit exact shelf count (up to 11) into the Android play board. */
+@media (pointer:coarse) and (max-height:1100px){
+ .app.playing{height:100dvh!important;min-height:0!important;max-height:100dvh!important;overflow:hidden!important}
+ .app.playing .board-wrap{flex:1 1 0!important;height:0!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
+ .app.playing .shelves{flex:1 1 0!important;height:0!important;min-height:0!important;display:grid!important;grid-template-rows:repeat(var(--shelf-count,11),minmax(0,1fr))!important;grid-auto-rows:minmax(0,1fr)!important;align-content:stretch!important;gap:2px!important;overflow:hidden!important}
+ .app.playing .shelf{height:100%!important;min-height:0!important;max-height:none!important;padding:1px 3px!important;grid-template-columns:32px minmax(0,1fr)!important;gap:2px!important}
+ .app.playing .shelf-label{font-size:7px!important;line-height:1!important}
+ .app.playing .shelf-label span{font-size:11px!important;margin:0!important}
+ .app.playing .slots{gap:2px!important}
+ .app.playing .item{height:clamp(18px,2.4dvh,27px)!important;font-size:clamp(14px,3.8vw,20px)!important}
+ .app.playing .shelf-foot{font-size:6px!important}
+}
 </style>
 </head>
 <body>
@@ -603,7 +616,7 @@ function scramble(){
 }
 function newDay(){document.querySelector('.app')?.classList.add('playing');scrambleVariant=0;worldBonusPaid=!dailyMode&&worldPerkClaims.has(level);stacks=scramble();selected=-1;moves=0;history=[];busy=false;started=true;specialOrderDone=false;festivalBonusPaid=false;goldenBasketPaid=goldenBasketClaims.has(goldenBasketKey());orderProduct=dailyMode?((Number(dailySeed.replace(/-/g,''))||1)%typesForLevel()):((level*3+1)%typesForLevel());dailyTargetMoves=20+typesForLevel()*7;render();update();say(dailyMode?'Daily challenge: complete the customer order within '+dailyTargetMoves+' moves for bonus coins!':'Tap a shelf to pick up its top product. Match it with the same product or an empty shelf.');}
 function ensureShelfNodes(){
- const root=$('shelves');if(root.children.length===stacks.length)return root;
+ const root=$('shelves');root.style.setProperty('--shelf-count',String(stacks.length));if(root.children.length===stacks.length)return root;
  const fragment=document.createDocumentFragment();
  stacks.forEach((stack,i)=>{const b=document.createElement('button');b.type='button';b.className='shelf';b.dataset.shelf=String(i);const lab=document.createElement('span');lab.className='shelf-label';const slots=document.createElement('span');slots.className='slots';b.append(lab,slots);fragment.appendChild(b)});
  root.replaceChildren(fragment);return root;
