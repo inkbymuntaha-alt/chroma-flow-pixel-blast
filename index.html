@@ -624,8 +624,11 @@ function scramble(){
  // A valid scramble always retains at least one legal reverse move.
  if(!hasLegalMove(b)||b[spare].length!==0){
   b=cloneBoard(goal);
-  const a=0,d=spare,item=b[a].pop();b[d].push(item);
-  // Keep a single legal opening move if an exceptionally short board is requested.
+  const a=0,d=1,item=b[a].pop(),other=b[d].pop();
+  reverseMoves.push([a,spare]);b[spare].push(item);
+  reverseMoves.push([d,a]);b[a].push(other);
+  reverseMoves.push([spare,d]);b[d].push(b[spare].pop());
+  // A three-move cycle leaves the spare empty and a legal opening move.
  }
  return b;
 }
