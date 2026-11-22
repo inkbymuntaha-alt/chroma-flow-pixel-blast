@@ -39,7 +39,7 @@ const scrambleFn = extract(/function scramble\(\)\{[\s\S]*?\n\}/, 'scramble');
 const nl = String.fromCharCode(10);
 const trackedScrambleFn = scrambleFn
   .replace('function scramble(){', 'function scramble(){')
-  .replace('b[d].push(b[a].pop());', 'reverseMoves.push([a,d]);b[d].push(b[a].pop());')
+  
   .replace('return b;', 'return {board:b,reverseMoves};');
 const generate = new Function('level', 'dailyMode', 'dailySeed', 'scrambleVariant', 'CAP', 'cloneBoard',
   seedFn + nl + typeFn + nl + trackedScrambleFn + nl + 'return scramble();');
