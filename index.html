@@ -3,1298 +3,203 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#17120b">
-<link rel="manifest" href="./manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="icon" href="./icon.svg" type="image/svg+xml">
-<meta name="description" content="Nazeef Bazar Sort Stories — a cozy 2D market sorting puzzle. Sort goods, serve customers and grow your neighborhood bazaar.">
-<title>Nazeef Bazar Sort Stories</title>
+<meta name="theme-color" content="#173d35">
+<meta name="description" content="Dash through the bazaar, collect market orders and dodge obstacles in Nazeef Bazar: Market Rush.">
+<link rel="manifest" href="./manifest.webmanifest">
+<title>Nazeef Bazar: Market Rush</title>
 <style>
-:root{color-scheme:dark;--gold:#f2ce79;--gold2:#a9792d;--ink:#17130d;--cream:#f8edcf;--muted:#c5b58e;--panel:#282116;--line:#8e6b32}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(ellipse at 50% -10%,#564324 0,#211a10 42%,#0c0a07 100%);color:var(--cream);font-family:system-ui,-apple-system,Segoe UI,sans-serif;overscroll-behavior:none}
-body{min-height:100dvh;display:flex;justify-content:center;padding:env(safe-area-inset-top) 12px env(safe-area-inset-bottom)}
-button{font:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}
-.app{width:min(100%,500px);min-height:100dvh;display:flex;flex-direction:column;gap:10px;padding:12px 0 16px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:8px}.brand{font-size:clamp(19px,5.7vw,27px);font-weight:1000;line-height:.98;letter-spacing:-.6px;color:#ffe9b0;text-shadow:0 2px 16px #e6b85a35}.brand span{color:var(--gold)}.brand small{display:block;font-size:9px;letter-spacing:2.7px;color:#c5a86b;margin-top:6px}.levelpill{border:1px solid #b78d48;border-radius:14px;padding:7px 12px;text-align:center;background:linear-gradient(145deg,#33291a,#14100b);min-width:66px}.levelpill b{display:block;color:var(--gold);font-size:20px}.levelpill small{font-size:9px;color:var(--muted);letter-spacing:1px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{background:linear-gradient(145deg,#302719,#17120c);border:1px solid #8c6b35;border-radius:13px;text-align:center;padding:8px 5px;box-shadow:inset 0 1px #fff2}.stat b{display:block;color:var(--gold);font-size:19px}.stat small{font-size:9px;letter-spacing:1px;color:var(--muted)}
-.market{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #92703a;border-radius:15px;padding:8px 11px;background:linear-gradient(100deg,#342818,#17120c)}.market-scene{font-size:25px;letter-spacing:2px}.market-copy{min-width:0;flex:1}.market-copy b{display:block;font-size:12px;color:#ffe6a4}.market-copy small{font-size:10px;color:var(--muted)}.coins{white-space:nowrap;color:#ffdc82;font-weight:900;font-size:13px}
-.order{border:1px solid #8e6b32;border-radius:14px;padding:9px 11px;background:#20190f;display:flex;align-items:center;justify-content:space-between;gap:8px}.order b{font-size:12px;color:#ffe6a4}.order small{display:block;font-size:10px;color:var(--muted);margin-top:2px}.order strong{font-size:12px;color:var(--gold);white-space:nowrap}
-.progress{height:6px;background:#ffffff18;border-radius:9px;overflow:hidden;margin-top:-6px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#a8782d,#ffe49a);transition:width .2s}
-.board-wrap{border:1px solid #b18a47;border-radius:19px;padding:10px;background:linear-gradient(145deg,#342819,#17120d 70%);box-shadow:0 15px 32px #0009,inset 0 1px #fff2}.board-head{display:flex;justify-content:space-between;align-items:center;margin:0 2px 8px}.board-head b{font-size:12px;color:#f7dfaa}.board-head small{font-size:10px;color:#bda779}.shelves{display:grid;gap:8px}
-.shelf{width:100%;border:1px solid #80612e;border-radius:13px;background:linear-gradient(180deg,#4a3923,#2b2115);padding:7px 8px 8px;display:grid;grid-template-columns:54px 1fr;gap:7px;align-items:center;min-height:66px;box-shadow:inset 0 1px #fff2,0 4px 7px #0006;text-align:left;color:var(--cream);transition:border-color .12s,transform .12s,background .12s}
-.shelf:active{transform:scale(.99)}.shelf.selected{border:2px solid #ffe39a;background:linear-gradient(180deg,#69502a,#382817);box-shadow:0 0 0 2px #e8bb5a33,0 0 16px #e8bb5a33}.shelf.target{border-color:#8ee4a0}.shelf-label{font-size:10px;color:#e5c989;font-weight:900;line-height:1.2}.shelf-label span{display:block;font-size:18px;margin-bottom:2px}.slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;min-width:0}.item{height:43px;min-width:0;border-radius:9px;display:grid;place-items:center;font-size:clamp(19px,5.7vw,27px);background:linear-gradient(145deg,#59462d,#21190f);border:1px solid #b08a4d88;box-shadow:inset 0 2px 4px #fff2,0 3px 5px #0007;position:relative}.item.top-item{border-color:#ffe29a;filter:brightness(1.18);box-shadow:0 0 10px #e8bb5a44,inset 0 2px 4px #fff3}.item.empty{border:1px dashed #9a7845;background:#17120d66;box-shadow:none}.item .tiny{position:absolute;right:2px;bottom:0;font-size:7px;color:#ffe5a5}
-.shelf-foot{grid-column:2;font-size:9px;color:#bda779;text-align:right;margin-top:-4px}
-.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.tool{border:1px solid #a47b38;border-radius:12px;padding:11px 5px;background:linear-gradient(145deg,#715026,#382710);color:#ffedc2;font-size:11px;font-weight:900;box-shadow:inset 0 1px #fff3,0 4px 8px #0007}.tool:active{filter:brightness(1.2);transform:translateY(1px)}.tool:disabled{opacity:.4;cursor:not-allowed}
-.message{text-align:center;color:#ddc99e;font-size:11px;line-height:1.45;min-height:17px}.footer{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}.footer button{border:1px solid #76592e;border-radius:10px;background:#ffffff0c;color:#d9c59a;padding:8px 10px;font-size:10px;font-weight:800}
-#voiceTest{border-color:#bd9858;color:#ffe4a3}.voice-speaking{animation:voicePulse .7s ease-in-out infinite alternate}@keyframes voicePulse{to{filter:brightness(1.5);box-shadow:0 0 15px #f4d58d88}}
-.toast{position:fixed;z-index:20;top:12%;left:50%;transform:translate(-50%,-8px);opacity:0;pointer-events:none;border-radius:30px;background:linear-gradient(100deg,#ffefbd,#c18e3c);color:#241707;font-weight:1000;padding:10px 17px;box-shadow:0 8px 25px #000b;transition:.2s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
-.overlay{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:18px;background:#090704df;backdrop-filter:blur(9px)}.hidden{display:none!important}.panel{width:min(100%,420px);max-height:90dvh;overflow:auto;border:1px solid #c49a50;border-radius:23px;padding:23px 19px;text-align:center;background:linear-gradient(145deg,#382b1a,#17120c 75%);box-shadow:0 24px 70px #000d,inset 0 1px #fff3}.hero{font-size:49px}.panel h1{font-size:clamp(25px,7vw,34px);line-height:1.05;color:#ffedc2;margin:8px 0}.panel h1 span{color:var(--gold)}.panel p{font-size:13px;line-height:1.55;color:#d8c7a4}.primary{border:1px solid #ffe9ac;border-radius:14px;padding:14px 22px;background:linear-gradient(100deg,#ffedb3,#c18c35);color:#241707;font-weight:1000;font-size:14px;min-width:190px;box-shadow:0 5px 17px #0008}.secondary{border:1px solid #a47b38;border-radius:12px;padding:10px 16px;background:#ffffff0e;color:#f1dfb7;font-weight:800;margin:7px}.steps{display:grid;gap:8px;text-align:left;margin:15px 0}.step{display:flex;gap:10px;align-items:center;padding:9px;border:1px solid #9a763d66;border-radius:12px;background:#ffffff09;color:#e9d9b5;font-size:12px}.step b{width:27px;height:27px;flex:0 0 27px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#ffe7a1,#b9822c);color:#251707}.level-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;max-height:40vh;overflow:auto;margin:14px 0}.level-cell{border:1px solid #a47b38;border-radius:10px;min-height:40px;background:#21190f;color:#ffdf91;font-weight:900}.level-cell:disabled{opacity:.25}.level-cell.current{background:linear-gradient(145deg,#ffe7a1,#b9822c);color:#241707}
-.celebrate{position:fixed;inset:0;z-index:25;pointer-events:none;overflow:hidden}.spark{position:absolute;font-size:24px;animation:burst 1.3s ease-out forwards}@keyframes burst{0%{transform:translateY(15vh) scale(.2) rotate(0);opacity:0}20%{opacity:1}100%{transform:translateY(-75vh) scale(1.4) rotate(280deg);opacity:0}}
-@media(max-height:740px){.app{gap:7px;padding-top:7px}.item{height:37px}.shelf{min-height:58px;padding:5px 7px}.board-wrap{padding:8px}.market{padding:6px 9px}}
-/* Premium interaction polish */
-.shelf{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;position:relative;overflow:hidden;min-height:70px;border:1px solid #a9854d;background:linear-gradient(115deg,#59452b 0%,#392a19 48%,#241a10 100%);box-shadow:inset 0 1px 0 #fff3,inset 0 -5px 12px #100b07aa,0 5px 12px #0007;transition:transform .16s cubic-bezier(.2,.8,.2,1),border-color .16s,box-shadow .16s,background .16s}
-.shelf:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(#ffe5a0,#9c6827);opacity:.65}
-.shelf:active{transform:scale(.975);filter:brightness(1.12)}
-.shelf.selected{border:2px solid #ffe39a;background:linear-gradient(115deg,#80602f,#4b351c);box-shadow:0 0 0 3px #f6cf7140,0 0 23px #f6cf7160,inset 0 1px #fff6;animation:chosen .24s ease-out}
-.shelf.target{border-color:#a5f1b0;box-shadow:0 0 0 2px #8ee4a033,0 0 14px #8ee4a044}
-.item{transition:transform .16s cubic-bezier(.2,.8,.2,1),filter .16s,box-shadow .16s;background:linear-gradient(145deg,#705638,#302113);box-shadow:inset 0 2px 5px #fff3,0 4px 7px #0008}
-.item.top-item{transform:translateY(-2px) scale(1.035);filter:brightness(1.24) drop-shadow(0 2px 4px #0008);border-color:#ffe29a}
-.item.empty{background:linear-gradient(145deg,#21180f,#17110b);border-color:#b18b50aa}
-.tool,.primary,.secondary,.footer button{transition:transform .14s ease,filter .14s ease,box-shadow .14s ease}
-.tool:active,.primary:active,.secondary:active,.footer button:active{transform:translateY(2px) scale(.98);filter:brightness(1.2)}
-button:focus-visible{outline:3px solid #ffe39a;outline-offset:3px}
-@keyframes chosen{0%{transform:scale(.985)}100%{transform:scale(1)}}
-@keyframes shelf-arrive{0%{transform:scale(.96);filter:brightness(1.5)}100%{transform:scale(1);filter:brightness(1)}}
-.shelf.just-moved{animation:shelf-arrive .28s cubic-bezier(.2,.8,.2,1)}.item.arriving{animation:item-arrive .32s cubic-bezier(.2,.8,.2,1)}@keyframes item-arrive{0%{transform:translateY(-15px) scale(.65) rotate(-12deg);opacity:.35;filter:brightness(1.8)}65%{transform:translateY(2px) scale(1.12) rotate(4deg);opacity:1}100%{transform:translateY(-2px) scale(1.035) rotate(0);filter:brightness(1.24)}}
-@media(hover:hover){.shelf:hover{border-color:#e4c17c;filter:brightness(1.08)}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
-@media(min-height:850px){.app{justify-content:center}.item{height:47px}.shelf{min-height:72px}}
-
-/* Illustrated-realism art direction: warm cinematic bazaar, tactile wood and dimensional produce */
-:root{--gold:#f4d58d;--gold2:#a9792d;--cream:#fff3d8;--muted:#d1bd98;--panel:#2b2015;--line:#a9824b}
-html,body{background-color:#17100b;background-image:radial-gradient(ellipse at 50% 0%,#80603a 0%,#49301d 24%,#24180f 58%,#100b08 100%);background-attachment:fixed}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;background-image:repeating-linear-gradient(0deg,transparent 0 5px,#e6c18a 6px,transparent 7px 13px);mix-blend-mode:soft-light}
-.app{position:relative;isolation:isolate}
-.brand{text-shadow:0 2px 2px #120b05,0 0 18px #f1c56a55;letter-spacing:.2px}
-.levelpill,.stat,.market,.order,.board-wrap,.panel{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.market{position:relative;overflow:hidden;background:linear-gradient(115deg,#70502d 0%,#3b2919 42%,#24180f 100%);box-shadow:inset 0 1px #fff5,inset 0 -5px 12px #120b0788,0 7px 18px #0006}
-.market:after,.board-wrap:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,#fff2,transparent 28% 72%,#0002)}
-.market-scene{filter:drop-shadow(0 3px 3px #100904);text-shadow:0 2px 5px #0008}
-.board-wrap{position:relative;overflow:hidden;border:1px solid #d0a45f;background:linear-gradient(145deg,#6b4b2a 0%,#392719 17%,#21170f 76%,#130e09 100%);box-shadow:0 18px 35px #000a,inset 0 2px 0 #fff4,inset 0 -8px 18px #0b0705}
-.board-head{position:relative;z-index:1}
-.shelf{border:1px solid #c19557;background:linear-gradient(110deg,#8a6338 0%,#684727 17%,#49301c 48%,#332113 100%);box-shadow:inset 0 2px 0 #fff5,inset 0 -7px 12px #1b1009aa,0 6px 10px #0008,0 1px 0 #e5bd7a}
-.shelf:before{width:7px;opacity:.9;background:linear-gradient(90deg,#d9ad69,#8b5728,#f1d092)}
-.shelf:after{content:"";position:absolute;left:8px;right:8px;top:5px;height:1px;background:#fff4;pointer-events:none}
-.shelf-label{color:#f8dfae;text-shadow:0 1px 2px #160d06}
-.slots{position:relative;z-index:1}
-.item{border:1px solid #c69a5c;background:radial-gradient(ellipse at 30% 18%,#9b7950 0%,#63472b 42%,#2a1b10 100%);box-shadow:inset 0 2px 3px #fff5,inset 0 -4px 7px #140b06aa,0 4px 7px #0009;text-shadow:0 3px 4px #100804;filter:drop-shadow(0 1px 1px #0008)}
-.item.top-item{background:radial-gradient(ellipse at 30% 12%,#c49a5b 0%,#79552f 45%,#342012 100%);box-shadow:inset 0 2px 4px #fff8,0 0 12px #f5d28a66,0 4px 8px #0009}
-.item.empty{background:linear-gradient(145deg,#2c1d12,#160f0a);border-color:#b38a53}
-.stat{background:linear-gradient(145deg,#57402a,#26190f);border-color:#b68a4b;box-shadow:inset 0 1px #fff5,inset 0 -4px 9px #120b07,0 4px 10px #0005}
-.order{background:linear-gradient(110deg,#4d351f,#24170e);border-color:#b68a4b;box-shadow:inset 0 1px #fff3,0 5px 12px #0005}
-.tool,.primary,.secondary,.footer button{box-shadow:inset 0 1px #fff5,inset 0 -3px 7px #170d07aa,0 5px 10px #0007}
-.panel{background:radial-gradient(ellipse at 50% 0%,#76522f 0%,#3d2b1b 36%,#1b120c 100%);border-color:#e0b66d;box-shadow:0 25px 75px #000e,inset 0 1px #fff6}
-.hero{filter:drop-shadow(0 5px 4px #120904)}
-.toast{box-shadow:0 8px 28px #000c,inset 0 1px #fff8}
-@media(prefers-reduced-motion:no-preference){.item.top-item{animation:produce-breathe 2.8s ease-in-out infinite alternate}.market-scene{animation:market-float 3.4s ease-in-out infinite alternate}}
-@keyframes produce-breathe{from{transform:translateY(-1px) scale(1.025)}to{transform:translateY(-3px) scale(1.055)}}
-@keyframes market-float{from{transform:translateY(0)}to{transform:translateY(-2px)}}
-
-.produce-art{width:100%;height:100%;max-width:42px;max-height:42px;overflow:visible;filter:drop-shadow(0 3px 2px #130a05)}.item.top-item .produce-art{transform:scale(1.08)}.item .tiny{z-index:2;background:#24170d99;border-radius:4px;padding:0 2px}.shelf .item{overflow:visible}\n.shelf.golden-basket{border-color:#ffe08a!important;background:linear-gradient(115deg,#9a702d,#5a3b19 58%,#33200f)!important;box-shadow:0 0 0 2px #ffd86a55,0 0 16px #ffd86a44,inset 0 1px #fff7!important}.shelf.golden-basket .shelf-label{color:#ffe9a5!important}.golden-tag{display:block;color:#fff0b3;font-size:8px;font-weight:1000;letter-spacing:.6px;margin-top:2px;text-shadow:0 1px 2px #000}
- /* Per-level colour identity: a fresh hue and coordinated bazaar palette for every day. */
-.app{--level-h:38;--level-accent:hsl(var(--level-h) 78% 70%);--level-deep:hsl(var(--level-h) 42% 22%);--level-mid:hsl(var(--level-h) 38% 31%);--level-glow:hsl(var(--level-h) 90% 62% / .22)}
-.levelpill{border-color:var(--level-accent)!important;box-shadow:0 0 14px var(--level-glow)}
-.brand span,.board-head b{color:var(--level-accent)}
-.market,.order,.board-wrap{border-color:hsl(var(--level-h) 48% 48% / .75)!important}
-.market{background:linear-gradient(125deg,var(--level-deep),#211a10 78%)}
-.order{background:linear-gradient(115deg,var(--level-mid),#241c12 85%)}
-.board-wrap{background:linear-gradient(155deg,var(--level-deep),#21190f 72%)}
-.progress{background:hsl(var(--level-h) 28% 16%)}
-.progress i{background:linear-gradient(90deg,hsl(var(--level-h) 82% 48%),var(--level-accent))}
-.shelf{border-color:hsl(var(--level-h) 45% 48%);background:linear-gradient(180deg,var(--level-mid),var(--level-deep));box-shadow:inset 0 1px #fff2,0 4px 7px #0006,0 0 0 1px var(--level-glow)}
-.shelf-label{color:var(--level-accent)}
-.shelf.selected{border-color:var(--level-accent);background:linear-gradient(180deg,hsl(var(--level-h) 48% 39%),hsl(var(--level-h) 44% 24%));box-shadow:0 0 0 2px var(--level-glow),0 0 18px var(--level-glow)}
-.shelf.target{border-color:#8ee4a0}
-.tool:focus-visible,.footer button:focus-visible{outline:2px solid var(--level-accent);outline-offset:2px}
-/* Level-specific scenery and atmospheric lighting */
-.app{--scene-h:38;position:relative}
-.app:before{content:"";position:fixed;z-index:-1;pointer-events:none;inset:0;background:radial-gradient(ellipse at 50% 12%,hsl(var(--scene-h) 68% 48% / .20),transparent 52%),radial-gradient(ellipse at 10% 70%,hsl(calc(var(--scene-h) + 65) 65% 42% / .10),transparent 45%);transition:background .5s ease}
-.market{background:linear-gradient(115deg,hsl(var(--scene-h) 42% 25%),hsl(var(--scene-h) 32% 17%) 55%,#21170f)!important;transition:background .45s ease,border-color .45s ease}
-.market-scene{font-size:clamp(22px,6vw,29px);min-width:86px;text-align:center;line-height:1.3;white-space:normal}
-.market-copy small{display:block;line-height:1.35}
-.board-wrap{transition:background .45s ease,border-color .45s ease}
-
-/* Living bazaar: lightweight animated market life */
-.living-bazaar{position:relative;overflow:hidden;border:1px solid #94713b;border-radius:15px;padding:9px 10px;background:linear-gradient(135deg,#342819,#21180f 70%);box-shadow:inset 0 1px #fff2}
-.stall-dress{display:flex;align-items:center;justify-content:space-between;gap:5px;padding:0 3px 8px;border-bottom:1px solid #a17a3b55;margin-bottom:8px}
-.stall-dress span{font-size:clamp(17px,5vw,23px);filter:drop-shadow(0 2px 2px #0008);animation:stall-sway 3.8s ease-in-out infinite;transform-origin:50% 100%}
-.stall-dress span:nth-child(2){animation-delay:-1.1s}.stall-dress span:nth-child(3){animation-delay:-2.2s}.stall-dress span:nth-child(4){animation-delay:-.6s}
-.customer-row{display:flex;align-items:center;gap:9px;min-height:49px;position:relative;z-index:1}
-.customer-queue{display:flex;align-items:center;gap:3px;flex:none}
-.customer{width:34px;height:37px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,#6a4b2c,#342318);border:1px solid #bd9450;font-size:23px;box-shadow:0 3px 5px #0006;animation:customer-bob 2.4s ease-in-out infinite}
-.customer:nth-child(2){animation-delay:-.8s;opacity:.88}.customer:nth-child(3){animation-delay:-1.5s;opacity:.72}
-.customer-copy{min-width:0;flex:1}.customer-copy b{display:block;color:#ffe5a6;font-size:11px;letter-spacing:.3px}.customer-copy small{display:block;color:#d5c29b;font-size:10px;line-height:1.3;margin-top:2px}
-.customer-mood{font-size:20px;flex:none;animation:mood-pop .45s ease-out}
-.weather-particle{position:absolute;pointer-events:none;opacity:.65;animation:petal-drift 8s linear infinite;top:8px;right:13%;font-size:13px}
-.weather-particle.p2{right:38%;top:24px;animation-delay:-3.5s}.weather-particle.p3{right:68%;top:4px;animation-delay:-5.7s}
-.living-bazaar[data-weather="rain"] .weather-particle{animation-name:rain-drop;animation-duration:1.5s}
-.living-bazaar[data-weather="night"]{background:linear-gradient(135deg,#302746,#191626 70%);border-color:#9880bd}
-.living-bazaar[data-weather="sun"] .stall-dress span:nth-child(3){filter:drop-shadow(0 0 7px #ffd66b)}
-@keyframes customer-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-@keyframes stall-sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
-@keyframes mood-pop{0%{transform:scale(.65) rotate(-12deg)}75%{transform:scale(1.18)}100%{transform:scale(1)}}
-@keyframes petal-drift{0%{transform:translate(0,-8px) rotate(0);opacity:0}15%{opacity:.7}100%{transform:translate(-44px,58px) rotate(180deg);opacity:0}}
-@keyframes rain-drop{0%{transform:translateY(-8px);opacity:0}30%{opacity:.7}100%{transform:translateY(48px);opacity:0}}
-@media(prefers-reduced-motion:reduce){.stall-dress span,.customer,.customer-mood,.weather-particle{animation:none!important}}
-
-
-/* Missions, daily challenge and newly unlocked produce */
-.daily-card{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;border:1px solid #9d793d;border-radius:13px;background:linear-gradient(105deg,#342819,#1b150d);box-shadow:inset 0 1px #fff2}
-.daily-copy{min-width:0}.daily-copy b{display:block;color:#ffe4a0;font-size:11px;letter-spacing:.5px}.daily-copy small{display:block;color:#cdb98e;font-size:10px;line-height:1.3;margin-top:2px}
-.daily-card button{flex:none;border:1px solid #e2bb68;border-radius:10px;padding:9px 11px;background:linear-gradient(145deg,#a87932,#65431d);color:#fff0c5;font-size:10px;font-weight:1000;box-shadow:inset 0 1px #fff4}
-.daily-card button:disabled{opacity:.42;filter:grayscale(.7)}
-.order strong{max-width:46%;text-align:right;white-space:normal}
-.mission-flash{animation:mission-flash .55s ease-out}
-@keyframes mission-flash{0%{box-shadow:0 0 0 0 #ffe08b99}100%{box-shadow:0 0 0 12px #ffe08b00}}
-@media(max-width:370px){.daily-card{padding:8px}.daily-card button{padding:8px;font-size:9px}.daily-copy small{font-size:9px}}
-
-
-/* Festival routes, collection album and chapter map */
-.festival-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}
-.festival-choice{border:1px solid #98733a;border-radius:13px;padding:11px 8px;background:linear-gradient(145deg,#382919,#21170d);color:#f6dfb1;font-weight:900;font-size:12px;min-height:66px}
-.festival-choice span{display:block;font-size:22px;margin-bottom:4px}
-.festival-choice.active{border:2px solid #ffe08c;background:linear-gradient(145deg,#755022,#3a2915);box-shadow:0 0 14px #f5c96b44}
-.album-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}
-.album-item{border:1px solid #8e6b32;border-radius:13px;padding:11px 8px;background:#21190f;color:#f6dfb1}
-.album-item .art{font-size:27px}.album-item b{display:block;font-size:11px;margin:4px 0}.album-item small{display:block;color:#cdb98e;font-size:10px;min-height:25px}
-.album-item button{margin-top:7px;border:1px solid #c49a50;border-radius:9px;padding:7px 9px;background:#745025;color:#fff0c5;font-weight:900;font-size:10px}
-.album-item button:disabled{opacity:.45}
-.chapter-label{grid-column:1/-1;text-align:left;color:#f4d995;font-size:11px;font-weight:1000;letter-spacing:.7px;padding:8px 3px 2px;border-bottom:1px solid #94713b66}
-.festival-banner{font-size:10px;color:#ffe5a2;text-align:center;letter-spacing:.6px;margin-top:3px}
-.living-bazaar[data-festival="diwali"]{background:linear-gradient(135deg,#493019,#24140c 75%)}
-.living-bazaar[data-festival="holi"]{background:linear-gradient(135deg,#452344,#1f172e 75%)}
-.living-bazaar[data-festival="eid"]{background:linear-gradient(135deg,#173e3b,#14221e 75%)}
-.living-bazaar[data-festival="monsoon"]{background:linear-gradient(135deg,#1d3949,#14232b 75%)}
-@media(max-width:360px){.festival-choice{font-size:11px;min-height:60px;padding:8px 5px}}
-
-
-/* Player profile, progress and achievement dashboard */
-.profile-card{border:1px solid #a9824b;border-radius:15px;padding:12px;background:linear-gradient(120deg,#46331f,#21170e);display:flex;align-items:center;gap:10px;box-shadow:inset 0 1px #fff2}
-.profile-avatar{width:45px;height:45px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,#ffe7a1,#a9782e);font-size:27px;flex:0 0 45px}
-.profile-copy{min-width:0;flex:1}.profile-copy b{display:block;color:#ffe6a4;font-size:12px}.profile-copy small{color:#cbb68e;font-size:10px}
-.profile-open{border:1px solid #c49a50;border-radius:10px;background:#765329;color:#fff0c8;padding:8px 10px;font-weight:900;font-size:10px}
-.profile-fields{display:grid;gap:9px;text-align:left;margin:12px 0}.profile-fields label{font-size:11px;color:#e8d5ad}.profile-fields input{width:100%;margin-top:5px;border:1px solid #a47b38;border-radius:10px;background:#17120c;color:#fff0c8;padding:11px;font:inherit}
-.avatar-choices{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:7px}.avatar-choice{border:1px solid #8d6b3a;border-radius:10px;background:#241a10;padding:8px 2px;font-size:22px}.avatar-choice.active{background:#725027;border:2px solid #ffe39a}
-.profile-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0}.profile-metric{border:1px solid #8d6b3a;border-radius:11px;padding:10px;background:#ffffff09}.profile-metric b{display:block;color:#ffdf91;font-size:20px}.profile-metric small{color:#cbb68e;font-size:9px;letter-spacing:.6px}
-.achievement-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;text-align:left;margin:12px 0}.achievement{border:1px solid #8d6b3a;border-radius:11px;padding:9px;background:#ffffff09;min-width:0}.achievement.locked{opacity:.4;filter:grayscale(1)}.achievement span{font-size:22px;display:block}.achievement b{font-size:10px;color:#ffe5a8;display:block;margin:3px 0}.achievement small{font-size:9px;color:#cbb68e;line-height:1.3;display:block}
-.profile-progress{height:7px;border-radius:8px;background:#ffffff18;overflow:hidden;margin:8px 0}.profile-progress i{display:block;height:100%;background:linear-gradient(90deg,#a8782d,#ffe49a)}
-.profile-section-title{text-align:left;color:#f4d58d;font-size:12px;letter-spacing:1px;margin:14px 0 5px}
-@media(max-width:360px){.achievement-list{gap:5px}.achievement{padding:7px}}
-/* Original synthesized market soundtrack controls */
-#music{border-color:#b28b48;color:#ffe4a1}
-#music.music-muted{opacity:.62;color:#c5b58f}
-.audio-note{font-size:9px;color:#bda779;text-align:center;margin-top:-2px}
-
-.backup-tools,.cloud-actions{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}.backup-tools .secondary,.cloud-actions .secondary{flex:1;min-width:125px;margin:3px;font-size:10px}.backup-note{font-size:10px!important;color:#d6bd8e!important}.cloud-box{display:grid;gap:7px;text-align:left;border:1px solid #a9824b;border-radius:14px;padding:12px;background:#120d08aa;margin:8px 0 14px}.cloud-box>b{color:#ffe2a0;font-size:12px}.cloud-box input{width:100%;min-width:0;border:1px solid #92703f;border-radius:9px;padding:11px;background:#170f09;color:#fff0ce;font:inherit;font-size:12px}.cloud-box input::placeholder{color:#b8a27e}.cloud-box>small{color:#d4c19b;font-size:10px;line-height:1.5}.cloud-guide{border-top:1px solid #80633c;padding-top:8px;color:#f0d9a8;font-size:11px}.cloud-guide summary{cursor:pointer;font-weight:900}.cloud-guide ol{padding-left:19px;line-height:1.5}.cloud-guide pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0b0906;padding:9px;border-radius:8px;color:#d9e8bd;font-size:9px}.cloud-guide small{display:block;color:#cdbb99;line-height:1.5}
-/* Market makeover and Fruit Dash mini-game */
-.market-hub-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.market-hub-actions button{border:1px solid #b78b48;border-radius:12px;padding:11px 7px;background:linear-gradient(145deg,#74502a,#332111);color:#ffedc2;font-size:11px;font-weight:1000;box-shadow:inset 0 1px #fff4,0 4px 9px #0007}
-.market-upgrade-list{display:grid;gap:8px;margin:14px 0;text-align:left}
-.upgrade-card{display:grid;grid-template-columns:43px 1fr auto;gap:8px;align-items:center;padding:10px;border:1px solid #9d793f;border-radius:12px;background:linear-gradient(120deg,#46321e,#21170f)}
-.upgrade-card .upgrade-icon{font-size:28px;text-align:center}.upgrade-card b{display:block;color:#ffe6a6;font-size:11px}.upgrade-card small{display:block;color:#cdb98e;font-size:9px;line-height:1.35;margin-top:3px}
-.upgrade-card button{border:1px solid #e0ba6c;border-radius:9px;padding:8px 9px;background:linear-gradient(145deg,#a87932,#68451d);color:#fff0c5;font-size:10px;font-weight:1000;white-space:nowrap}.upgrade-card button:disabled{opacity:.4}
-.upgrade-level{color:#f4d58d;font-size:9px;font-weight:900;letter-spacing:.5px}
-.fruit-scorebar{display:flex;justify-content:space-around;gap:8px;margin:12px 0;padding:10px;border:1px solid #99713a;border-radius:12px;background:#1c140c}.fruit-scorebar b{display:block;color:#ffdf91;font-size:20px}.fruit-scorebar small{color:#cbb68e;font-size:9px}
-.fruit-lanes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
-.fruit-lane{min-height:130px;border:1px solid #a77c3b;border-radius:14px;background:linear-gradient(180deg,#624326,#25190f);color:#ffe8b3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;box-shadow:inset 0 1px #fff4,0 5px 10px #0007}
-.fruit-lane .lane-fruit{font-size:clamp(32px,9vw,46px);min-height:48px;filter:drop-shadow(0 4px 3px #0008)}
-.fruit-lane small{font-size:9px;letter-spacing:1px;color:#e3c895}.fruit-lane.active{border:2px solid #ffe49a;box-shadow:0 0 17px #f6cf7166,inset 0 1px #fff6;transform:translateY(-3px)}
-.fruit-lane.rotten{border-color:#ef927b;background:linear-gradient(180deg,#69352a,#25130f)}
-.fruit-instructions{font-size:11px!important;color:#e0cca5!important}
-.market-upgraded .stall-dress{border-bottom-color:#f3d18a}.market-upgraded[data-stall="1"] .stall-dress span:first-child{filter:drop-shadow(0 0 4px #dca45a)}
-.market-upgraded[data-stall="2"] .stall-dress{background:linear-gradient(90deg,#7b4e2a55,#d3a75b22);border-radius:10px}
-.market-upgraded[data-stall="3"] .stall-dress{background:linear-gradient(90deg,#a8753b66,#e5c17855);box-shadow:0 0 15px #efc46c33}
-.market-upgraded[data-awning="1"]{border-top:3px solid #c57d42}.market-upgraded[data-awning="2"]{border-top:5px solid #dba64e;background-image:repeating-linear-gradient(90deg,#6c332e33 0 18px,#d7a24b33 18px 36px),linear-gradient(135deg,#342819,#21180f 70%)}
-.market-upgraded[data-awning="3"]{border-top:6px solid #e6c16c;background-image:repeating-linear-gradient(90deg,#9b3e3938 0 14px,#e4b95b44 14px 28px),linear-gradient(135deg,#493019,#21180f 70%)}
-.market-upgraded[data-path="1"]{box-shadow:inset 0 -5px 0 #b48a4a55}.market-upgraded[data-path="2"]{box-shadow:inset 0 -8px 0 #c7a36a77}.market-upgraded[data-path="3"]{box-shadow:inset 0 -11px 0 #d9c08b99,0 0 18px #e4c17c22}
-.market-upgraded[data-lights="1"] .stall-dress span{filter:drop-shadow(0 0 5px #ffd76d)}.market-upgraded[data-lights="2"] .stall-dress span{filter:drop-shadow(0 0 9px #ffca52)}.market-upgraded[data-lights="3"] .stall-dress span{filter:drop-shadow(0 0 13px #ffe18a)}
-@media(max-width:360px){.fruit-lane{min-height:112px}.upgrade-card{grid-template-columns:34px 1fr auto;padding:8px}.upgrade-card button{padding:7px 6px}}
-
-/* Offline-ready install experience and seven-day login calendar */
-.login-reward{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:9px 11px;border:1px solid #b28a49;border-radius:13px;background:linear-gradient(105deg,#4b351f,#21170f);box-shadow:inset 0 1px #fff2}
-.login-reward b{display:block;color:#ffe4a1;font-size:11px}.login-reward small{display:block;color:#d0bc94;font-size:9px;margin-top:3px;line-height:1.35}
-.login-reward button{flex:none;border:1px solid #f0d18a;border-radius:10px;padding:9px 11px;background:linear-gradient(145deg,#ffe7a1,#a9782e);color:#241707;font-weight:1000;font-size:10px}
-.login-reward button:disabled{opacity:.45;filter:grayscale(.6)}
-.login-calendar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:14px 0}
-.login-day{border:1px solid #98723b;border-radius:11px;padding:9px 3px;background:#21170f;color:#f5dfb3;text-align:center}
-.login-day span{display:block;font-size:22px}.login-day b{display:block;color:#ffdf91;font-size:11px;margin:3px 0}.login-day small{display:block;color:#cbb68e;font-size:8px}
-.login-day.claimed{background:linear-gradient(145deg,#75532a,#382614);border-color:#ffe09a}.login-day.today{outline:2px solid #ffe39a;outline-offset:1px}
-.install-note{font-size:10px!important;color:#d6c39c!important;line-height:1.5!important}
-.customer-personality{color:#ffe3a0!important}
-
-/* Chapter milestones and Rainbow Basket event */
-.shelf.rainbow-basket{border-color:#e7b7ff!important;background:linear-gradient(115deg,#754d8e,#3d285d 58%,#241536)!important;box-shadow:0 0 0 2px #d99cff55,0 0 18px #c77cff55,inset 0 1px #fff8!important}
-.shelf.rainbow-basket .shelf-label{color:#f1d2ff!important}
-.shelf.rainbow-basket .golden-tag{color:#f6dfff!important}
-/* Instant shelf response: subtle feedback without blocking subsequent moves. */
-.shelf.just-moved,.item.arriving{animation:none!important}.shelf{transition:border-color .08s,background .08s,box-shadow .08s!important}.item{transition:filter .08s,box-shadow .08s!important}
-
-/* Android performance mode: keep input and board updates ahead of decoration. */
-@media (pointer:coarse){
- /* Prioritise touch latency and low-end Android GPU fill-rate over decorative effects. */
- .app,.board-wrap,.market,.living-bazaar,.panel{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
- .app:before,body:before{display:none!important}
- .item.top-item,.market-scene,.stall-dress span,.customer,.weather-particle,.spark{animation:none!important}
- .shelf,.item,.tool,.primary,.secondary,.footer button{transition:none!important}
- .shelf:active{transform:none!important;filter:none!important}
- .board-wrap,.shelf,.item,.tool,.stat,.market,.order,.living-bazaar,.fruit-lane{box-shadow:none!important}
- .shelf{background:#302316!important}
- .item{background:#30271c!important}
- .item.top-item{filter:none!important}
- .market,.order,.stat{background:#21180f!important}
- .market-upgraded .stall-dress span,.stall-dress span{filter:none!important}
- .progress i{transition:none!important}
-}
-
-/* Smart touch polish: fast visual guidance with short, non-blocking feedback. */
-.shelf.invalid-move{animation:invalid-nudge .28s ease-out;border-color:#ff9a82!important;box-shadow:0 0 0 2px #ff806655,0 0 15px #ff806644!important}
-@keyframes invalid-nudge{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
-.shelf.just-moved{animation:shelf-arrive .24s ease-out}
-.item.arriving{animation:item-arrive .28s cubic-bezier(.2,.8,.2,1)}
-@media(prefers-reduced-motion:reduce){.shelf.invalid-move,.shelf.just-moved,.item.arriving{animation:none!important}}
-
-.star-result{display:flex;justify-content:center;gap:12px;margin:8px auto 0;font-size:clamp(38px,10vw,56px);line-height:1.1;letter-spacing:3px;color:#e9a928;text-shadow:0 4px 0 #8b5815,0 0 22px #ffd66a;min-height:58px}
-.star-result span{display:inline-block;opacity:.22;transform:scale(.65)}
-.star-result span.earned{opacity:1;animation:star-pop .48s cubic-bezier(.2,1.7,.4,1) both}
-@keyframes star-pop{0%{transform:scale(.2) rotate(-35deg)}75%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
-.star-caption,.brief-kicker{font-size:11px;font-weight:900;letter-spacing:2px;color:#b77b2a;margin:3px 0 12px}
-.brief-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:16px 0}
-.brief-stats>div{background:rgba(160,105,42,.11);border:1px solid rgba(160,105,42,.2);border-radius:14px;padding:12px 5px}
-.brief-stats b{display:block;font-size:24px;color:#85551d}
-.brief-stats small{display:block;font-size:9px;font-weight:900;letter-spacing:.7px;color:#886d4c;margin-top:4px}
-.brief-challenge{background:rgba(232,178,73,.15);border:1px solid rgba(190,130,40,.25);border-radius:13px;padding:12px;margin:8px 0 16px;font-size:13px;font-weight:700;color:#79531e}
-#briefBack{margin-top:8px}
-.level-cell{position:relative}
-.level-cell .map-stars{display:block;font-size:10px;letter-spacing:0;color:#d79a24;line-height:1.1;margin-top:2px}
-.level-cell.current{outline:3px solid #e4ae43;outline-offset:2px}
-@media(prefers-reduced-motion:reduce){.star-result span.earned{animation:none}}
-
-.world-heading,.map-level-heading{font-size:11px;font-weight:1000;letter-spacing:1.5px;color:#d6a74f;text-align:left;margin:14px 0 8px}
-.world-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;text-align:left}
-.world-card{position:relative;display:grid;grid-template-columns:42px 1fr;align-items:center;gap:8px;padding:10px;border:1px solid #76572b;border-radius:13px;background:linear-gradient(145deg,#3a2b1a,#21180f);color:#f8e6bd;text-align:left;min-width:0}
-.world-card.current{border:2px solid #f1c56b;box-shadow:0 0 0 2px #e7b65b24,0 0 16px #e7b65b22}
-.world-card.locked{opacity:.48;filter:saturate(.45)}
-.world-card.cleared{border-color:#83b889}
-.world-art{font-size:29px;text-align:center}
-.world-copy{min-width:0}.world-copy b{display:block;font-size:11px;line-height:1.2}.world-copy small{display:block;color:#c7ae80;font-size:9px;margin-top:3px;line-height:1.25}
-.world-state{position:absolute;right:6px;top:5px;font-size:9px;color:#f1c56b;font-weight:900}
-.world-progress{font-size:11px;color:#d6c39d;background:#ffffff0b;border-radius:10px;padding:9px;margin-top:9px}
-.world-card:not(.locked){cursor:pointer}
-@media(max-width:360px){.world-grid{grid-template-columns:1fr}}
-.produce-emoji{display:grid;place-items:center;width:100%;height:100%;font-size:clamp(22px,6vw,31px);filter:drop-shadow(0 3px 2px #0005)}
-
-/* Compact phone playfield: fit the complete puzzle into the available viewport. */
-@media (pointer:coarse) and (max-height:1000px){
- html,body{height:100%;min-height:0;overflow:hidden}
- body{padding:env(safe-area-inset-top) 5px env(safe-area-inset-bottom)}
- .app{height:100dvh;min-height:0;overflow:hidden;gap:5px;padding:5px 0 6px}
- .top{flex:0 0 auto;min-height:34px}
- .brand{font-size:clamp(17px,4.8vw,22px)}
- .brand small{font-size:7px;letter-spacing:1.8px;margin-top:3px}
- .levelpill{padding:3px 8px;border-radius:10px}.levelpill b{font-size:16px}
- .stats{flex:0 0 auto;gap:4px}.stat{padding:4px 3px;border-radius:9px}.stat b{font-size:16px}.stat small{font-size:8px}
- .market{flex:0 0 auto;padding:4px 7px;border-radius:10px}.market-scene{font-size:19px}
- .market-copy b,.order b{font-size:10px}.market-copy small,.order small{font-size:8px}.coins{font-size:11px}
- .order{flex:0 0 auto;padding:5px 7px;border-radius:10px}
- .progress{flex:0 0 4px;margin-top:-3px}
- .board-wrap{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;padding:5px;border-radius:13px;overflow:hidden}
- .board-head{flex:0 0 auto;margin:0 2px 4px}.board-head b{font-size:10px}.board-head small{font-size:8px}
- .shelves{flex:1 1 auto;min-height:0;grid-auto-rows:minmax(0,1fr);gap:3px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
- .shelf{height:100%;min-height:0!important;padding:2px 4px;grid-template-columns:37px minmax(0,1fr);gap:3px;border-radius:9px;box-shadow:inset 0 1px #fff2,0 2px 4px #0005;transition:border-color .08s,background .08s}
- .shelf:active{transform:none;filter:brightness(1.08)}
- .shelf-label{font-size:8px;line-height:1}.shelf-label span{font-size:13px;margin-bottom:1px}
- .slots{gap:3px}.item{height:clamp(22px,3.8dvh,32px)!important;border-radius:6px;font-size:clamp(16px,4.7vw,22px);box-shadow:inset 0 1px 3px #fff2,0 1px 3px #0006}
- .item.top-item{transform:none;filter:brightness(1.12)}.shelf-foot{font-size:7px}
- .controls{flex:0 0 auto;gap:4px}.tool{padding:7px 3px;font-size:9px;border-radius:9px;box-shadow:inset 0 1px #fff2,0 2px 4px #0005}
- .message{flex:0 0 auto;min-height:12px;font-size:9px;line-height:1.2}
- .footer{flex:0 0 auto;gap:4px}.footer button{padding:5px 7px;font-size:8px;border-radius:8px}
-}
-@media (pointer:coarse) and (max-height:680px){
- .app{gap:3px;padding:3px 0}.top{min-height:29px}.brand small{display:none}
- .market-scene{font-size:16px}.market{padding:3px 6px}.order{padding:3px 6px}
- .board-wrap{padding:3px}.board-head{margin-bottom:2px}.shelves{gap:2px}
- .shelf{grid-template-columns:33px minmax(0,1fr);padding:1px 3px}
- .shelf-label span{font-size:11px}.item{height:23px!important;font-size:16px}
- .tool{padding:5px 2px;font-size:8px}.footer button{padding:4px 5px}
-}
-
-/* Focused Android play layout: give the puzzle the space, not decorative panels. */
-@media (pointer:coarse) and (max-height:1100px){
- .app.playing{height:100dvh;min-height:0;overflow:hidden;gap:5px;padding:5px 0 6px}
- .app.playing .profile-card,
- .app.playing .login-reward,
- .app.playing .living-bazaar,
- .app.playing .market-hub-actions,
- .app.playing .daily-card{display:none!important}
- .app.playing .top,.app.playing .stats,.app.playing .market,
- .app.playing .order,.app.playing .progress,.app.playing .controls,
- .app.playing .message,.app.playing .footer{flex:0 0 auto}
- .app.playing .board-wrap{flex:1 1 0;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:6px}
- .app.playing .shelves{flex:1 1 auto;min-height:0;grid-auto-rows:minmax(46px,1fr);gap:4px;overflow-y:auto;overscroll-behavior:contain}
- .app.playing .shelf{height:100%;min-height:46px!important;padding:3px 5px;grid-template-columns:40px minmax(0,1fr);gap:4px}
- .app.playing .shelf-label{font-size:9px}
- .app.playing .shelf-label span{font-size:14px}
- .app.playing .item{height:clamp(28px,3.4dvh,38px)!important;font-size:clamp(18px,4.8vw,24px)}
- .app.playing .controls{gap:5px}
- .app.playing .tool{padding:9px 4px;font-size:10px}
- .app.playing .footer{gap:4px}
- .app.playing .footer button{padding:5px 7px;font-size:8px}
-}
-@media (pointer:coarse) and (max-height:680px){
- .app.playing .shelves{grid-auto-rows:minmax(40px,1fr);gap:2px}
- .app.playing .shelf{min-height:40px!important}
- .app.playing .item{height:25px!important}
-}
-
-
-/* Final compact shelf grid: distribute every shelf evenly in the available board height. */
-@media (pointer:coarse) and (max-height:1100px){
- .app.playing .board-wrap{min-height:0!important;overflow:hidden!important}
- .app.playing .shelves{display:grid!important;grid-auto-rows:minmax(0,1fr)!important;align-content:stretch!important;overflow-y:auto!important;overscroll-behavior:contain}
- .app.playing .shelf{height:100%!important;min-height:0!important;padding:2px 4px!important;grid-template-columns:34px minmax(0,1fr)!important;gap:3px!important}
- .app.playing .shelf-label{font-size:8px!important;line-height:1!important}
- .app.playing .shelf-label span{font-size:12px!important;margin-bottom:0!important}
- .app.playing .slots{gap:2px!important}
- .app.playing .item{height:clamp(20px,2.7dvh,30px)!important;font-size:clamp(15px,4.2vw,21px)!important}
-}
-
-
-/* Fit exact shelf count (up to 11) into the Android play board. */
-@media (pointer:coarse) and (max-height:1100px){
- .app.playing{height:100dvh!important;min-height:0!important;max-height:100dvh!important;overflow:hidden!important}
- .app.playing .board-wrap{flex:1 1 0!important;height:0!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
- .app.playing .shelves{flex:1 1 0!important;height:0!important;min-height:0!important;display:grid!important;grid-template-rows:repeat(var(--shelf-count,11),minmax(0,1fr))!important;grid-auto-rows:minmax(0,1fr)!important;align-content:stretch!important;gap:2px!important;overflow:hidden!important}
- .app.playing .shelf{height:100%!important;min-height:0!important;max-height:none!important;padding:1px 3px!important;grid-template-columns:32px minmax(0,1fr)!important;gap:2px!important}
- .app.playing .shelf-label{font-size:7px!important;line-height:1!important}
- .app.playing .shelf-label span{font-size:11px!important;margin:0!important}
- .app.playing .slots{gap:2px!important}
- .app.playing .item{height:clamp(18px,2.4dvh,27px)!important;font-size:clamp(14px,3.8vw,20px)!important}
- .app.playing .shelf-foot{font-size:6px!important}
-}
-
-/* Preserve complete illustrated fruit at compact Android shelf sizes. */
-@media (pointer:coarse) and (max-height:1100px){
- .app.playing .shelf{overflow:visible!important;min-height:54px!important}
- .app.playing .slots{min-height:46px!important;overflow:visible!important;align-items:center}
- .app.playing .item{height:44px!important;min-height:44px!important;overflow:visible!important;display:grid!important;place-items:center!important}
- .app.playing .item .produce-art{display:block!important;width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;max-width:40px!important;max-height:40px!important;overflow:visible!important;flex:none!important}
- .app.playing .item .tiny{z-index:3}
-}
-
-
-/* Android shelf layout v2: fixed compact rows prevent grid intrinsic-size overlap. */
-@media (pointer:coarse) and (max-height:1100px){
- .app.playing .board-wrap{flex:1 1 0!important;height:0!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
- .app.playing .shelves{display:grid!important;flex:1 1 0!important;height:0!important;min-height:0!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:repeat(var(--shelf-count,11),46px)!important;grid-auto-rows:46px!important;gap:2px!important;align-content:start!important;overflow-y:auto!important;overflow-x:hidden!important}
- .app.playing .shelf{box-sizing:border-box!important;display:grid!important;grid-template-columns:30px minmax(0,1fr)!important;grid-template-rows:1fr!important;align-items:center!important;gap:2px!important;width:100%!important;height:46px!important;min-height:46px!important;max-height:46px!important;padding:1px 3px!important;overflow:hidden!important}
- .app.playing .shelf-label{display:block!important;min-width:0!important;max-height:40px!important;overflow:hidden!important;font-size:7px!important;line-height:1!important;white-space:nowrap!important}
- .app.playing .shelf-label span{display:block!important;font-size:10px!important;line-height:12px!important;margin:0!important}
- .app.playing .slots{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:38px!important;align-self:center!important;width:100%!important;height:38px!important;min-height:38px!important;gap:2px!important;overflow:visible!important}
- .app.playing .item{box-sizing:border-box!important;display:grid!important;place-items:center!important;width:100%!important;height:36px!important;min-height:36px!important;max-height:36px!important;min-width:0!important;padding:0!important;overflow:visible!important;font-size:17px!important}
- .app.playing .item .produce-art{display:block!important;width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important;max-width:30px!important;max-height:30px!important;overflow:visible!important}
- .app.playing .item .tiny{font-size:6px!important;right:1px!important;bottom:0!important;z-index:3}
-}
-
-/* Cross-device Android play profile: stable touch targets, no row collisions. */
-@media (pointer:coarse){
- .app.playing{height:100dvh;min-height:0;overflow:hidden;gap:clamp(3px,.7dvh,7px);padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
- .app.playing .board-wrap{flex:1 1 0!important;height:0!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;padding:clamp(4px,1.2vw,8px)!important}
- .app.playing .shelves{display:grid!important;flex:1 1 0!important;height:0!important;min-height:0!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:repeat(var(--shelf-count,11),minmax(42px,1fr))!important;grid-auto-rows:minmax(42px,1fr)!important;gap:2px!important;align-content:stretch!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;scrollbar-width:thin}
- .app.playing .shelf{box-sizing:border-box!important;display:grid!important;grid-template-columns:clamp(27px,7vw,36px) minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important;align-items:center!important;gap:2px!important;width:100%!important;height:100%!important;min-height:42px!important;max-height:none!important;padding:1px 3px!important;overflow:hidden!important}
- .app.playing .shelf-label{display:block!important;min-width:0!important;max-height:38px!important;overflow:hidden!important;font-size:clamp(6px,1.8vw,8px)!important;line-height:1!important;white-space:nowrap!important}
- .app.playing .shelf-label span{display:block!important;font-size:clamp(9px,2.5vw,12px)!important;line-height:1.1!important;margin:0!important}
- .app.playing .slots{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:minmax(30px,1fr)!important;align-self:center!important;width:100%!important;height:100%!important;min-height:30px!important;max-height:40px!important;gap:clamp(1px,.5vw,3px)!important;overflow:visible!important}
- .app.playing .item{box-sizing:border-box!important;display:grid!important;place-items:center!important;width:100%!important;height:100%!important;min-height:30px!important;max-height:38px!important;min-width:0!important;padding:0!important;overflow:visible!important;font-size:16px!important}
- .app.playing .item .produce-art{display:block!important;width:clamp(25px,7.5vw,32px)!important;height:clamp(25px,7.5vw,32px)!important;min-width:0!important;min-height:0!important;max-width:100%!important;max-height:100%!important;overflow:visible!important;flex:none!important}
- .app.playing .item .tiny{font-size:6px!important;right:1px!important;bottom:0!important;z-index:3}
- .app.playing .controls{gap:4px!important}
- .app.playing .tool{min-height:42px!important;padding:7px 3px!important;font-size:clamp(9px,2.4vw,11px)!important}
- .app.playing .footer{gap:3px!important}
- .app.playing .footer button{min-height:32px!important;padding:5px 6px!important;font-size:8px!important}
-}
-@media (pointer:coarse) and (max-height:700px){
- .app.playing .shelf{min-height:40px!important}
- .app.playing .shelves{grid-template-rows:repeat(var(--shelf-count,11),minmax(40px,1fr))!important;grid-auto-rows:minmax(40px,1fr)!important}
- .app.playing .item .produce-art{width:26px!important;height:26px!important}
-}
-@media (pointer:coarse) and (max-width:360px){
- .app.playing .shelf{grid-template-columns:25px minmax(0,1fr)!important}
- .app.playing .board-head small{font-size:8px!important}
-}
-.produce-art{width:100%;height:100%;display:block;overflow:visible;pointer-events:none}
-
-
-/* Android short-screen mode: keep all eleven shelves visible without board scrolling. */
-@media (pointer:coarse) and (max-height:900px){
- .app.playing{height:100dvh!important;min-height:0!important;max-height:100dvh!important;overflow:hidden!important;gap:2px!important;padding:2px 0 env(safe-area-inset-bottom)!important}
- .app.playing .top{min-height:25px!important;flex:0 0 auto!important}.app.playing .brand{font-size:clamp(15px,4.6vw,20px)!important}.app.playing .brand small{font-size:6px!important;letter-spacing:1px!important;margin-top:2px!important}
- .app.playing .levelpill{padding:2px 6px!important;min-width:45px!important}.app.playing .levelpill b{font-size:14px!important}.app.playing .levelpill small{font-size:6px!important}
- .app.playing .stats{gap:3px!important;flex:0 0 auto!important}.app.playing .stat{padding:2px!important;border-radius:7px!important}.app.playing .stat b{font-size:12px!important}.app.playing .stat small{font-size:6px!important;letter-spacing:0!important}
- .app.playing .market{padding:2px 4px!important;min-height:0!important;flex:0 0 auto!important}.app.playing .market-scene{font-size:12px!important;gap:2px!important}.app.playing .market-copy b{font-size:8px!important}.app.playing .market-copy small{font-size:6px!important;line-height:1!important}
- .app.playing .order{padding:2px 4px!important;min-height:0!important;flex:0 0 auto!important}.app.playing .order b{font-size:7px!important}.app.playing .order small{font-size:6px!important;line-height:1!important;margin-top:0!important}.app.playing .order strong{font-size:9px!important}
- .app.playing .progress{height:2px!important;flex:0 0 2px!important;margin:0!important}
- .app.playing .board-wrap{flex:1 1 0!important;height:0!important;min-height:0!important;max-height:none!important;padding:2px!important;gap:1px!important;overflow:hidden!important}
- .app.playing .board-head{flex:0 0 11px!important;min-height:11px!important;margin:0 1px!important;gap:2px!important}.app.playing .board-head b{font-size:7px!important}.app.playing .board-head small{font-size:5px!important}
- .app.playing .shelves{display:grid!important;flex:1 1 0!important;height:0!important;min-height:0!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:repeat(var(--shelf-count,11),minmax(0,1fr))!important;grid-auto-rows:minmax(0,1fr)!important;gap:1px!important;overflow:hidden!important;align-content:stretch!important}
- .app.playing .shelf{display:grid!important;grid-template-columns:clamp(20px,5.5vw,25px) minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important;gap:1px!important;min-height:0!important;max-height:none!important;height:100%!important;padding:0 1px!important;border-radius:5px!important;overflow:hidden!important}
- .app.playing .shelf-label{font-size:5px!important;line-height:1!important;max-height:100%!important}.app.playing .shelf-label span{font-size:6px!important;line-height:1!important;margin:0!important}
- .app.playing .slots{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:minmax(0,1fr)!important;gap:1px!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;overflow:visible!important}
- .app.playing .item{height:100%!important;min-height:0!important;max-height:none!important;min-width:0!important;padding:0!important;border-radius:4px!important;font-size:clamp(8px,3vw,12px)!important;overflow:visible!important}
- .app.playing .item .produce-art{width:clamp(12px,4.4vw,18px)!important;height:clamp(12px,4.4vw,18px)!important;max-width:100%!important;max-height:100%!important}
- .app.playing .item .tiny{font-size:4px!important;right:0!important;bottom:0!important}
- .app.playing .controls{flex:0 0 auto!important;gap:2px!important}.app.playing .tool{min-height:27px!important;padding:3px 2px!important;font-size:7px!important;border-radius:7px!important}
- .app.playing .message{flex:0 0 auto!important;min-height:9px!important;font-size:6px!important;line-height:1!important;padding:0!important;margin:0!important}
- .app.playing .footer{flex:0 0 auto!important;gap:2px!important;justify-content:center!important}.app.playing .footer button{min-height:20px!important;padding:2px 3px!important;font-size:5.5px!important;border-radius:6px!important}
-}
-@media (pointer:coarse) and (max-height:600px){.app.playing .market{display:none!important}.app.playing .order small{display:none!important}.app.playing .tool{min-height:24px!important}}
-
-
-/* Board-first Android/tablet gameplay layout v3: fit every shelf without shrinking the produce into icons. */
-@media (pointer:coarse) and (max-height:1100px){
- .app.playing{height:100dvh;min-height:0;overflow:hidden;gap:4px;padding:4px 0 max(4px,env(safe-area-inset-bottom))}
- .app.playing .profile-card,
- .app.playing .login-reward,
- .app.playing .living-bazaar,
- .app.playing .market-hub-actions,
- .app.playing .daily-card,
- .app.playing .stats{display:none!important}
- .app.playing .footer{display:flex!important;justify-content:flex-end;flex:0 0 22px;gap:0!important;min-height:22px!important}
- .app.playing .footer button{display:none!important}
- .app.playing .footer #restart{display:block!important;min-height:22px!important;padding:2px 9px!important;font-size:8px!important;border-radius:7px!important}
- .app.playing .top{flex:0 0 auto;min-height:32px}
- .app.playing .brand{font-size:clamp(17px,4.8vw,23px)}
- .app.playing .brand small{font-size:7px;letter-spacing:1.5px;margin-top:2px}
- .app.playing .levelpill{padding:2px 8px}
- .app.playing .levelpill b{font-size:16px}
- .app.playing .market{flex:0 0 auto;min-height:31px;padding:3px 7px;border-radius:9px}
- .app.playing .market-scene{font-size:17px;letter-spacing:0}
- .app.playing .market-copy b{font-size:9px;line-height:1.1}
- .app.playing .market-copy small{font-size:7px;line-height:1.1}
- .app.playing .coins{font-size:10px}
- .app.playing .order{flex:0 0 auto;min-height:31px;padding:4px 7px;border-radius:9px}
- .app.playing .order b{font-size:10px}
- .app.playing .order small{display:none!important}
- .app.playing .order strong{font-size:11px}
- .app.playing .progress{flex:0 0 3px;height:3px;margin:0}
- .app.playing .board-wrap{flex:1 1 0!important;height:0!important;min-height:0!important;max-height:none!important;display:flex;flex-direction:column;overflow:hidden;padding:4px;border-radius:12px}
- .app.playing .board-head{flex:0 0 17px;min-height:17px;margin:0 2px 3px;gap:4px}
- .app.playing .board-head b{font-size:10px}
- .app.playing .board-head small{font-size:8px}
- .app.playing .shelves{display:grid!important;flex:1 1 0!important;height:0!important;min-height:0!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:repeat(var(--shelf-count,4),minmax(0,1fr))!important;grid-auto-rows:unset!important;gap:3px!important;overflow:hidden!important;align-content:stretch}
- .app.playing .shelf{height:100%!important;min-height:0!important;max-height:none!important;grid-template-columns:56px minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important;gap:5px!important;padding:1px 4px!important;border-radius:8px!important;overflow:hidden!important;box-shadow:inset 0 1px #fff2,0 1px 3px #0006!important;transition:border-color .08s,background .08s!important}
- .app.playing .shelf:active{transform:none;filter:brightness(1.08)}
- .app.playing .shelf-label{font-size:8px!important;line-height:1.05!important;white-space:nowrap;text-align:center!important;overflow:hidden!important;text-overflow:clip!important}.app.playing .shelf-label>span{display:none!important}
- .app.playing .shelf-label span{font-size:clamp(10px,3vw,14px)!important;line-height:1!important;margin:0 0 1px!important}
- .app.playing .slots{height:100%!important;min-height:0!important;max-height:none!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:minmax(0,1fr)!important;gap:3px!important;overflow:hidden!important}
- .app.playing .item{height:100%!important;min-height:0!important;max-height:none!important;min-width:0!important;padding:0!important;border-radius:6px!important;font-size:clamp(17px,5.8vw,27px)!important;overflow:hidden!important;box-shadow:inset 0 1px 3px #fff2,0 1px 3px #0006!important}
- .app.playing .item.top-item{transform:none!important;filter:brightness(1.13)!important}
- .app.playing .item .produce-art{display:block;width:clamp(22px,7vw,32px)!important;height:clamp(22px,7vw,32px)!important;max-width:90%!important;max-height:90%!important;filter:drop-shadow(0 2px 2px #0008)}
- .app.playing .item .tiny{font-size:5px!important;right:1px!important;bottom:0!important}
- .app.playing .controls{flex:0 0 auto!important;gap:4px!important}
- .app.playing .tool{min-height:36px!important;padding:5px 3px!important;font-size:clamp(9px,2.7vw,11px)!important;border-radius:9px!important}
- .app.playing .message{flex:0 0 auto!important;min-height:13px!important;padding:0!important;margin:0!important;font-size:9px!important;line-height:1.2!important}
-}
-@media (pointer:coarse) and (max-height:600px){
- .app.playing .market{display:none!important}
- .app.playing .top{min-height:27px}
- .app.playing .board-head{flex-basis:14px;min-height:14px}
- .app.playing .shelves{gap:2px!important}
- .app.playing .shelf{grid-template-columns:52px minmax(0,1fr)!important}
- .app.playing .item .produce-art{width:clamp(19px,6vw,26px)!important;height:clamp(19px,6vw,26px)!important}
- .app.playing .tool{min-height:32px!important}
-}
-@media (pointer:coarse) and (min-width:600px) and (min-height:700px){
- .app.playing{width:min(100%,680px)}
- .app.playing .board-wrap{padding:8px}
- .app.playing .shelves{gap:5px!important}
- .app.playing .shelf{grid-template-columns:64px minmax(0,1fr)!important;padding:3px 6px!important}
- .app.playing .shelf-label{font-size:10px!important}
- .app.playing .shelf-label span{font-size:16px!important}
- .app.playing .slots{gap:5px!important}
- .app.playing .item .produce-art{width:clamp(28px,4.5vw,40px)!important;height:clamp(28px,4.5vw,40px)!important}
-}
-
-/* Final responsive polish: compact phones, short screens and tablet touch targets. */
-@media (pointer:coarse){
- .app.playing .shelf,.app.playing .item{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
- .app.playing .shelf{contain:layout style}
- .app.playing .item{contain:layout style}
- .app.playing .item .produce-art{filter:drop-shadow(0 1px 1px #0007)!important}
-}
-@media (pointer:coarse) and (max-width:380px) and (min-height:601px){
- .app.playing .shelf{grid-template-columns:44px minmax(0,1fr)!important;gap:2px!important;padding-inline:2px!important}
- .app.playing .shelf-label{font-size:7px!important;letter-spacing:-.2px!important}
- .app.playing .slots{gap:2px!important}
- .app.playing .item .produce-art{width:clamp(19px,6vw,23px)!important;height:clamp(19px,6vw,23px)!important}
- .app.playing .board-head small{font-size:7px!important}
-}
-@media (pointer:coarse) and (max-height:600px){
- .app.playing .shelves{grid-template-rows:repeat(var(--shelf-count,11),minmax(0,1fr))!important;grid-auto-rows:minmax(0,1fr)!important;gap:1px!important;overflow:hidden!important}
- .app.playing .shelf{min-height:0!important;grid-template-columns:42px minmax(0,1fr)!important;padding:0 2px!important}
- .app.playing .shelf-label{font-size:6px!important}
- .app.playing .item .produce-art{width:clamp(17px,5.6vw,21px)!important;height:clamp(17px,5.6vw,21px)!important}
- .app.playing .board-wrap{min-height:0!important}
- .app.playing .controls .tool{min-height:25px!important}
-}
-@media (pointer:coarse) and (min-width:600px) and (min-height:700px){
- .app.playing .shelf{grid-template-columns:68px minmax(0,1fr)!important}
- .app.playing .item .produce-art{width:clamp(30px,4.2vw,42px)!important;height:clamp(30px,4.2vw,42px)!important}
- .app.playing .tool{min-height:44px!important}
-}
-
-/* Premium hand-painted 2D finish: tactile timber, soft painted light, crisp produce silhouettes. */
-:root{--wood-light:#b9874e;--wood-mid:#704626;--wood-deep:#2b1a10}
-.shelf{background-color:#4b301c;background-image:linear-gradient(180deg,#ffffff20 0,#ffffff08 14%,transparent 34%,#160b0660 100%),repeating-linear-gradient(3deg,transparent 0 9px,#d8a66a12 10px,#1c10091a 11px,transparent 14px 23px),linear-gradient(105deg,#8c6338 0%,#624126 24%,#442b19 62%,#2b1b11 100%);border-color:#c69a61;box-shadow:inset 0 2px 0 #fff5,inset 0 -3px 0 #1a0e08aa,inset 0 0 0 2px #2b180d55,0 4px 8px #0008}
-.shelf:before{width:6px;background:linear-gradient(90deg,#f0d19a,#a96f37 48%,#5b351d);box-shadow:1px 0 2px #160b08}
-.shelf:after{left:10px;right:10px;top:auto;bottom:5px;height:2px;background:linear-gradient(90deg,transparent,#e7bd8055 18% 82%,transparent)}
-.shelf-label{color:#ffe4b0;text-shadow:0 1px 2px #160b06,0 0 8px #f6d28a22}
-.item{background:linear-gradient(155deg,#9a7046 0%,#65452b 34%,#382315 100%);border-color:#d2a66b;box-shadow:inset 0 2px 0 #fff5,inset 0 -4px 6px #1b0f08aa,0 3px 5px #0009}
-.item.top-item{background:linear-gradient(155deg,#b18450 0%,#79522f 40%,#422716 100%);box-shadow:inset 0 2px 0 #fff8,inset 0 -3px 5px #1b0f08aa,0 0 0 1px #ffe2a055,0 4px 8px #0009}
-.item.empty{background:repeating-linear-gradient(135deg,#24170f 0 5px,#2b1b11 5px 10px);border:1px dashed #b58b58;box-shadow:inset 0 1px 5px #0009}
-.produce-art{width:100%;height:100%;max-width:46px;max-height:46px;overflow:visible;filter:drop-shadow(0 2px 1.5px #160b08);transform:translateY(-1px)}
-.item.top-item .produce-art{transform:translateY(-2px) scale(1.06)}
-.item .tiny{background:#201209cc;border:1px solid #f5d28a55;color:#fff0c8}
-.board-wrap{background:linear-gradient(145deg,#76512e 0%,#422b1a 16%,#21160e 72%,#130d08 100%);border-color:#d3a867;box-shadow:0 16px 32px #000a,inset 0 2px 0 #fff5,inset 0 -7px 16px #0c0705}
-.market{background:linear-gradient(115deg,#765332,#422b1a 48%,#25170e)!important;border-color:#c69a5e!important}
-@media(pointer:coarse){.item.top-item{animation:none!important;filter:none}.produce-art{filter:none}.shelf{transition:border-color .1s,background-color .1s,box-shadow .1s}.shelf:active{filter:none}}
-@media(prefers-reduced-motion:reduce){.produce-art,.item.top-item{animation:none!important}}
-
-/* Fast-touch profile: keep tap feedback synchronous and avoid repainting the whole board. */
-@media(pointer:coarse){
- .shelf,.item,.tool{transition:none!important;animation:none!important}
- .shelf:active{transform:none!important;filter:none!important}
- .item,.item.top-item{filter:none!important;animation:none!important;transform:none}
- .shelf.selected{box-shadow:inset 0 0 0 2px #ffe39a,0 0 0 2px #e8bb5a33!important}
- .shelf.just-moved,.item.arriving{animation:none!important}
-}
-
-/* Clear, rewarding level-results panel */
-.finish-panel{border-color:#e5bd70;background:radial-gradient(ellipse at 50% 0%,#8a6032 0%,#49301d 34%,#1b120c 78%);overflow-y:auto}
-.finish-ribbon{display:inline-block;padding:5px 12px;border:1px solid #f0d08a88;border-radius:30px;background:#f0c66b1c;color:#ffe6a4;font-size:9px;font-weight:1000;letter-spacing:2px}
-.finish-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:13px 0 10px}
-.finish-stats>div{min-width:0;padding:11px 4px;border:1px solid #d3aa6555;border-radius:12px;background:linear-gradient(145deg,#76502b66,#21160e99);box-shadow:inset 0 1px #fff2}
-.finish-stats b{display:block;color:#ffe3a0;font-size:clamp(19px,5vw,25px);font-variant-numeric:tabular-nums}
-.finish-stats small{display:block;margin-top:3px;color:#d5bd91;font-size:8px;font-weight:900;letter-spacing:.7px}
-.finish-panel #finishText{margin:8px 0 15px}
-@media(max-height:680px){.finish-panel{padding:15px 14px}.finish-panel .hero{font-size:38px}.finish-stats{margin:8px 0}.finish-stats>div{padding:7px 3px}}
-.shelf.drag-over{outline:3px solid #ffe08a!important;outline-offset:2px;background-color:#896334!important;box-shadow:inset 0 0 0 2px #fff3,0 0 0 4px #f4c96a55!important}@media(pointer:coarse){.shelf.drag-over{transition:none!important;filter:none!important;transform:none!important}}\n
-
-/* Premium bazaar screen polish — clearer hierarchy, richer materials, responsive play area */
-:root{--gold:#f5d58b;--cream:#fff2d2;--muted:#d0bd98}
-html,body{background-color:#100c08;background-image:radial-gradient(ellipse at 50% -14%,#76512b 0%,#352416 34%,#171109 72%,#090705 100%)}
-body{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
-.app{width:min(100%,560px);gap:8px;padding-top:max(9px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}
-.top{padding:2px 2px 4px}.brand{font-size:clamp(21px,5.2vw,29px);letter-spacing:-.9px;text-shadow:0 2px 18px #f0c46b30}.brand small{font-size:8px;letter-spacing:2.2px}
-.levelpill{border-color:#d1a75d;background:linear-gradient(145deg,#49331d,#21170e);box-shadow:inset 0 1px #fff3,0 5px 14px #0005}.levelpill b{font-size:22px}
-.profile-card{padding:8px 10px;border-color:#a98750;background:linear-gradient(110deg,#4a3520,#24180e 78%);box-shadow:inset 0 1px #fff3,0 5px 13px #0004}
-.profile-avatar{width:39px;height:39px;flex-basis:39px;border:1px solid #ffe7a477;box-shadow:inset 0 2px #fff6,0 3px 8px #0005}
-.login-reward{padding:7px 9px;background:linear-gradient(105deg,#49331c,#24170d);border-color:#9c7844}
-.login-reward button{padding:8px 10px}
-.stats{gap:8px}.stat{padding:7px 5px;border-color:#96713c;background:linear-gradient(145deg,#3a2b1b,#1d150d);box-shadow:inset 0 1px #fff2,0 4px 10px #0004}.stat b{font-size:20px}
-.market{padding:8px 11px;border-color:#a7834a;background:linear-gradient(100deg,#49331e,#20160d);box-shadow:inset 0 1px #fff3,0 5px 13px #0004}.market-scene{font-size:27px}
-.living-bazaar{border-color:#a9864e;background:linear-gradient(135deg,#4c3822 0%,#302015 58%,#1e150d 100%);box-shadow:inset 0 1px #fff3,0 6px 15px #0004}
-.stall-dress{padding-bottom:6px;margin-bottom:6px}.customer-row{min-height:43px}
-.order{padding:8px 10px;border-color:#987444;background:linear-gradient(100deg,#302215,#1b140c);box-shadow:inset 0 1px #fff2}
-.progress{height:7px;margin-top:-5px;background:#fff2;border:1px solid #ffffff12}.progress i{background:linear-gradient(90deg,#bd8737,#ffe8a4);box-shadow:0 0 10px #f0c76c66}
-.board-wrap{padding:11px;border:1px solid #c09a5b;border-radius:20px;background:linear-gradient(145deg,#49351f 0%,#302115 45%,#1b130c 100%);box-shadow:0 14px 34px #0009,inset 0 1px #fff4,inset 0 -1px #0008}
-.board-head{margin:0 2px 9px}.board-head b{font-size:13px;letter-spacing:.45px}.board-head small{font-size:10px;color:#e1c99c}
-.shelves{gap:8px}
-.shelf{min-height:69px;padding:8px 9px;border-color:#9a7540;border-radius:14px;background:linear-gradient(180deg,#59432a 0%,#392818 58%,#2b1d12 100%);box-shadow:inset 0 1px #fff3,inset 0 -2px #120c07aa,0 4px 8px #0007}
-.shelf-label{font-size:10px;letter-spacing:.25px;color:#f0d59e}.shelf-label span{font-size:19px}
-.slots{gap:6px}.item{height:45px;border-radius:10px;border-color:#c19a5c88;background:linear-gradient(145deg,#715637 0%,#49341f 48%,#2c1e12 100%);box-shadow:inset 0 2px 4px #fff3,inset 0 -2px 3px #0005,0 3px 5px #0007;font-size:clamp(21px,5.8vw,29px)}
-.item.empty{background:linear-gradient(145deg,#24190f,#1a120b);border-color:#b08b58aa}
-.item.top-item{border-color:#ffe7a3;box-shadow:0 0 0 1px #ffe29a55,0 0 12px #e8bb5a44,inset 0 2px 4px #fff4}
-.market-hub-actions button,.daily-card{box-shadow:inset 0 1px #fff3,0 4px 10px #0005}
-.controls{gap:8px}.tool{min-height:43px;border-color:#bb914e;background:linear-gradient(145deg,#805b2e,#4a3018);box-shadow:inset 0 1px #fff4,0 4px 9px #0006;font-size:11px;letter-spacing:.2px}
-.message{min-height:15px;color:#ead8b3;font-weight:600}
-.footer{gap:6px}.footer button{border-color:#80633a;background:linear-gradient(145deg,#302315,#1b140c);color:#e7d2a8}
-.toast{z-index:40}
-@media(min-width:600px){.app{width:min(100%,600px)}.shelf{grid-template-columns:64px 1fr;min-height:73px}.item{height:49px}.board-wrap{padding:13px}.shelves{gap:9px}}
-@media(max-height:760px){.app{gap:6px;padding-top:6px}.profile-card{padding:6px 9px}.profile-avatar{width:34px;height:34px;flex-basis:34px}.login-reward{padding:6px 8px}.login-reward button{padding:7px 9px}.living-bazaar{padding:7px 9px}.stall-dress{display:none}.customer-row{min-height:36px}.board-wrap{padding:8px}.board-head{margin-bottom:6px}.shelf{min-height:60px;padding:6px 8px}.item{height:38px}.controls .tool{min-height:39px;padding:8px 4px}}
-@media(max-width:370px){.app{gap:6px}.brand small{letter-spacing:1.4px;font-size:7px}.profile-open{padding:7px 8px;font-size:9px}.board-head small{max-width:52%;text-align:right}.shelf{grid-template-columns:47px 1fr;gap:5px}.item{height:37px}.slots{gap:4px}}
-@media(pointer:coarse){.shelf,.tool,.market-hub-actions button,.daily-card button,.footer button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}.shelf{transition:none!important}.shelf:active{transform:none!important}}
-
-/* Kenney CC0 scenery integration — lightweight raster backgrounds, no runtime canvas */
-.app:before{content:"";position:fixed;z-index:-1;pointer-events:none;left:50%;bottom:0;transform:translateX(-50%);width:min(100vw,760px);height:34vh;opacity:.13;background:url("./assets/kenney/colored_desert.png") center bottom/100% auto no-repeat;mask-image:linear-gradient(transparent,#000 35%);-webkit-mask-image:linear-gradient(transparent,#000 35%)}
-.board-wrap:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;background:linear-gradient(180deg,#20170caa,#21170fdd),url("./assets/kenney/colored_forest.png") center/cover no-repeat;opacity:.34}
-.board-head,.shelves{position:relative;z-index:1}
-.market{background-image:linear-gradient(100deg,#342818d9,#17120ce8),url("./assets/kenney/colored_castle.png");background-position:center,right center;background-size:cover,auto 180%;background-repeat:no-repeat}
-@media(max-width:380px){.app:before{height:27vh;opacity:.1}.board-wrap:before{opacity:.25}}
-@media(prefers-reduced-data:reduce){.app:before,.board-wrap:before{background-image:none}}
-
-/* NBS premium gameplay overhaul v10 */
-/* A proper illustrated market stage: scenery, depth, readable shelves and crisp produce. */
-html,body{background:#100b07 url("./assets/kenney/colored_desert.png") center bottom/100% auto no-repeat fixed}
-.app{max-width:580px}
-.market{min-height:72px;position:relative;background:linear-gradient(90deg,#24170be8 0%,#382514c9 52%,#1c1209e8 100%),url("./assets/kenney/colored_castle.png") center 46%/cover no-repeat!important;border:1px solid #d0a45f!important}
-.market:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,#fff2,transparent 42%,#0005)}
-.market-scene,.market-copy,.coins{position:relative;z-index:1}
-.board-wrap{padding:12px;border:2px solid #d2a45d!important;border-radius:21px;background:linear-gradient(145deg,#684727 0%,#392617 16%,#21170f 70%,#120c08 100%)!important;box-shadow:0 18px 34px #000b,inset 0 2px #fff6,inset 0 -7px 14px #080503}
-.board-wrap:before{content:"";position:absolute;inset:7px;border:1px solid #f1d49a45;border-radius:13px;pointer-events:none;z-index:0;background:linear-gradient(180deg,#1b120b88,#1b120bd9),url("./assets/kenney/colored_forest.png") center/cover no-repeat;opacity:.42}
-.board-head{z-index:1;min-height:25px}
-.shelves{z-index:1;gap:9px}
-.shelf{position:relative;isolation:isolate;min-height:72px;grid-template-columns:58px minmax(0,1fr);padding:8px 9px;border:1px solid #d0a267!important;border-radius:12px;background:linear-gradient(180deg,#93683b 0%,#684626 14%,#50341f 58%,#342012 100%)!important;box-shadow:inset 0 2px #fff6,inset 0 -5px 8px #1a0e06b8,0 5px 0 #1a1009,0 7px 12px #0009,0 0 0 1px #120b06}
-.shelf:before{width:6px;background:linear-gradient(90deg,#f0d49a,#9c672f,#e8c17c);box-shadow:1px 0 2px #120b08}
-.shelf:after{content:"";position:absolute;z-index:-1;inset:5px 8px;border-radius:7px;pointer-events:none;opacity:.19;background:repeating-linear-gradient(0deg,transparent 0 7px,#f8d9a0 8px,#211307 9px,transparent 12px)}
-.shelf-label{font-size:9px;letter-spacing:.45px;text-shadow:0 1px 2px #170d05}
-.shelf-label span{font-size:21px;filter:drop-shadow(0 2px 2px #170d08)}
-.slots{gap:6px}
-.item{height:47px;position:relative;isolation:isolate;overflow:hidden!important;border:1px solid #d9b477;border-radius:10px;background:radial-gradient(ellipse at 25% 8%,#a9895d 0%,#76512f 43%,#392313 100%);box-shadow:inset 0 2px 4px #fff6,inset 0 -4px 6px #160c06a8,0 3px 5px #100904}
-.item:after{content:"";position:absolute;inset:2px 3px auto;height:35%;border-radius:8px 8px 55% 55%;pointer-events:none;background:linear-gradient(180deg,#fff5,transparent);opacity:.55}
-.item .produce-art{position:relative;z-index:1;width:100%;height:100%;max-width:44px;max-height:44px;filter:drop-shadow(0 3px 2px #160b05)}
-.item.top-item{border-color:#ffe6a2;background:radial-gradient(ellipse at 28% 8%,#c19a5c,#76502b 52%,#3b2412);box-shadow:inset 0 2px 5px #fff8,0 0 0 1px #ffe6a244,0 0 12px #f5cf7b66,0 4px 7px #000a}
-.item.empty{background:repeating-linear-gradient(135deg,#26190f,#26190f 5px,#2d1d11 6px,#2d1d11 11px);border:1px dashed #c59a5e99;box-shadow:inset 0 2px 5px #0008}
-.shelf.selected{border:2px solid #fff0b5!important;background:linear-gradient(180deg,#b18443,#6b461f 60%,#3c2512)!important;box-shadow:0 0 0 3px #ffdf8b55,0 0 20px #ffd77c77,inset 0 2px #fff8!important}
-.shelf.target{border-color:#a8efae!important;box-shadow:0 0 0 2px #8ee4a044,0 0 13px #8ee4a055}
-.controls .tool{min-height:46px;border-radius:13px;background:linear-gradient(180deg,#a87939,#68421e 65%,#432812);border-color:#d1a15b;box-shadow:inset 0 1px #fff7,inset 0 -3px 5px #281505,0 5px 0 #1b1008,0 7px 10px #0008}
-.stat{border-color:#c19452;background:linear-gradient(145deg,#50371f,#21150c);box-shadow:inset 0 1px #fff4,0 4px 9px #0007}
-.order{border-color:#bd9456;background:linear-gradient(105deg,#49311b,#21150c);box-shadow:inset 0 1px #fff3,0 5px 11px #0006}
-@media(max-width:390px){.shelf{grid-template-columns:47px minmax(0,1fr);gap:5px;min-height:64px;padding:6px}.item{height:40px}.slots{gap:4px}.board-wrap{padding:9px}.shelves{gap:7px}}
-@media(min-width:700px){.app{max-width:620px}.shelf{min-height:76px}.item{height:51px}.board-wrap{padding:14px}}
-/* Keep the new materials lightweight on touch devices. */
-@media(pointer:coarse){.shelf,.item,.tool{transition:none!important;animation:none!important}.shelf:active{transform:none!important;filter:none!important}.item.top-item{transform:none!important;filter:none!important}.board-wrap,.market,.stat,.order{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}}
-@media(prefers-reduced-motion:reduce){.shelf,.item,.tool{animation:none!important;transition:none!important}}
-
-
-/* NAZEEF WORLD OF WONDERS — free-asset redesign v11 */
-:root{--cream:#fff8e9;--ink:#26332d;--gold:#ffc75e;--level-h:32}
-html{background:#172d28}
-body{background:radial-gradient(ellipse at 50% -12%,#f8d99a 0,#b9d6b1 32%,#507e68 72%,#203d36 100%);color:var(--cream)}
-body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,#f7e9c355,#183c3344),url("./assets/kenney/colored_desert.png") center bottom/auto 42vh repeat-x;opacity:.42}
-.app{width:min(100%,560px);gap:11px;padding:14px 12px 22px;isolation:isolate}
-.top{padding:3px 2px 7px;align-items:center}
-.brand{font-size:clamp(22px,6vw,30px);letter-spacing:-1px;color:#fff9e8;text-shadow:0 2px 0 #315c48,0 5px 14px #17372d88}
-.brand span{color:#ffcf70;text-shadow:0 2px 0 #9a5a2d}
-.brand small{font-size:9px;letter-spacing:2px;color:#e4f0d8}
-.levelpill{min-width:76px;border:1px solid #f7d58b;border-radius:17px;padding:7px 13px;background:linear-gradient(145deg,#fff3d6,#d8a957);box-shadow:0 4px 0 #9c6938,0 8px 16px #193c3155;color:#60452a}
-.levelpill b{color:#744a26;text-shadow:none;font-size:22px}.levelpill small{color:#80603d;font-weight:900}
-.profile-card{border:1px solid #f4e0b4;border-radius:19px;padding:10px 12px;background:linear-gradient(110deg,#fff5dc,#d9edcf);box-shadow:0 5px 0 #7a9b6c,0 10px 20px #173b3150;color:#294638}
-.profile-avatar{border-radius:16px;background:linear-gradient(145deg,#ffe7a1,#e6a64b);box-shadow:inset 0 2px #fff9,0 3px 7px #8a5d3155}
-.profile-copy b{color:#294638;font-size:12px}.profile-copy small{color:#577666}
-.profile-open{border:1px solid #a5c79b;border-radius:12px;background:linear-gradient(#fef4d8,#e5bc71);color:#654321;box-shadow:0 3px 0 #b07a42}
-.login-reward{border:1px solid #f5d98e!important;border-radius:15px!important;background:linear-gradient(100deg,#fff0c8,#f4cf83)!important;color:#664421!important;box-shadow:0 4px 0 #ad793e,0 8px 16px #17372d44!important}
-.login-reward b{color:#704a24!important}.login-reward small{color:#85633c!important}.login-reward button{background:#fff9e9!important;color:#704a24!important;border:1px solid #d7a45b!important;border-radius:10px!important}
-.stats{gap:8px}.stat{border:1px solid #d8e7c7;border-radius:15px;background:linear-gradient(155deg,#f8f3dd,#d8e8ca);box-shadow:0 4px 0 #739779,0 8px 13px #163b3044,inset 0 1px #fff;color:#2e4a3c}
-.stat b{color:#b56c32;font-size:21px}.stat small{color:#557363;font-weight:900}
-.market{position:relative;overflow:hidden;border:1px solid #f1d18b;border-radius:18px;padding:10px 13px;background:linear-gradient(105deg,#315d49ed,#214638eF),url("./assets/kenney/colored_forest.png") center/cover;box-shadow:0 5px 0 #173d32,0 10px 18px #15382e55}
-.market:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,#fff1 48%,transparent);opacity:.6}
-.market-scene{font-size:29px;filter:drop-shadow(0 3px 2px #102e2788)}
-.market-copy b{font-size:13px;color:#fff0c5;letter-spacing:.3px}.market-copy small{color:#d8e9d2}.coins{color:#ffdf8d}
-.living-bazaar{border:1px solid #f3d89c;border-radius:19px;padding:10px 12px;background:linear-gradient(135deg,#fff1ce,#e7c17f 48%,#f5e3b5);box-shadow:0 5px 0 #a76e3e,0 10px 20px #163b3044;color:#35503e}
-.stall-dress{border-bottom:1px solid #a66e3d55}.stall-dress span{filter:drop-shadow(0 3px 2px #78502b55)}
-.customer{background:linear-gradient(145deg,#fff9e8,#e2edcf);box-shadow:inset 0 1px #fff,0 3px 6px #72522c44}
-.customer-copy b{color:#315642}.customer-copy small{color:#6d674b}.customer-mood{color:#b86b35}
-.order{border:1px solid #f0d89c;border-radius:15px;background:linear-gradient(100deg,#fff5db,#e8efcf);box-shadow:0 3px 0 #8ba17a;color:#31513e}
-.order b{color:#355b42}.order small{color:#71816a}.order strong{color:#a95d2c}
-.progress{height:8px;border:1px solid #f4e3bc;background:#284c3c88;border-radius:20px;overflow:hidden}.progress i{border-radius:20px;background:linear-gradient(90deg,#f8bc55,#f47d4f,#efc85f);box-shadow:0 0 9px #ffe08b}
-.board-wrap{position:relative;overflow:hidden;border:1px solid #f4d99c;border-radius:22px;padding:12px;background:linear-gradient(145deg,#fff0ce,#e6c486 35%,#d3a86d);box-shadow:0 7px 0 #98643b,0 14px 24px #14362d66,inset 0 2px #fff9}
-.board-wrap:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;background:linear-gradient(180deg,#315640d9,#254333e8),url("./assets/kenney/colored_forest.png") center/cover;opacity:.94}
-.board-head,.shelves{position:relative;z-index:1}.board-head{margin:0 2px 10px;align-items:center}.board-head b{font-size:13px;letter-spacing:.4px;color:#fff0c6;text-shadow:0 1px 3px #173a2e}.board-head small{color:#e1eccc;font-weight:700}
-.shelves{gap:9px}
-.shelf{min-height:72px;border:1px solid #e9c47c;border-radius:15px;padding:8px 9px;background:linear-gradient(110deg,#f8e6bc,#d7b17a 45%,#b88754);color:#4a3927;box-shadow:inset 0 2px #fff9,inset 0 -5px 9px #81512b33,0 4px 0 #8a5d37,0 7px 10px #112e2555;grid-template-columns:59px 1fr;gap:8px}
-.shelf:before{width:5px;background:linear-gradient(#fff0b5,#b36a32);opacity:.95}
-.shelf.selected{border:2px solid #fff1a8;background:linear-gradient(110deg,#fff1b9,#f0c36d);box-shadow:0 0 0 3px #ffe58b66,0 0 20px #ffe58b66,0 4px 0 #a76c35}
-.shelf.target{border-color:#a8f1ae;background:linear-gradient(110deg,#e9f5c6,#b5d99b)}
-.shelf-label{color:#67462b;font-size:9px;font-weight:1000}.shelf-label span{font-size:20px;filter:drop-shadow(0 2px 1px #79502b55)}
-.slots{gap:5px}.item{height:46px;border-radius:11px;background:linear-gradient(145deg,#fff6df,#d7b77e);border:1px solid #b88b52;box-shadow:inset 0 2px 4px #fff9,0 3px 5px #6d4b2d66;font-size:clamp(21px,6vw,29px)}
-.item.top-item{border-color:#fff0a1;background:linear-gradient(145deg,#fff5ce,#e6c176);box-shadow:0 0 0 1px #fff2a766,0 0 10px #ffe69a66,inset 0 2px 4px #fff}
-.item.empty{border:1px dashed #a77a4d;background:#78583b22;box-shadow:none}
-.shelf-foot{color:#f9e7bc}
-.controls{gap:8px}.tool{border:1px solid #f2d18b;border-radius:14px;padding:12px 5px;background:linear-gradient(160deg,#fff0c6,#dba45b);color:#674322;box-shadow:0 4px 0 #98643a,0 7px 12px #173a3044,inset 0 1px #fff;font-size:11px}
-.tool:active{filter:brightness(1.04);transform:translateY(2px);box-shadow:0 2px 0 #98643a,0 4px 8px #173a3044}
-.message{color:#fff4d5;font-weight:700;text-shadow:0 1px 3px #163a2e}
-.footer button{border:1px solid #c9dfb7;border-radius:11px;background:#254b3dd9;color:#f4e9c9}
-.market-hub-actions button,.daily-card{border-radius:15px!important}
-@media(min-width:600px){.app{padding-top:20px}.shelf{min-height:76px}.item{height:50px}}
-@media(max-width:380px){.app{padding-inline:8px;gap:8px}.shelf{grid-template-columns:49px 1fr;min-height:64px;padding:6px}.item{height:40px}.board-wrap{padding:9px}.board-head small{font-size:9px}}
-@media(max-height:740px){.app{gap:8px;padding-top:8px}.shelf{min-height:62px}.item{height:39px}.living-bazaar{padding:7px 9px}}
-@media(hover:none),(pointer:coarse){.shelf,.tool{transition:none!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.shelf:active{transform:none}.shelf.selected{box-shadow:0 0 0 2px #ffe58b66,0 4px 0 #a76c35}}
-@media(prefers-reduced-motion:reduce){.stall-dress span{animation:none!important}}
-
+:root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#173d35;color:#fff7df}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#173d35;overscroll-behavior:none;touch-action:none}
+#game{position:relative;width:100%;height:100%;height:100dvh;max-width:620px;margin:auto;overflow:hidden;background:#8ec6a1}
+canvas{display:block;width:100%;height:100%;touch-action:none}
+.hud{position:absolute;inset:env(safe-area-inset-top,0) 0 auto;padding:calc(10px + env(safe-area-inset-top,0)) 12px 0;display:flex;gap:8px;align-items:flex-start;pointer-events:none}
+.pill{background:linear-gradient(150deg,#fff4d9,#e9c37f);color:#57391f;border:1px solid #fff1c5;border-radius:13px;padding:7px 10px;box-shadow:0 3px 0 #94633b,0 6px 12px #183d3455;min-width:64px;text-align:center}
+.pill b{display:block;font-size:18px;line-height:1.05;font-weight:1000}.pill small{font-size:9px;letter-spacing:1px;font-weight:900}
+.hud .spacer{flex:1}.iconbtn{pointer-events:auto;border:1px solid #ffe2a0;background:linear-gradient(#fff2d4,#dfb36b);color:#5c3a1d;border-radius:13px;min-width:42px;height:42px;font-size:18px;font-weight:900;box-shadow:0 3px 0 #98663a}
+.order{position:absolute;top:calc(66px + env(safe-area-inset-top,0));left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #f5dfa9;border-radius:14px;padding:8px 11px;background:linear-gradient(110deg,#244f40ed,#315d49ed);box-shadow:0 4px 12px #16382d55}
+.order b{font-size:11px;letter-spacing:.8px;color:#ffe3a1}.order small{display:block;color:#e2efd4;font-size:10px}.order strong{white-space:nowrap;color:#ffe09a;font-size:13px}
+.controls{position:absolute;left:0;right:0;bottom:calc(15px + env(safe-area-inset-bottom,0));display:flex;justify-content:space-between;align-items:end;padding:0 14px;pointer-events:none}
+.movegroup{display:flex;gap:9px}.movebtn{pointer-events:auto;width:57px;height:57px;border-radius:18px;border:1px solid #f9d99a;background:linear-gradient(145deg,#fff0c9,#dca65a);color:#64401f;font-size:23px;font-weight:1000;box-shadow:0 5px 0 #98643b,0 8px 14px #183c3155;touch-action:manipulation}
+.actiongroup{display:grid;grid-template-columns:repeat(2,57px);gap:8px}.actiongroup .movebtn{width:57px;height:48px;font-size:19px}.movebtn:active,.iconbtn:active{transform:translateY(2px);box-shadow:0 2px 0 #98643b}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:22px;background:linear-gradient(180deg,#163d3577,#102c28b8);backdrop-filter:blur(3px)}
+.panel{width:min(100%,390px);border:1px solid #ffdfa0;border-radius:25px;padding:23px 20px 20px;text-align:center;color:#3c3925;background:linear-gradient(155deg,#fff4d6,#e6c27f 65%,#d2a05e);box-shadow:0 8px 0 #87562f,0 20px 45px #09251f99}
+.logo{font-size:12px;font-weight:1000;letter-spacing:3px;color:#567451}.hero{font-size:58px;line-height:1.3;filter:drop-shadow(0 5px 2px #79502a55)}h1{margin:2px 0 7px;font-size:clamp(27px,7vw,37px);line-height:1;color:#31513c;letter-spacing:-1px}.panel p{font-size:13px;line-height:1.5;color:#685136;margin:8px 0 16px}
+.primary,.secondary{width:100%;border:0;border-radius:14px;padding:14px 15px;font-size:15px;font-weight:1000;letter-spacing:.4px;touch-action:manipulation}
+.primary{background:linear-gradient(145deg,#387b53,#20583d);color:#fff5d8;box-shadow:0 5px 0 #17442f}
+.secondary{margin-top:10px;background:#fff4d9;color:#644321;border:1px solid #c99a58}
+.howto{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:16px 0}
+.howto div{background:#fff8e6a8;border-radius:11px;padding:8px 3px;font-size:20px}.howto small{display:block;font-size:9px;font-weight:900;color:#765534;margin-top:3px}
+.hidden{display:none!important}.district{font-size:11px;letter-spacing:1.8px;font-weight:1000;color:#fff0c4;text-shadow:0 2px 4px #16382d;position:absolute;top:calc(119px + env(safe-area-inset-top,0));left:0;right:0;text-align:center;pointer-events:none}
+.toast{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);background:#fff1c9;color:#654322;padding:10px 17px;border-radius:22px;font-weight:1000;box-shadow:0 4px 12px #132f28aa;pointer-events:none;opacity:0;transition:opacity .15s}
+@media(min-width:600px){#game{border-inline:1px solid #d9c08c}.movebtn{width:64px;height:64px}.actiongroup{grid-template-columns:repeat(2,64px)}.actiongroup .movebtn{width:64px;height:54px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
 <body>
-<main class="app">
-<header class="top"><div class="brand">NAZEEF <span>BAZAR</span><small>WORLD OF WONDERS · SORT STORIES</small></div><div class="levelpill"><b id="level">1</b><small>DAY / LEVEL</small></div></header>
-<section class="profile-card"><div class="profile-avatar" id="profileAvatar">🧑🏽‍🌾</div><div class="profile-copy"><b id="profileName">BAZAR PLAYER</b><small id="profileSub">Restore the colours of every market lane</small></div><button class="profile-open" id="profileOpen" type="button">MY PROFILE</button></section>
-<section class="login-reward"><div><b>🎁 DAILY LOGIN GIFT</b><small id="loginRewardText">Your seven-day reward trail is ready.</small></div><button id="loginRewardOpen" type="button">COLLECT GIFT</button></section>
-<section class="stats"><div class="stat"><b id="moves">0</b><small>MOVES</small></div><div class="stat"><b id="sorted">0/4</b><small>SHELVES SORTED</small></div><div class="stat"><b id="best">0</b><small>BEST DAY</small></div></section>
-<section class="market"><div class="market-scene" id="marketScene">🏪🥬🧺</div><div class="market-copy"><b id="marketName">NAZEEF BAZAR · WORLD OF WONDERS</b><small id="marketRank">Explore lively lanes, one puzzle at a time</small></div><div class="coins">🪙 <span id="coins">0</span></div></section>
-<section class="living-bazaar" id="livingBazaar" data-weather="sun" aria-label="Living neighborhood bazaar">
- <div class="stall-dress" aria-hidden="true"><span>🏮</span><span>🎏</span><span>🧺</span><span>🌼</span></div>
- <span class="weather-particle" aria-hidden="true">🌸</span><span class="weather-particle p2" aria-hidden="true">✨</span><span class="weather-particle p3" aria-hidden="true">🍃</span>
- <div class="customer-row"><div class="customer-queue" aria-hidden="true"><span class="customer" id="customerOne">🧑🏽</span><span class="customer" id="customerTwo">👩🏻</span><span class="customer" id="customerThree">🧒🏽</span></div><div class="customer-copy" aria-live="polite"><b id="customerTitle">NEIGHBOURHOOD CUSTOMERS</b><small id="customerLine">Your first shoppers are arriving. Make them smile!</small></div><span class="customer-mood" id="customerMood" aria-hidden="true">😊</span></div>
-</section>
-<section class="order"><div><b id="orderTitle">CUSTOMER ORDER</b><small id="orderText">Sort every shelf to serve the neighborhood.</small></div><strong id="orderProgress">0 / 4</strong></section>
-<div class="progress"><i id="progressFill"></i></div>
-<section class="board-wrap"><div class="board-head"><b>THE BAZAAR SORTING BOARD</b><small id="boardTip">Tap a basket, then choose a matching basket</small></div><div class="shelves" id="shelves" aria-label="Sorting shelves"></div></section>
-<section class="market-hub-actions"><button id="marketUpgradeOpen" type="button">🏗️ MARKET MAKEOVER</button><button id="fruitDashOpen" type="button">🍎 FRUIT DASH</button></section>
-<section class="daily-card" id="dailyCard"><div class="daily-copy"><b>🌟 DAILY BAZAAR CHALLENGE</b><small id="dailyDescription">A fresh puzzle and bonus coins every day.</small></div><button id="dailyStart" type="button">PLAY TODAY ▶</button></section>
-<section class="controls"><button class="tool" id="hint">💡 HINT</button><button class="tool" id="undo">↶ UNDO</button><button class="tool" id="shuffle">🔀 MIX UP</button></section>
-<div class="message" id="message">Choose a shelf to pick up its top product.</div>
-<footer class="footer"><button id="sound">🔊 SOUND ON</button><button id="music">🎵 MUSIC ON</button><button id="voiceTest">🎙️ TEST HINDI VOICE</button><button id="installApp">📲 INSTALL GAME</button><button id="restart">↻ RESTART DAY</button><button id="mapOpen">🗺️ MARKET MAP</button><button id="festivalOpen">🎊 FESTIVALS</button><button id="albumOpen">🏆 COLLECTION</button></footer>
-</main>
-<div class="toast" id="toast">Lovely sorting!</div>
-<div class="overlay" id="welcome"><div class="panel"><div class="hero">🏪🥭🧺</div><h1>NAZEEF <span>BAZAR</span><br>SORT STORIES</h1><p>Welcome to your little neighborhood market! Sort fruits, vegetables and treats, serve happy customers, earn coins and grow your bazaar one shelf at a time.</p><div class="steps"><div class="step"><b>1</b><span>Tap a shelf to pick up its top item.</span></div><div class="step"><b>2</b><span>Tap another shelf to place it. Match the item on top, or use an empty shelf.</span></div><div class="step"><b>3</b><span>Make every shelf hold four matching products to finish the day.</span></div></div><button class="primary" id="start">OPEN THE BAZAR ▶</button></div></div>
-<div class="overlay hidden" id="finish"><div class="panel finish-panel"><div class="hero" id="finishIcon">🎉🏪</div><div class="finish-ribbon" id="finishRibbon">BAZAAR SUCCESS</div><h1 id="finishTitle">ORDER COMPLETE!</h1><div class="star-result" id="starResult" aria-label="Level rating">☆☆☆</div><div class="star-caption" id="starCaption">YOUR MARKET RATING</div><div class="finish-stats" aria-label="Level results"><div><b id="finishMoves">0</b><small>MOVES USED</small></div><div><b id="finishProducts">0</b><small>PRODUCT TYPES</small></div><div><b id="finishReward">0</b><small>COINS EARNED</small></div></div><p id="finishText">The neighborhood is happy!</p><button class="primary" id="continue">OPEN NEXT DAY ▶</button><br><button class="secondary" id="again">PLAY THIS DAY AGAIN</button></div></div>
-<div class="overlay hidden" id="levelBrief"><div class="panel brief-panel"><div class="hero" id="briefIcon">🏪🧺✨</div><div class="brief-kicker" id="briefChapter">CHAPTER 1</div><h1 id="briefTitle">DAY 1 <span>MARKET OPEN</span></h1><p id="briefStory">A fresh day begins in your neighborhood bazaar.</p><div class="brief-stats"><div><b id="briefTypes">3</b><small>PRODUCT TYPES</small></div><div><b id="briefShelves">4</b><small>PRODUCT SHELVES</small></div><div><b id="briefReward">50</b><small>BASE COINS</small></div></div><div class="brief-challenge" id="briefChallenge">Sort every shelf to finish the day.</div><button class="primary" id="briefStart">START LEVEL ▶</button><button class="secondary" id="briefBack">BACK</button></div></div>
-<div class="overlay hidden" id="map"><div class="panel"><div class="hero">🛍️🏘️</div><h1>BAZAR <span>JOURNEY</span></h1><p>Choose a day you have unlocked.</p><div class="world-heading">YOUR NEIGHBOURHOOD WORLDS</div><div class="world-grid" id="worldGrid"></div><div class="world-progress" id="worldProgress">Unlock new markets by completing levels.</div><div class="map-level-heading">LEVEL SELECT</div><div id="levelGrid" class="level-grid"></div><button class="secondary" id="mapClose">BACK TO MARKET</button></div></div>
-
-<div class="overlay hidden" id="festival"><div class="panel"><div class="hero" id="festivalHero">🎊🏮✨</div><h1>BAZAR <span>FESTIVALS</span></h1><p>Choose a celebration to decorate your market. Every festival has its own colours, lights and atmosphere.</p><div class="festival-row" id="festivalChoices"></div><div class="festival-banner" id="festivalStatus">Your market, your celebration!</div><button class="secondary" id="festivalClose">BACK TO MARKET</button></div></div>
-<div class="overlay hidden" id="profile"><div class="panel"><div class="hero" id="profileHero">🧑🏽‍🌾</div><h1>PLAYER <span>PROFILE</span></h1><p>Your bazaar story, milestones and rewards are saved on this device.</p>
-<div class="profile-fields"><label>PLAYER NICKNAME<input id="playerNameInput" maxlength="18" autocomplete="nickname" placeholder="Enter nickname"></label><label>CHOOSE YOUR AVATAR<div class="avatar-choices" id="avatarChoices"></div></label></div>
-<div class="profile-section-title">BACKUP & CLOUD SAVE</div>
-<div class="backup-tools">
- <button class="secondary" id="backupExport" type="button">⬇ EXPORT BACKUP</button>
- <button class="secondary" id="backupImport" type="button">⬆ RESTORE BACKUP</button>
- <input id="backupFile" type="file" accept="application/json,.json" hidden>
+<div id="game">
+<canvas id="world" aria-label="Market Rush game. Swipe left and right to change lanes, swipe up to jump, swipe down to slide."></canvas>
+<div class="hud" id="hud">
+ <div class="pill"><b id="score">0</b><small>SCORE</small></div>
+ <div class="pill"><b id="distance">0m</b><small>DISTANCE</small></div>
+ <div class="pill"><b id="coins">0</b><small>COINS</small></div>
+ <div class="spacer"></div><button class="iconbtn" id="pause" aria-label="Pause game">Ⅱ</button>
 </div>
-<p class="backup-note">Keep a backup file somewhere safe. Restore replaces the progress currently on this device.</p>
-<div class="cloud-box">
- <b>☁️ CLOUD SAVE · SUPABASE</b>
- <input id="cloudUrl" type="url" placeholder="Supabase Project URL (https://….supabase.co)" autocomplete="url">
- <input id="cloudKey" type="password" placeholder="Supabase publishable / anon key" autocomplete="off">
- <input id="cloudEmail" type="email" placeholder="Account email" autocomplete="email">
- <input id="cloudPassword" type="password" placeholder="Account password" autocomplete="current-password">
- <div class="cloud-actions"><button class="secondary" id="cloudSignup" type="button">CREATE ACCOUNT</button><button class="secondary" id="cloudLogin" type="button">SIGN IN</button></div>
- <div class="cloud-actions"><button class="secondary" id="cloudSave" type="button">☁ SAVE TO CLOUD</button><button class="secondary" id="cloudRestore" type="button">↻ RESTORE FROM CLOUD</button></div>
- <small id="cloudStatus" aria-live="polite">Cloud needs your own free Supabase project setup. See setup guide below.</small>
- <details class="cloud-guide"><summary>One-time free setup instructions</summary>
- <ol><li>Create a free project at Supabase.</li><li>Copy its Project URL and publishable (anon) key into the fields above.</li><li>In Supabase SQL Editor, run this SQL:</li></ol>
- <pre>create table if not exists public.player_saves (
- user_id uuid primary key references auth.users(id) on delete cascade,
- save_data jsonb not null,
- updated_at timestamptz not null default now()
-);
-alter table public.player_saves enable row level security;
-create policy "Players manage their own save"
-on public.player_saves for all to authenticated
-using (auth.uid() = user_id)
-with check (auth.uid() = user_id);</pre>
- <small>Use only the publishable/anon key in this browser game. Never paste a service-role or secret key. Enable email/password sign-in in Supabase Auth. If email confirmation is enabled, confirm the signup email before signing in.</small>
- </details>
-</div><div class="profile-section-title">YOUR PROGRESS</div><div class="profile-metrics"><div class="profile-metric"><b id="pLevels">0</b><small>LEVELS COMPLETED</small></div><div class="profile-metric"><b id="pMoves">0</b><small>TOTAL MOVES</small></div><div class="profile-metric"><b id="pCoins">0</b><small>COINS EARNED</small></div><div class="profile-metric"><b id="pStreak">0</b><small>DAY STREAK 🔥</small></div></div>
-<div class="profile-section-title">NEXT MILESTONE</div><div id="nextAchievement">Complete your first day to earn a badge.</div><div class="profile-progress"><i id="achievementProgress"></i></div>
-<div class="profile-section-title">ACHIEVEMENT COLLECTION</div><div class="achievement-list" id="achievementList"></div><button class="secondary" id="profileClose">BACK TO MARKET</button></div></div>
-<div class="overlay hidden" id="loginRewards"><div class="panel"><div class="hero">🎁🌟🪙</div><h1>DAILY <span>REWARDS</span></h1><p>Visit the bazaar each day and collect a bigger gift. Missed a day? Your streak starts again at Day 1.</p><div class="login-calendar" id="loginCalendar"></div><div class="festival-banner" id="loginRewardStatus">Your next gift is waiting!</div><button class="primary" id="loginClaim" type="button">COLLECT TODAY'S GIFT</button><br><button class="secondary" id="loginRewardsClose" type="button">BACK TO MARKET</button></div></div>
-<div class="overlay hidden" id="marketUpgrade"><div class="panel"><div class="hero">🏗️🏮🏪</div><h1>MARKET <span>MAKEOVER</span></h1><p>Spend your earned coins to improve your bazaar. Each upgrade changes the look of your market and stays saved on this device.</p><div class="market-upgrade-list" id="marketUpgradeList"></div><div class="festival-banner" id="upgradeBalance">Your bazaar is ready to grow!</div><button class="secondary" id="marketUpgradeClose">BACK TO MARKET</button></div></div>
-<div class="overlay hidden" id="fruitDash"><div class="panel"><div class="hero">🍎🍋🍇</div><h1>FRUIT <span>DASH</span></h1><p class="fruit-instructions" id="fruitInstructions">Catch the fresh fruit before it disappears. Avoid rotten fruit! You have 25 seconds.</p><div class="fruit-scorebar"><div><b id="fruitScore">0</b><small>CAUGHT</small></div><div><b id="fruitTime">25</b><small>SECONDS</small></div><div><b id="fruitMiss">0</b><small>MISSED</small></div></div><div class="fruit-lanes"><button class="fruit-lane" data-lane="0" type="button"><span class="lane-fruit" id="fruitLane0">🧺</span><small>BASKET 1</small></button><button class="fruit-lane" data-lane="1" type="button"><span class="lane-fruit" id="fruitLane1">🧺</span><small>BASKET 2</small></button><button class="fruit-lane" data-lane="2" type="button"><span class="lane-fruit" id="fruitLane2">🧺</span><small>BASKET 3</small></button></div><button class="primary" id="fruitStart">START FRUIT DASH ▶</button><br><button class="secondary" id="fruitDashClose">BACK TO MARKET</button></div></div>
-<div class="overlay hidden" id="album"><div class="panel"><div class="hero">🏆🎁🪙</div><h1>MARKET <span>COLLECTION</span></h1><p>Collect decorations with your earned coins. Your collection stays saved on this device.</p><div class="album-grid" id="albumGrid"></div><button class="secondary" id="albumClose">BACK TO MARKET</button></div></div>
-
+<div class="order" id="order">
+ <div><b id="districtName">OLD TOWN MARKET</b><small id="orderHint">Customer order · collect any 12 goods</small></div>
+ <strong id="delivery">0 / 12</strong>
+</div>
+<div class="district" id="districtBanner">OLD TOWN · MORNING RUSH</div>
+<div class="controls" id="controls">
+ <div class="movegroup"><button class="movebtn" data-action="left" aria-label="Move left">◀</button><button class="movebtn" data-action="right" aria-label="Move right">▶</button></div>
+ <div class="actiongroup"><button class="movebtn" data-action="jump" aria-label="Jump">⬆ JUMP</button><button class="movebtn" data-action="slide" aria-label="Slide">⬇ SLIDE</button></div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="overlay" id="menu">
+ <div class="panel">
+  <div class="logo">A NAZEEF BAZAR ADVENTURE</div><div class="hero">🛺</div>
+  <h1>MARKET RUSH</h1>
+  <p>The bazaar is buzzing! Run through lively streets, collect goods for waiting customers and dodge carts, crates and low market signs.</p>
+  <div class="howto"><div>↔️<small>CHANGE LANES</small></div><div>⬆️<small>JUMP</small></div><div>⬇️<small>SLIDE</small></div><div>🧺<small>COLLECT GOODS</small></div></div>
+  <button class="primary" id="play">START RUN ▶</button>
+  <p style="margin-bottom:0">Swipe anywhere to move · No internet required</p>
+ </div>
+</div>
+<div class="overlay hidden" id="pauseScreen">
+ <div class="panel"><div class="hero">⏸️</div><h1>TAKE A BREATHER</h1><p>Your market run is paused.</p><button class="primary" id="resume">CONTINUE RUN</button><button class="secondary" id="quit">END RUN</button></div>
+</div>
+<div class="overlay hidden" id="gameover">
+ <div class="panel"><div class="hero" id="resultHero">🧺</div><div class="logo">RUN COMPLETE</div><h1 id="resultTitle">NICE DELIVERY!</h1><p id="resultText">You helped the bazaar today.</p>
+ <div class="howto"><div>⭐<small id="resultScore">0 SCORE</small></div><div>🪙<small id="resultCoins">0 COINS</small></div><div>📍<small id="resultDistance">0 METRES</small></div><div>🏆<small id="resultBest">0 BEST</small></div></div>
+ <button class="primary" id="again">RUN AGAIN ▶</button><button class="secondary" id="home">BACK TO MARKET</button></div>
+</div>
+</div>
 <script>
-(()=>{'use strict';
+(()=>{
+'use strict';
 const $=id=>document.getElementById(id);
-const CAP=4,PRODUCTS=[{e:'🍎',n:'Apples'},{e:'🥕',n:'Carrots'},{e:'🍋',n:'Lemons'},{e:'🍇',n:'Grapes'},{e:'🥐',n:'Pastries'},{e:'🥭',n:'Mangoes'},{e:'🍉',n:'Watermelons'},{e:'🍊',n:'Oranges'},{e:'🥥',n:'Coconuts'},{e:'🍍',n:'Pineapples'}];
-function productArt(v){
- const p=PRODUCTS[v];if(!p||v<0||v>9)return '';
- const id='fruit'+v;
- const palettes=[
-  ['#8d1523','#f04443','#ff9b83'],['#bd4a12','#ff9a28','#ffd17a'],['#c49a16','#fff06a','#fff8bd'],
-  ['#51246f','#a85bd0','#e7b7ff'],['#a85b1b','#f5b84f','#ffe0a0'],['#bd5b18','#ffbd45','#ffe0a0'],
-  ['#145638','#4baf65','#b4ed8c'],['#bd4c0d','#ff9a22','#ffd06a'],['#4c281a','#a86a43','#f8ead7'],['#a85b16','#f5b72d','#ffe98a']
- ];
- const [dark,main,light]=palettes[v];
- const defs='<defs>'+
-  '<linearGradient id="'+id+'body" x1=".12" y1=".08" x2=".88" y2=".94"><stop offset="0" stop-color="'+light+'"/><stop offset=".18" stop-color="'+main+'"/><stop offset=".62" stop-color="'+main+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient>'+
-  '<linearGradient id="'+id+'leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a9d66c"/><stop offset=".48" stop-color="#4f9b45"/><stop offset="1" stop-color="#245b32"/></linearGradient>'+
-  '<radialGradient id="'+id+'shine" cx=".24" cy=".16" r=".82"><stop stop-color="#fff" stop-opacity=".82"/><stop offset=".22" stop-color="#fff" stop-opacity=".34"/><stop offset=".58" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'+
-  '<linearGradient id="'+id+'cream" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff2ce"/><stop offset="1" stop-color="#d6a66b"/></linearGradient>'+
- '</defs>';
- const svg=body=>'<svg class="produce-art" viewBox="0 0 64 64" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+p.n+'" focusable="false">'+defs+'<ellipse cx="33" cy="57" rx="18" ry="3.2" fill="#160d08" opacity=".28"/>'+body+'</svg>';
- const body='url(#'+id+'body)',leaf='url(#'+id+'leaf)',shine='url(#'+id+'shine)',cream='url(#'+id+'cream)';
- const arts=[
-  // Apple: lobed fruit, stem, leaf, natural blush and reflected light
-  '<path d="M32 17C23 8 9 14 8 29 6 44 17 57 29 56q3 0 4-2 3 2 6 2c13 0 21-14 18-28-2-14-16-19-25-11Z" fill="'+body+'" stroke="#70202a" stroke-width="1.8"/><path d="M31 17q-3-7 2-12" fill="none" stroke="#67401f" stroke-width="4" stroke-linecap="round"/><path d="M34 11Q43 0 56 7q-4 12-20 10Z" fill="'+leaf+'" stroke="#356b35" stroke-width="1"/><path d="M35 16q7-6 15-7" fill="none" stroke="#d9ed9a" stroke-width="1.2"/><ellipse cx="20" cy="29" rx="7" ry="13" fill="'+shine+'" transform="rotate(18 20 29)"/><path d="M13 43q5 8 13 9" fill="none" stroke="#ffc0a4" stroke-width="1.5" opacity=".6"/>',
-  // Carrot: tapered root with fine ridges and leafy crown
-  '<path d="M27 15Q16 7 10 4q11-2 23 10Q39 1 54 5q-4 12-20 17" fill="'+leaf+'" stroke="#315e31" stroke-width="1.2"/><path d="M29 14Q43 10 45 22q-1 16-20 37-7 7-12-1Q10 51 16 33q4-14 13-19Z" fill="'+body+'" stroke="#9e4617" stroke-width="1.6"/><path d="M27 20q-8 16-12 32" fill="none" stroke="#ffe2a1" stroke-width="3" stroke-linecap="round" opacity=".7"/><path d="m25 32-7 3m12 3-7 3m1 6-6 3" stroke="#b84e18" stroke-width="1.6" stroke-linecap="round" opacity=".7"/><path d="M30 17q8 1 8 8" fill="none" stroke="#fff0c2" stroke-width="2" opacity=".45"/>',
-  // Lemon: asymmetric oval, tapered ends, pores and waxy sheen
-  '<path d="M11 32q-7-3-6 1 2 6 10 5 8 15 20 13 16-1 24-18-8-17-24-19-12-1-20 15-7-1-9 3Z" fill="'+body+'" stroke="#9e8116" stroke-width="1.5"/><path d="M12 32q-3-3-6 0m46-14q5-3 7 1" fill="none" stroke="#d7b92e" stroke-width="2"/><ellipse cx="23" cy="25" rx="8" ry="5" fill="'+shine+'" transform="rotate(-20 23 25)"/><g fill="#fff4a5" opacity=".55"><circle cx="20" cy="39" r=".8"/><circle cx="29" cy="44" r=".7"/><circle cx="42" cy="28" r=".8"/><circle cx="48" cy="36" r=".7"/></g>',
-  // Grapes: clustered individual berries with shaded edges
-  '<path d="M31 16q-7-12-16-7 2 9 14 12m5-5Q44 4 53 10q-2 9-16 13" fill="'+leaf+'" stroke="#35663b" stroke-width="1.2"/><path d="M31 16q-2-6 3-10" fill="none" stroke="#70502a" stroke-width="3"/><g fill="'+body+'" stroke="#51285f" stroke-width="1.3"><circle cx="21" cy="27" r="10"/><circle cx="42" cy="27" r="10"/><circle cx="13" cy="43" r="9"/><circle cx="31" cy="43" r="10"/><circle cx="50" cy="43" r="9"/><circle cx="31" cy="57" r="7"/></g><g fill="'+shine+'" opacity=".8"><ellipse cx="18" cy="23" rx="3" ry="5"/><ellipse cx="39" cy="23" rx="3" ry="5"/><ellipse cx="11" cy="40" rx="2.5" ry="4"/></g>',
-  // Croissant pastry: buttery curved laminated layers
-  '<path d="M9 39Q5 31 13 23l8-9q5-5 10 0l3 5 8-6q7-4 12 3l5 10q3 7-4 12L42 52q-7 5-13-1l-5-5-7 2q-6 1-8-9Z" fill="'+body+'" stroke="#96511d" stroke-width="1.8"/><path d="M13 37q8-13 17-18 6-4 9 3m-23 22q12-15 26-20 6-2 10 5M22 46q9-12 24-17" fill="none" stroke="#ffe0a0" stroke-width="3.2" stroke-linecap="round" opacity=".9"/><path d="M17 26q-5 7-5 12m34-20q7 1 9 8" fill="none" stroke="#fff0c8" stroke-width="2" opacity=".75"/><path d="M17 43q-2 5 3 6m23-1q6-1 8-7" fill="none" stroke="#a85e24" stroke-width="2"/>',
-  // Mango: asymmetric golden fruit with warm blush and leaf
-  '<path d="M34 14q-5-8 2-12" fill="none" stroke="#68401d" stroke-width="3.5" stroke-linecap="round"/><path d="M36 9q10-8 18-1-7 9-18 7" fill="'+leaf+'" stroke="#356b35" stroke-width="1"/><path d="M31 13Q13 7 9 27 5 48 25 56q17 6 29-11 11-17-3-28-9-8-20-4Z" fill="'+body+'" stroke="#9d4b17" stroke-width="1.6"/><path d="M17 24q-6 14 3 24" fill="none" stroke="#fff0b8" stroke-width="3.5" stroke-linecap="round" opacity=".7"/><path d="M15 40q8 13 21 12" fill="none" stroke="#e76b25" stroke-width="1.5" opacity=".7"/>',
-  // Watermelon: dark rind, striped surface and subtle shine
-  '<path d="M32 8C16 7 7 19 8 34q1 21 23 23 23 0 25-22Q57 10 32 8Z" fill="'+body+'" stroke="#174b32" stroke-width="2"/><path d="M17 16q-8 17 0 32m12-39q-6 20 0 45m13-42q8 18 2 37" fill="none" stroke="#b8e68c" stroke-width="3" stroke-linecap="round" opacity=".85"/><path d="M22 13q-5 15-2 22" fill="none" stroke="#e3f2b4" stroke-width="1.3" opacity=".6"/><path d="M32 8q-3-5 2-7" fill="none" stroke="#76502c" stroke-width="3.5" stroke-linecap="round"/>',
-  // Orange: rounded citrus with dimpled peel and leaf
-  '<path d="M31 10q-3-6 3-9" fill="none" stroke="#76502b" stroke-width="3" stroke-linecap="round"/><path d="M35 8q10-8 18-1-6 9-18 7" fill="'+leaf+'" stroke="#356b35" stroke-width="1"/><circle cx="32" cy="35" r="23" fill="'+body+'" stroke="#a94c13" stroke-width="1.6"/><ellipse cx="23" cy="24" rx="9" ry="11" fill="'+shine+'"/><path d="M17 46q8 9 18 8" fill="none" stroke="#ffd27a" stroke-width="1.5" opacity=".6"/><g fill="#ffe1a1" opacity=".48"><circle cx="17" cy="34" r=".7"/><circle cx="24" cy="48" r=".7"/><circle cx="43" cy="23" r=".7"/><circle cx="47" cy="39" r=".7"/><circle cx="34" cy="14" r=".7"/></g>',
-  // Coconut: fibrous husk, cut shell and bright white flesh
-  '<path d="M8 39Q5 19 25 10 46 1 57 22q9 18-10 34Q26 68 12 49Z" fill="'+body+'" stroke="#482a1b" stroke-width="2"/><path d="M13 38Q10 22 28 14 46 6 53 25q5 14-11 27-19 12-29-14Z" fill="'+cream+'" stroke="#c7ae8b" stroke-width="2.5"/><path d="M18 37Q17 25 31 18q13-6 18 8 4 11-9 20-15 8-22-9Z" fill="#70432b" stroke="#4a2a1b" stroke-width="2"/><path d="M22 34q4-10 14-13" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85"/><path d="M9 35q-2-13 9-21m-4 38q8 9 18 7" fill="none" stroke="#d49b63" stroke-width="1.5" opacity=".7"/>',
-  // Pineapple: crown leaves, golden segmented scales and texture
-  '<path d="M31 24Q13 10 17 1q11 2 17 19Q34 1 44 1q5 10-7 22Q49 7 58 10q0 12-17 19" fill="'+leaf+'" stroke="#28633a" stroke-width="1.2"/><path d="M19 24q13-12 27-1 14 12 4 29-16 17-34 1-11-16 3-29Z" fill="'+body+'" stroke="#a96b1c" stroke-width="1.6"/><path d="m20 29 8 7-7 8m12-19 8 7-7 9m-13 5 7 5m17-7 7 5" fill="none" stroke="#ffe9a0" stroke-width="2.4" stroke-linecap="round"/><g fill="#9c6420" opacity=".65"><circle cx="28" cy="29" r="1.2"/><circle cx="42" cy="39" r="1.2"/><circle cx="30" cy="47" r="1.2"/><circle cx="44" cy="25" r="1.1"/></g>'
- ];
- return svg(arts[v]);
-}
-const STALLS=[['🏪🥬🧺',"NAZEEF'S CORNER BAZAR",'A little shop with big dreams'],['🍎🥕🏬','FRESH PRODUCE STALL','The neighborhood favourite'],['🥐🍋🛍️','THE BUSY MARKET','More customers are coming'],['🌼🍇🏘️','GOLDEN BAZAR STREET','A beautiful market street'],['🎪🧺✨','THE GRAND BAZAR','Your market is shining']];
-let level=1,coins=0,best=0,unlocked=1,stacks=[],selected=-1,moves=0,history=[],busy=false,started=false,soundOn=true;
-let totalMoves=0,levelsCompleted=0,totalCoinsEarned=0,playStreak=0,lastFinishDate='',playerName='Bazaar Player',playerAvatar='🧑🏽‍🌾';
-let marketUpgrades={stall:0,awning:0,path:0,lights:0},fruitBest=0,fruitTimer=null,fruitElapsed=0,fruitScore=0,fruitMiss=0,fruitActiveLane=-1,fruitActiveRotten=false;
-let loginLastDate='',loginStreak=0,installPromptEvent=null;
-let musicOn=true,musicTimer=null,musicStep=0,musicMaster=null,ambienceOsc=null;
-let dailyMode=false,dailySeed='',dailyTargetMoves=0,orderProduct=0,specialOrderDone=false,goldenBasketPaid=false,scrambleVariant=0,worldBonusPaid=false,worldPerkClaims=(()=>{try{return new Set(JSON.parse(localStorage.getItem('nbsWorldPerkClaims')||'[]'))}catch(e){return new Set()}})();
-let goldenBasketClaims=(()=>{try{return new Set(JSON.parse(localStorage.getItem('nbsGoldenBasketClaims')||'[]'))}catch(e){return new Set()}})();
-function specialBasketType(){if(dailyMode)return '';if(level%25===0)return 'rainbow';if(level%10===0)return 'golden';return ''}
-function goldenBasketEvent(){return specialBasketType()==='golden'||specialBasketType()==='rainbow'}
-function goldenBasketKey(){return 'level-'+level}
-function chapterChallenge(){return !dailyMode&&(level-1)%10===0}
-function vipCustomerRush(){return !dailyMode&&level%5===0}
-function chapterMoveTarget(){return 55+typesForLevel()*10}
-function chapterNumber(){return Math.floor((level-1)/10)+1}
-const WORLD_PERKS=[{name:'Welcome Basket',icon:'🧺',coins:5,desc:'Your first completed shelf earns a welcome gift.'},{name:'River Delivery',icon:'⛵',coins:6,desc:'Deliver your first sorted basket for a river-trader tip.'},{name:'Blossom Combo',icon:'🌸',coins:7,desc:'Your first perfect shelf earns a blossom bonus.'},{name:'Garden Harvest',icon:'🌿',coins:8,desc:'Your first harvest-ready shelf earns a garden bonus.'},{name:'Lantern Spark',icon:'🏮',coins:9,desc:'Light up the night market with your first sorted shelf.'},{name:'Citrus Sunshine',icon:'☀️',coins:10,desc:'Your first sunny-market basket earns a sunshine bonus.'},{name:'Canal Trade',icon:'🎏',coins:11,desc:'Your first canal-side delivery earns a trader tip.'},{name:'Rooftop Breeze',icon:'🪁',coins:12,desc:'Your first rooftop basket earns a sky-high bonus.'},{name:'Old Town Treasure',icon:'🏘️',coins:13,desc:'Your first old-town shelf uncovers a little treasure.'},{name:'Monsoon Rainbow',icon:'🌈',coins:14,desc:'Your first monsoon basket earns a rainbow reward.'}];
-function worldPerkInfo(){return WORLD_PERKS[chapterNumber()-1]||WORLD_PERKS[0]}
-const BAZAAR_BOSSES=[{name:'Haji Karim',title:'The Spice Master',line:'Only the sharpest sorter can impress my stall!'},{name:'Zoya Begum',title:'The Flower Queen',line:'Bring order to my colourful courtyard!'},{name:'Rafiq Chacha',title:'The Fruit Baron',line:'Show me your fastest market hands!'},{name:'Meera Maharani',title:'The Sweet Shop Royal',line:'A royal bazaar deserves perfect shelves!'},{name:'Kabir Khan',title:'The River Trader',line:'Keep the riverside market moving!'},{name:'Farah Sultana',title:'The Lantern Keeper',line:'Make my glowing night market proud!'},{name:'Dev Uncle',title:'The Garden Guardian',line:'Fresh goods need a clever sorter!'},{name:'Amina Aunty',title:'The Old Town Legend',line:'Let us see your neighbourhood skills!'},{name:'Raju Bhai',title:'The Rooftop Merchant',line:'A champion can sort this in no time!'},{name:'Nawab Saheb',title:'The Grand Bazaar Boss',line:'Prove you are the ultimate bazaar champion!'}];
-let bossBadges=(()=>{try{return new Set(JSON.parse(localStorage.getItem('nbsBossBadges')||'[]'))}catch(e){return new Set()}})();
-function isBossLevel(){return !dailyMode&&level%10===0}
-function bossInfo(){return BAZAAR_BOSSES[Math.max(0,chapterNumber()-1)%BAZAAR_BOSSES.length]}
-function bossMoveTarget(){return 42+typesForLevel()*7}
-function bossBadgeKey(){return 'chapter-'+chapterNumber()}
-function hasBossBadge(){return bossBadges.has(bossBadgeKey())}
-function saveBossBadges(){try{localStorage.setItem('nbsBossBadges',JSON.stringify([...bossBadges]))}catch(e){}}
-const FESTIVALS=[{id:'bazaar',name:'Classic Bazar',icon:'🏪',scene:'🏪 🧺 🌼',tag:'Warm neighborhood market',faces:['🏮','🎏','🌼','🧺']},{id:'diwali',name:'Diwali Lights',icon:'🪔',scene:'🪔 ✨ 🏮',tag:'A glowing festival of lights',faces:['🪔','✨','🏮','🎆']},{id:'holi',name:'Holi Colours',icon:'🎨',scene:'🎨 🌈 🎊',tag:'A joyful splash of colours',faces:['🎨','🌈','🎊','💜']},{id:'eid',name:'Eid Celebration',icon:'🌙',scene:'🌙 ⭐ 🕌',tag:'A moonlit celebration',faces:['🌙','⭐','✨','🕌']},{id:'monsoon',name:'Monsoon Mela',icon:'☔',scene:'☔ 🌧️ 🌿',tag:'A cool rainy-day market',faces:['☔','🌧️','🌿','💧']}];
-let festival='bazaar',festivalBonusPaid=false;
-let levelStars=(()=>{try{const value=JSON.parse(localStorage.getItem('nbsLevelStars')||'{}');return value&&typeof value==='object'&&!Array.isArray(value)?value:{}}catch(e){return {}}})();
-const DECORATIONS=[{id:'lantern',name:'Golden Lanterns',icon:'🏮',cost:50,desc:'A glowing stall decoration.'},{id:'bunting',name:'Festival Bunting',icon:'🎏',cost:75,desc:'Colourful flags for your market.'},{id:'flower',name:'Flower Garland',icon:'🌼',cost:100,desc:'A cheerful floral touch.'},{id:'fountain',name:'Lucky Fountain',icon:'⛲',cost:150,desc:'A special centerpiece.'}];
-function readSet(key){try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?value.filter(v=>typeof v==='string'):[]}catch(e){return []}}
-let ownedDecor=readSet('nbsDecor');
-try{const savedFestival=localStorage.getItem('nbsFestival')||'bazaar';festival=FESTIVALS.some(f=>f.id===savedFestival)?savedFestival:'bazaar'}catch(e){}
-function saveFestival(){try{localStorage.setItem('nbsFestival',festival);localStorage.setItem('nbsDecor',JSON.stringify(ownedDecor))}catch(e){}}
-function chapterName(n){return ['Sunrise Spice Lane','Riverside Fresh Market','Blossom Courtyard','Green Garden Bazar','Lantern Night Market','Sunny Fruit Square','Colourful Canal Walk','Breezy Rooftop Bazar','Twilight Old Town','Monsoon Street Market'][Math.floor((n-1)/10)%10]}
-function renderFestivals(){const root=$('festivalChoices');root.innerHTML='';FESTIVALS.forEach(f=>{const b=document.createElement('button');b.type='button';b.className='festival-choice'+(festival===f.id?' active':'');b.innerHTML='<span>'+f.icon+'</span>'+f.name;b.addEventListener('click',()=>{festival=f.id;saveFestival();renderFestivals();applyLevelPalette();toast(f.name+' selected!');});root.appendChild(b)});const chosen=FESTIVALS.find(f=>f.id===festival)||FESTIVALS[0];$('festivalHero').textContent=chosen.scene;$('festivalStatus').textContent=chosen.tag+' · +10 coins for your first sorted shelf in each day.'}
-
-
-const LOGIN_REWARDS=[15,20,25,30,40,50,100];
-function dateBefore(key,days){const d=new Date(key+'T12:00:00');d.setDate(d.getDate()-days);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function loginRewardClaimedToday(){return loginLastDate===todayKey()}
-function renderLoginRewards(){const today=todayKey(),claimed=loginRewardClaimedToday();let streak=loginStreak;if(loginLastDate&&loginLastDate!==today&&loginLastDate!==dateBefore(today,1))streak=0;const nextDay=claimed?Math.max(1,Math.min(7,loginStreak)):(streak%7)+1;const root=$('loginCalendar');root.innerHTML='';LOGIN_REWARDS.forEach((reward,i)=>{const day=i+1,cell=document.createElement('div');cell.className='login-day'+(day<=loginStreak&&claimed?' claimed':'')+(day===nextDay&&!claimed?' today':'');const icon=document.createElement('span');icon.textContent=day<=loginStreak&&claimed?'🎉':['🪙','🎁','🌼','🧺','🏮','💎','👑'][i];const label=document.createElement('b');label.textContent=reward+' coins';const sub=document.createElement('small');sub.textContent='DAY '+day;cell.append(icon,label,sub);root.append(cell)});$('loginClaim').disabled=claimed;$('loginClaim').textContent=claimed?'GIFT COLLECTED ✓':"COLLECT "+LOGIN_REWARDS[nextDay-1]+" COINS";$('loginRewardStatus').textContent=claimed?'You have collected today’s gift. Come back tomorrow!':'Day '+nextDay+' reward is ready: '+LOGIN_REWARDS[nextDay-1]+' coins.';$('loginRewardText').textContent=claimed?'Gift collected! Your next visit brings another reward.':'Day '+nextDay+' gift waiting · up to 100 coins!';$('loginRewardOpen').disabled=claimed;$('loginRewardOpen').textContent=claimed?'COLLECTED ✓':'COLLECT GIFT'}
-function claimLoginReward(){if(loginRewardClaimedToday())return;const today=todayKey();if(!loginLastDate||loginLastDate!==dateBefore(today,1))loginStreak=0;loginStreak=loginStreak%7+1;const reward=LOGIN_REWARDS[loginStreak-1];loginLastDate=today;earnCoins(reward);save();renderLoginRewards();update();toast('Daily gift collected: +'+reward+' coins!');}
-function setupInstallExperience(){
- const btn=$('installApp');if(!btn)return;
- const standalone=window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
- if(standalone){btn.textContent='✓ GAME INSTALLED';btn.disabled=true}
- window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPromptEvent=e;btn.textContent='📲 INSTALL GAME';btn.classList.add('install-ready')});
- window.addEventListener('appinstalled',()=>{installPromptEvent=null;btn.textContent='✓ GAME INSTALLED';btn.disabled=true});
- btn.addEventListener('click',async()=>{if(installPromptEvent){installPromptEvent.prompt();try{await installPromptEvent.userChoice}catch(e){}installPromptEvent=null;return}say('To install: open your browser menu ⋮ and choose “Install app” or “Add to Home screen”. First open the game online once so offline files can be saved.');toast('Open browser menu ⋮ to install');});
- if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').then(()=>{btn.title='Offline files are being prepared'}).catch(()=>{btn.title='Offline install is not available in this browser'}))}
-}
-
-const MARKET_UPGRADES=[
- {id:'stall',name:'Stall Craftsmanship',icon:'🪵',desc:'Polish the woodwork and add richer stall details.',costs:[60,110,180],labels:['Carved timber','Royal woodwork','Grand artisan stall']},
- {id:'awning',name:'Colourful Awnings',icon:'🎪',desc:'Give your market a brighter canopy and festival stripes.',costs:[55,100,165],labels:['Fresh canopy','Striped awning','Festival canopy']},
- {id:'path',name:'Market Pathway',icon:'🧱',desc:'Add layered stone edging beneath your bustling market.',costs:[70,125,190],labels:['Stone edging','Cobble walkway','Royal courtyard']},
- {id:'lights',name:'Lantern Strings',icon:'🏮',desc:'Light up your stall with a warmer evening glow.',costs:[65,120,200],labels:['Two lanterns','Golden glow','Grand lantern arch']}
+const canvas=$('world'),ctx=canvas.getContext('2d',{alpha:false});
+const W=480,H=850,LANES=[-1,0,1];
+const districts=[
+ {name:'OLD TOWN MARKET',banner:'OLD TOWN · MORNING RUSH',sky:['#f5c77f','#f3e0a9'],ground:'#c98d58',accent:'#d96c42'},
+ {name:'RIVERSIDE BAZAAR',banner:'RIVERSIDE · BREEZY DASH',sky:['#83c9d0','#e5e8bd'],ground:'#b68c61',accent:'#4e9b9b'},
+ {name:'GARDEN STREET',banner:'GARDEN STREET · GREEN RUN',sky:['#b3d99c','#f5e7ad'],ground:'#b78b55',accent:'#689b55'},
+ {name:'LANTERN NIGHT MARKET',banner:'LANTERN NIGHT · FESTIVAL RUN',sky:['#625f9a','#e3a36e'],ground:'#79614e',accent:'#db8b45'},
+ {name:'SPICE HILL',banner:'SPICE HILL · SUNSET SPRINT',sky:['#d98759','#f3c47e'],ground:'#a9774d',accent:'#a84f39'}
 ];
-function applyMarketUpgrades(){const el=$('livingBazaar');if(!el)return;Object.keys(marketUpgrades).forEach(k=>el.dataset[k]=String(marketUpgrades[k]||0));el.classList.toggle('market-upgraded',Object.values(marketUpgrades).some(v=>v>0));const dress=el.querySelector('.stall-dress');if(dress){const base=['🏮','🎏','🧺','🌼'];const extras=[];if(marketUpgrades.stall)extras.push('🪵');if(marketUpgrades.awning)extras.push('🎪');if(marketUpgrades.lights)extras.push('✨');const all=[...extras,...base];Array.from(dress.children).forEach((n,i)=>n.textContent=all[i]||'🌟')}}
-function renderMarketUpgrades(){const root=$('marketUpgradeList');root.innerHTML='';MARKET_UPGRADES.forEach(u=>{const tier=Math.max(0,Math.min(3,Number(marketUpgrades[u.id])||0));const card=document.createElement('div');card.className='upgrade-card';const icon=document.createElement('span');icon.className='upgrade-icon';icon.textContent=u.icon;const copy=document.createElement('div');const title=document.createElement('b');title.textContent=u.name;const desc=document.createElement('small');desc.textContent=tier===3?'MAX LEVEL · '+u.labels[2]:u.desc+' Next: '+u.labels[tier];const lvl=document.createElement('div');lvl.className='upgrade-level';lvl.textContent='LEVEL '+tier+'/3';copy.append(title,desc,lvl);const btn=document.createElement('button');btn.type='button';btn.textContent=tier===3?'MAXED ✓':'UPGRADE · '+u.costs[tier]+' 🪙';btn.disabled=tier===3||coins<u.costs[tier];btn.addEventListener('click',()=>{if(tier>=3||coins<u.costs[tier])return;coins-=u.costs[tier];marketUpgrades[u.id]=tier+1;save();applyMarketUpgrades();renderMarketUpgrades();update();toast(u.name+' upgraded!');});card.append(icon,copy,btn);root.appendChild(card)});$('upgradeBalance').textContent='AVAILABLE COINS · '+coins+' 🪙 · Upgrade each feature up to 3 times.'}
-function openMarketUpgrades(){renderMarketUpgrades();$('marketUpgrade').classList.remove('hidden')}
-function clearFruitDash(){if(fruitTimer){clearInterval(fruitTimer);fruitTimer=null}fruitActiveLane=-1;document.querySelectorAll('.fruit-lane').forEach(b=>{b.classList.remove('active','rotten')})}
-function showFruitLanes(){for(let i=0;i<3;i++){$('fruitLane'+i).textContent='🧺';const b=document.querySelector('[data-lane="'+i+'"]');b.classList.remove('active','rotten')}}
-function fruitSpawn(){if(fruitActiveLane>=0)fruitMiss++;showFruitLanes();fruitActiveLane=Math.floor(Math.random()*3);fruitActiveRotten=Math.random()<.17;const fruit=PRODUCTS[Math.floor(Math.random()*PRODUCTS.length)].e;$('fruitLane'+fruitActiveLane).textContent=fruitActiveRotten?'🤢':fruit;const b=document.querySelector('[data-lane="'+fruitActiveLane+'"]');b.classList.add('active');if(fruitActiveRotten)b.classList.add('rotten');$('fruitMiss').textContent=fruitMiss}
-function finishFruitDash(){clearFruitDash();const reward=fruitScore*2+(fruitScore>=15?20:0);if(reward>0)earnCoins(reward);fruitBest=Math.max(fruitBest,fruitScore);try{localStorage.setItem('nbsFruitBest',String(fruitBest));localStorage.setItem('nbsLoginLastDate',loginLastDate);localStorage.setItem('nbsLoginStreak',String(loginStreak))}catch(e){}$('fruitInstructions').textContent='Round complete! You caught '+fruitScore+' fruit. '+(fruitScore>=15?'Amazing market speed!':'Keep practising to beat your best score!')+' Reward: '+reward+' coins.';$('fruitStart').textContent='PLAY AGAIN ▶';$('fruitStart').disabled=false;update();toast('Fruit Dash: +'+reward+' coins!')}
-function startFruitDash(){clearFruitDash();fruitElapsed=0;fruitScore=0;fruitMiss=0;$('fruitScore').textContent='0';$('fruitMiss').textContent='0';$('fruitTime').textContent='25';$('fruitInstructions').textContent='Tap the basket showing fresh fruit. Avoid the rotten one!';$('fruitStart').disabled=true;$('fruitStart').textContent='DASH IN PROGRESS…';showFruitLanes();fruitSpawn();fruitTimer=setInterval(()=>{fruitElapsed+=.8;$('fruitTime').textContent=String(Math.max(0,Math.ceil(25-fruitElapsed)));if(fruitElapsed>=25){finishFruitDash();return}fruitSpawn()},800)}
-function tapFruitLane(i){if(!fruitTimer||i!==fruitActiveLane)return;if(fruitActiveRotten){fruitMiss+=2;toast('Rotten fruit! Watch out!')}else{fruitScore++;tone(650+fruitScore%5*55,'sine',.08,.025)}fruitActiveLane=-1;showFruitLanes();$('fruitScore').textContent=fruitScore;$('fruitMiss').textContent=fruitMiss}
-
-function renderAlbum(){const root=$('albumGrid');root.innerHTML='';DECORATIONS.forEach(d=>{const owned=ownedDecor.includes(d.id);const item=document.createElement('div');item.className='album-item';const art=document.createElement('div');art.className='art';art.textContent=d.icon;const name=document.createElement('b');name.textContent=d.name;const desc=document.createElement('small');desc.textContent=d.desc;const btn=document.createElement('button');btn.type='button';btn.textContent=owned?'COLLECTED ✓':'UNLOCK · '+d.cost+' 🪙';btn.disabled=owned||coins<d.cost;btn.addEventListener('click',()=>{if(ownedDecor.includes(d.id)||coins<d.cost)return;coins-=d.cost;ownedDecor.push(d.id);save();saveFestival();renderAlbum();update();toast(d.name+' added to your collection!')});item.append(art,name,desc,btn);root.appendChild(item)});}
-
-try{const safeInt=(key,fallback,min,max)=>{const value=Number(localStorage.getItem(key));return Number.isFinite(value)?Math.min(max,Math.max(min,Math.floor(value))):fallback};level=safeInt('nbsLevel',1,1,100);unlocked=safeInt('nbsUnlocked',1,1,100);level=Math.min(level,unlocked);unlocked=Math.max(unlocked,level);coins=safeInt('nbsCoins',0,0,Number.MAX_SAFE_INTEGER);best=safeInt('nbsBest',0,0,100);
- totalMoves=safeInt('nbsTotalMoves',0,0,Number.MAX_SAFE_INTEGER);levelsCompleted=safeInt('nbsLevelsCompleted',0,0,Number.MAX_SAFE_INTEGER);totalCoinsEarned=safeInt('nbsTotalCoinsEarned',0,0,Number.MAX_SAFE_INTEGER);playStreak=safeInt('nbsPlayStreak',0,0,100000);lastFinishDate=localStorage.getItem('nbsLastFinishDate')||'';playerName=localStorage.getItem('nbsPlayerName')||'Bazaar Player';playerAvatar=localStorage.getItem('nbsPlayerAvatar')||'🧑🏽‍🌾';
-try{const savedUpgrades=JSON.parse(localStorage.getItem('nbsMarketUpgrades')||'{}');if(savedUpgrades&&typeof savedUpgrades==='object'&&!Array.isArray(savedUpgrades))for(const key of Object.keys(marketUpgrades))marketUpgrades[key]=Math.min(3,Math.max(0,Math.floor(Number(savedUpgrades[key])||0)));fruitBest=safeInt('nbsFruitBest',0,0,Number.MAX_SAFE_INTEGER)}catch(e){}
-try{loginLastDate=localStorage.getItem('nbsLoginLastDate')||'';loginStreak=safeInt('nbsLoginStreak',0,0,7)}catch(e){}
-}catch(e){}
-const say=t=>{$('message').textContent=t};
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-
-function audioContext(){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;if(!window.ac)window.ac=new A();if(window.ac.state==='suspended')window.ac.resume().catch(()=>{});return window.ac}
-function tone(freq=620,type='sine',duration=.13,volume=.04){if(!soundOn)return;try{const c=audioContext();if(!c)return;const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(freq,c.currentTime);g.gain.setValueAtTime(volume,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+duration);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+duration+.02)}catch(e){}}
-const FESTIVAL_SCALES={bazaar:[392,440,494,587,659,587,494,440],diwali:[523,659,784,988,784,659,587,659],holi:[392,494,587,659,784,659,587,494],eid:[440,523,587,659,587,523,494,523],monsoon:[330,392,440,494,440,392,349,392]};
-function musicNote(freq,when,duration=.65,volume=.012){
- const c=audioContext();if(!c||!musicMaster)return;
- const o=c.createOscillator(),g=c.createGain(),filter=c.createBiquadFilter();
- o.type='sine';o.frequency.setValueAtTime(freq,when);
- filter.type='lowpass';filter.frequency.value=1700;
- g.gain.setValueAtTime(.0001,when);g.gain.linearRampToValueAtTime(volume,when+.035);g.gain.exponentialRampToValueAtTime(.0001,when+duration);
- o.connect(filter);filter.connect(g);g.connect(musicMaster);o.start(when);o.stop(when+duration+.03);
+const fruits=['🍎','🥭','🍊','🍋','🍇','🍉','🥥','🍍','🥕','🍐'];
+const state={screen:'menu',lane:1,jump:0,slide:0,score:0,distance:0,coins:0,runCoins:0,delivered:0,target:12,speed:330,spawn:0,objects:[],road:0,last:0,shake:0,run:0,toast:0,high:Number(localStorage.getItem('nmrBest')||0),bank:Number(localStorage.getItem('nmrCoins')||0),district:0,streak:0};
+let width=480,height=850,dpr=1,raf=0,audio=null;
+function resize(){const r=canvas.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);width=W;height=H;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}
+window.addEventListener('resize',resize,{passive:true});resize();
+function tone(freq=620,duration=.08){try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),g=audio.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(.055,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+duration)}catch(e){}}
+function laneX(lane,z=1){const spread=58+z*105;return 240+lane*spread}
+function rounded(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke()}}
+function drawBackground(dt){
+ const d=districts[state.district%districts.length],sky=ctx.createLinearGradient(0,0,0,450);sky.addColorStop(0,d.sky[0]);sky.addColorStop(1,d.sky[1]);ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ ctx.fillStyle='#fff4c2';ctx.globalAlpha=.65;ctx.beginPath();ctx.arc(385,145,39,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ // Distant rooftops and bazaar buildings
+ for(let i=0;i<8;i++){const x=i*68-25,hh=90+(i*37%75),y=360-hh;ctx.fillStyle=i%2?'#9c7057':'#bd8760';ctx.fillRect(x,y,58,hh+60);ctx.fillStyle='#674d45';ctx.beginPath();ctx.moveTo(x-7,y+8);ctx.lineTo(x+28,y-20-(i%3)*8);ctx.lineTo(x+65,y+8);ctx.closePath();ctx.fill();ctx.fillStyle='#f2d59b';ctx.fillRect(x+10,y+35,12,22);ctx.fillRect(x+35,y+35,12,22);ctx.fillStyle=d.accent;ctx.fillRect(x-2,y+65,62,10)}
+ // Road perspective
+ ctx.fillStyle='#c8a27a';ctx.fillRect(0,360,W,490);
+ ctx.beginPath();ctx.moveTo(155,335);ctx.lineTo(325,335);ctx.lineTo(480,850);ctx.lineTo(0,850);ctx.closePath();ctx.fillStyle=d.ground;ctx.fill();
+ ctx.beginPath();ctx.moveTo(155,335);ctx.lineTo(325,335);ctx.lineTo(480,850);ctx.lineTo(0,850);ctx.closePath();ctx.strokeStyle='#f4d7a1';ctx.lineWidth=7;ctx.stroke();
+ // lane dividers
+ state.road=(state.road+dt*state.speed*.001)%100;
+ for(let l=0;l<2;l++){const top=240+(l-.5)*56,bottom=240+(l-.5)*286;for(let j=0;j<8;j++){const z=((j*95-state.road)%760+760)%760/760;const y=350+z*500;const x=top+(bottom-top)*z;const ww=2+z*3;ctx.fillStyle='#f8e5bb99';ctx.fillRect(x-ww/2,y,ww,12+z*18)}}
+ // foreground market stalls on both sidewalks
+ for(let side=0;side<2;side++){const x=side?390:0;const flip=side?-1:1;for(let j=0;j<3;j++){const y=410+j*150+((state.road*1.1)%150);const scale=.65+j*.17;const sx=x+(side?-1:1)*j*13;ctx.save();ctx.translate(sx,y);ctx.scale(scale,scale);ctx.fillStyle='#72513c';ctx.fillRect(side?-28:0,0,36,95);ctx.fillStyle=j%2?'#e6b75d':'#c85f43';ctx.beginPath();ctx.moveTo(side?-40:-8,-8);ctx.lineTo(side?20:48,-8);ctx.lineTo(side?12:40,20);ctx.lineTo(side?-32:-2,20);ctx.closePath();ctx.fill();ctx.fillStyle='#ffe3a2';ctx.fillRect(side?-22:8,30,24,22);ctx.fillStyle='#487b50';ctx.fillRect(side?-23:8,56,25,18);ctx.restore()}}
 }
-function stopMarketMusic(){if(musicTimer){clearTimeout(musicTimer);musicTimer=null}if(musicMaster){try{musicMaster.gain.setTargetAtTime(.0001,window.ac.currentTime,.12);const old=musicMaster;setTimeout(()=>{try{old.disconnect()}catch(e){}},650)}catch(e){}musicMaster=null}ambienceOsc=null}
-function scheduleMarketMusic(){
- if(!musicOn||!soundOn||musicTimer)return;
- const c=audioContext();if(!c)return;
- if(!musicMaster){musicMaster=c.createGain();musicMaster.gain.value=.72;musicMaster.connect(c.destination)}
- const scales=FESTIVAL_SCALES[festival]||FESTIVAL_SCALES.bazaar;
- const step=musicStep++%scales.length,now=c.currentTime;
- const base=festival==='monsoon'?196:festival==='eid'?220:196;
- musicNote(scales[step],now,.82,.010);
- if(step%4===0)musicNote(base,now,.95,.006);
- if(step===3||step===7)musicNote(scales[(step+2)%scales.length]*2,now+.12,.55,.004);
- musicTimer=setTimeout(()=>{musicTimer=null;scheduleMarketMusic()},1450);
+function drawPlayer(){
+ const x=laneX(state.lane,1),ground=740-(state.jump>0?Math.sin((1-state.jump/.72)*Math.PI)*145:0);
+ const sliding=state.slide>0;
+ ctx.save();ctx.translate(x,ground);
+ ctx.fillStyle='#17372c55';ctx.beginPath();ctx.ellipse(0,8,29,9,0,0,Math.PI*2);ctx.fill();
+ if(sliding){ctx.rotate(-.22);rounded(-25,-43,51,31,14,'#d76b3f','#813e2b');ctx.fillStyle='#8d4d34';ctx.beginPath();ctx.arc(22,-42,14,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f1c28c';ctx.beginPath();ctx.arc(25,-44,10,0,Math.PI*2);ctx.fill();ctx.restore();return}
+ const run=Math.sin(state.run*13)*6;
+ ctx.strokeStyle='#4a3429';ctx.lineWidth=9;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-8,-17);ctx.lineTo(-12+run,-2);ctx.moveTo(8,-17);ctx.lineTo(12-run,-2);ctx.stroke();
+ rounded(-20,-66,40,48,13,'#2f8159','#1c533e');
+ ctx.strokeStyle='#f1c18b';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(-17,-55);ctx.lineTo(-26-run,-35);ctx.moveTo(17,-55);ctx.lineTo(26+run,-35);ctx.stroke();
+ ctx.fillStyle='#f1c18b';ctx.beginPath();ctx.arc(0,-81,18,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#3e3025';ctx.beginPath();ctx.arc(0,-88,19,Math.PI,Math.PI*2);ctx.fill();ctx.fillRect(-18,-88,36,7);
+ ctx.fillStyle='#d85e3e';ctx.fillRect(-19,-68,38,8);
+ ctx.fillStyle='#2b2925';ctx.beginPath();ctx.arc(-6,-81,2,0,Math.PI*2);ctx.arc(6,-81,2,0,Math.PI*2);ctx.fill();
+ ctx.restore();
 }
-function startMarketMusic(){if(!musicOn||!soundOn)return;stopMarketMusic();scheduleMarketMusic()}
-function updateAudioButtons(){
- const sb=$('sound'),mb=$('music');
- if(sb)sb.textContent=soundOn?'🔊 SOUND ON':'🔇 SOUND OFF';
- if(mb){mb.textContent=musicOn?'🎵 MUSIC ON':'🎵 MUSIC OFF';mb.classList.toggle('music-muted',!musicOn)}
+function drawObject(o){
+ const z=o.z,x=laneX(o.lane,z),y=355+z*410,s=.35+z*.85;ctx.save();ctx.translate(x,y);ctx.scale(s,s);
+ if(o.kind==='fruit'){ctx.fillStyle='#3d382c55';ctx.beginPath();ctx.ellipse(0,19,22,7,0,0,Math.PI*2);ctx.fill();ctx.font='34px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(o.icon,0,0);ctx.strokeStyle='#fff5bd';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,24,0,Math.PI*2);ctx.stroke()}
+ else if(o.kind==='crate'){rounded(-25,-28,50,53,5,'#b77b3e','#704626');ctx.strokeStyle='#e9bd72';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-20,-22);ctx.lineTo(20,18);ctx.moveTo(20,-22);ctx.lineTo(-20,18);ctx.stroke();ctx.fillStyle='#f3d49a';ctx.font='17px system-ui';ctx.textAlign='center';ctx.fillText('!',0,3)}
+ else if(o.kind==='barrier'){rounded(-43,-15,86,27,6,'#c6533e','#773d2c');ctx.fillStyle='#ffdfa0';ctx.fillRect(-34,-9,18,15);ctx.fillRect(16,-9,18,15);ctx.fillStyle='#633b2d';ctx.fillRect(-39,12,8,23);ctx.fillRect(31,12,8,23)}
+ else {rounded(-34,-20,68,42,12,'#5c9b9b','#315c5c');ctx.fillStyle='#d9f0d4';ctx.font='18px system-ui';ctx.textAlign='center';ctx.fillText('🛺',0,2)}
+ ctx.restore();
 }
-function celebrationJingle(){if(!soundOn)return;const seq=festival==='diwali'?[523,659,784,1047,988,784]:festival==='holi'?[392,494,587,784,659,784]:festival==='eid'?[440,554,659,880,784,659]:festival==='monsoon'?[392,440,523,587,659,587]:[523,659,784,880,784,1047];seq.forEach((n,i)=>setTimeout(()=>tone(n,'sine',.28,.035),i*115))}
-
-function bind(id,fn){$(id).addEventListener('click',e=>{e.preventDefault();fn(e)})}
-let saveTimer=0;
-function flushSave(){saveTimer=0;try{localStorage.setItem('nbsLevel',String(level));localStorage.setItem('nbsUnlocked',String(unlocked));localStorage.setItem('nbsCoins',String(coins));localStorage.setItem('nbsBest',String(best));localStorage.setItem('nbsDecor',JSON.stringify(ownedDecor));localStorage.setItem('nbsFestival',festival);localStorage.setItem('nbsTotalMoves',String(totalMoves));localStorage.setItem('nbsLevelsCompleted',String(levelsCompleted));localStorage.setItem('nbsTotalCoinsEarned',String(totalCoinsEarned));localStorage.setItem('nbsPlayStreak',String(playStreak));localStorage.setItem('nbsLastFinishDate',lastFinishDate);localStorage.setItem('nbsPlayerName',playerName);localStorage.setItem('nbsPlayerAvatar',playerAvatar);localStorage.setItem('nbsMarketUpgrades',JSON.stringify(marketUpgrades));localStorage.setItem('nbsFruitBest',String(fruitBest))}catch(e){}}
-function save(){if(saveTimer)clearTimeout(saveTimer);saveTimer=setTimeout(flushSave,180)}
-window.addEventListener('pagehide',flushSave,{capture:true});
-function earnCoins(amount){coins+=amount;totalCoinsEarned+=amount;save()}
-const AVATARS=['🧑🏽‍🌾','👨🏽‍🍳','🧑🏻‍🌾','🧔🏽','👳🏽','🧕🏽','🧑🏾','👨🏻‍🌾','👩🏽‍🌾','🧑🏽‍🍳','👨🏾‍🌾','🧑🏻‍🍳'];
-const ACHIEVEMENTS=[
- {id:'first',icon:'🌱',name:'First Day',desc:'Complete your first level.',goal:1,metric:'levels'},
- {id:'five',icon:'🧺',name:'Market Regular',desc:'Complete 5 levels.',goal:5,metric:'levels'},
- {id:'ten',icon:'🏘️',name:'Neighbourhood Star',desc:'Complete 10 levels.',goal:10,metric:'levels'},
- {id:'twentyfive',icon:'🏆',name:'Bazar Champion',desc:'Complete 25 levels.',goal:25,metric:'levels'},
- {id:'hundred',icon:'👑',name:'Royal Bazaar',desc:'Complete all 100 levels.',goal:100,metric:'levels'},
- {id:'moves100',icon:'👣',name:'Quick Hands',desc:'Make 100 sorting moves.',goal:100,metric:'moves'},
- {id:'moves500',icon:'⚡',name:'Sorting Expert',desc:'Make 500 sorting moves.',goal:500,metric:'moves'},
- {id:'coins250',icon:'🪙',name:'Coin Collector',desc:'Earn 250 coins.',goal:250,metric:'coins'},
- {id:'coins1000',icon:'💰',name:'Golden Trader',desc:'Earn 1,000 coins.',goal:1000,metric:'coins'},
- {id:'streak3',icon:'🔥',name:'Three-Day Streak',desc:'Finish a level on 3 consecutive days.',goal:3,metric:'streak'},
- {id:'streak7',icon:'🌟',name:'Market Devotee',desc:'Finish a level on 7 consecutive days.',goal:7,metric:'streak'},
- {id:'decor',icon:'🎁',name:'Market Stylist',desc:'Collect every market decoration.',goal:4,metric:'decor'}
-];
-function achievementValue(metric){return metric==='levels'?levelsCompleted:metric==='moves'?totalMoves:metric==='coins'?totalCoinsEarned:metric==='streak'?playStreak:ownedDecor.length}
-function renderProfile(){
- $('profileAvatar').textContent=playerAvatar;$('profileName').textContent=playerName.toUpperCase();$('profileSub').textContent='DAY '+level+' · '+chapterName(level);
- $('profileHero').textContent=playerAvatar;$('playerNameInput').value=playerName;
- $('pLevels').textContent=levelsCompleted;$('pMoves').textContent=totalMoves;$('pCoins').textContent=totalCoinsEarned;$('pStreak').textContent=playStreak;
- const list=$('achievementList');list.innerHTML='';
- ACHIEVEMENTS.forEach(a=>{const value=achievementValue(a.metric),unlockedNow=value>=a.goal;const el=document.createElement('div');el.className='achievement'+(unlockedNow?'':' locked');const icon=document.createElement('span');icon.textContent=unlockedNow?a.icon:'🔒';const name=document.createElement('b');name.textContent=a.name;const desc=document.createElement('small');desc.textContent=unlockedNow?'UNLOCKED · '+a.desc:a.desc+' ('+Math.min(value,a.goal)+'/'+a.goal+')';el.append(icon,name,desc);list.appendChild(el)});
- const next=ACHIEVEMENTS.find(a=>achievementValue(a.metric)<a.goal);
- if(next){const value=achievementValue(next.metric);$('nextAchievement').textContent=next.icon+' '+next.name+' · '+value+'/'+next.goal;$('achievementProgress').style.width=Math.min(100,value/next.goal*100)+'%'}else{$('nextAchievement').textContent='🏆 All achievements unlocked!';$('achievementProgress').style.width='100%'}
- const av=$('avatarChoices');av.innerHTML='';AVATARS.forEach(emoji=>{const b=document.createElement('button');b.type='button';b.className='avatar-choice'+(emoji===playerAvatar?' active':'');b.textContent=emoji;b.setAttribute('aria-label','Choose avatar '+emoji);b.addEventListener('click',()=>{playerAvatar=emoji;renderProfile();save()});av.appendChild(b)});
+function draw(){
+ ctx.clearRect(0,0,W,H);drawBackground(0);
+ for(const o of state.objects)drawObject(o);
+ drawPlayer();
+ if(state.shake>0){/* shake timer is visual feedback only */}
 }
-function recordPlayStreak(){const today=todayKey();if(lastFinishDate===today)return;const d=new Date();d.setDate(d.getDate()-1);const y=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');playStreak=lastFinishDate===y?playStreak+1:1;lastFinishDate=today}
-
-function typesForLevel(){return Math.min(10,3+Math.floor((level-1)/4))}
-function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function seededRandom(seed){let h=2166136261;for(let i=0;i<seed.length;i++){h^=seed.charCodeAt(i);h=Math.imul(h,16777619)}return function(){h+=0x6D2B79F5;let t=h;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
-function dailyAlreadyClaimed(){try{return localStorage.getItem('nbsDailyClaim')===todayKey()}catch(e){return false}}
-function refreshDailyCard(){const b=$('dailyStart'),d=$('dailyDescription');if(!b||!d)return;const claimed=dailyAlreadyClaimed();b.disabled=claimed||busy; b.textContent=claimed?'COMPLETED ✓':'PLAY TODAY ▶';d.textContent=claimed?'Today’s challenge is complete. Come back tomorrow!':'Finish within '+(dailyTargetMoves||20+typesForLevel()*7)+' moves for '+(35+typesForLevel()*5)+' bonus coins.';}
-function shelfCount(){return typesForLevel()+1}
-function cloneBoard(b=stacks){return b.map(s=>s.slice())}
-function scramble(){
- const n=typesForLevel(),count=n+1,spare=count-1,baseSeed=dailyMode?dailySeed+'-'+level:'nbs-level-'+level+'-layout-v2',rng=seededRandom(baseSeed+(scrambleVariant?'-mix-'+scrambleVariant:'')),productRng=seededRandom(baseSeed+'-products');
- const productOrder=Array.from({length:n},(_,i)=>i);
- for(let i=n-1;i>0;i--){const j=Math.floor(productRng()*(i+1));[productOrder[i],productOrder[j]]=[productOrder[j],productOrder[i]]}
- if(scrambleVariant){const shift=scrambleVariant%n;productOrder.push(...productOrder.splice(0,shift))}
- const goal=Array.from({length:count},(_,i)=>i<n?Array(CAP).fill(productOrder[i]):[]);
- let b=cloneBoard(goal),steps=16+level*3;
- const reverseMoves=[];
- for(let z=0;z<steps;z++){
-  let choices=[];
-  for(let a=0;a<count;a++)if(b[a].length&&(b[a].length===1||b[a][b[a].length-2]===b[a][b[a].length-1])){
-   const item=b[a][b[a].length-1];
-   for(let d=0;d<count;d++)if(d!==a&&b[d].length<CAP&&b[d][b[d].length-1]!==item)choices.push([a,d]);
+function updateHud(){
+ $('score').textContent=state.score.toLocaleString();$('distance').textContent=Math.floor(state.distance)+'m';$('coins').textContent=state.bank+state.runCoins;$('delivery').textContent=state.delivered+' / '+state.target;
+ const d=districts[state.district%districts.length];$('districtName').textContent=d.name;$('districtBanner').textContent=d.banner;
+}
+function showToast(msg){const t=$('toast');t.textContent=msg;t.style.opacity='1';state.toast=.9}
+function spawn(){
+ const lane=Math.floor(Math.random()*3),roll=Math.random();let kind,icon='';
+ if(roll<.53){kind='fruit';icon=fruits[Math.floor(Math.random()*fruits.length)]}
+ else if(roll<.72)kind='crate';else if(roll<.88)kind='barrier';else kind='cart';
+ state.objects.push({lane,z:0,kind,icon,hit:false});
+}
+function startRun(){
+ state.screen='run';state.lane=1;state.jump=0;state.slide=0;state.score=0;state.distance=0;state.runCoins=0;state.delivered=0;state.speed=330;state.spawn=.4;state.objects=[];state.road=0;state.run=0;state.last=performance.now();
+ $('menu').classList.add('hidden');$('pauseScreen').classList.add('hidden');$('gameover').classList.add('hidden');$('hud').classList.remove('hidden');$('order').classList.remove('hidden');$('controls').classList.remove('hidden');$('districtBanner').classList.remove('hidden');updateHud();tone(520,.1);
+}
+function finishRun(hit='Run complete!'){
+ if(state.screen!=='run')return;state.screen='over';state.high=Math.max(state.high,state.score);state.bank+=state.runCoins;localStorage.setItem('nmrBest',String(state.high));localStorage.setItem('nmrCoins',String(state.bank));
+ $('resultTitle').textContent=hit==='delivery'?'ORDER DELIVERED!':'RUN COMPLETE!';$('resultText').textContent=hit==='delivery'?'The customers are cheering. New market lanes await!':'You dashed '+Math.floor(state.distance)+' metres through the bazaar. Try another run!';$('resultScore').textContent=state.score+' SCORE';$('resultCoins').textContent='+'+state.runCoins+' COINS';$('resultDistance').textContent=Math.floor(state.distance)+' METRES';$('resultBest').textContent=state.high+' BEST';
+ $('gameover').classList.remove('hidden');$('hud').classList.add('hidden');$('order').classList.add('hidden');$('controls').classList.add('hidden');$('districtBanner').classList.add('hidden');tone(260,.2);
+}
+function act(action){
+ if(state.screen!=='run')return;
+ if(action==='left')state.lane=Math.max(0,state.lane-1);
+ if(action==='right')state.lane=Math.min(2,state.lane+1);
+ if(action==='jump'&&state.jump<=0&&state.slide<=0){state.jump=.72;tone(740,.06)}
+ if(action==='slide'&&state.jump<=0){state.slide=.58;tone(330,.06)}
+}
+function update(dt){
+ if(state.screen!=='run')return;
+ state.run+=dt;state.distance+=state.speed*dt*.055;state.score+=Math.floor(dt*state.speed*.035);state.speed=Math.min(570,330+state.distance*.12);
+ if(state.jump>0)state.jump=Math.max(0,state.jump-dt);if(state.slide>0)state.slide=Math.max(0,state.slide-dt);
+ state.spawn-=dt;if(state.spawn<=0){spawn();state.spawn=Math.max(.38,1.05-(state.speed-330)/600)+(Math.random()*.18)}
+ for(let i=state.objects.length-1;i>=0;i--){
+  const o=state.objects[i];o.z+=dt*(state.speed/440);
+  if(o.z>.87&&!o.hit&&o.lane===state.lane){
+   o.hit=true;
+   if(o.kind==='fruit'){state.runCoins+=2;state.score+=80;state.delivered++;tone(880,.07);showToast('GOOD PICKUP! +2 🪙');if(state.delivered>=state.target){state.district=(state.district+1)%districts.length;state.delivered=0;state.target+=3;state.score+=500;state.runCoins+=30;showToast('ORDER COMPLETE! +30 🪙');}}
+   else if(o.kind==='crate'&&state.jump<=0){finishRun('crate');return}
+   else if(o.kind==='barrier'&&state.slide<=0){finishRun('barrier');return}
+   else if(o.kind==='cart'){finishRun('cart');return}
   }
-  if(!choices.length)break;
-  const [a,d]=choices[Math.floor(rng()*choices.length)];
-  reverseMoves.push([a,d]);b[d].push(b[a].pop());
+  if(o.z>1.16)state.objects.splice(i,1);
  }
- const hasLegalMove=board=>board.some((stack,from)=>stack.length&&board.some((target,to)=>to!==from&&target.length<CAP&&(!target.length||target[target.length-1]===stack[stack.length-1])));
- const isSolved=board=>board.slice(0,n).every(stack=>stack.length===CAP&&stack.every(item=>item===stack[0]))&&board[spare].length===0;
- while(reverseMoves.length&&(b[spare].length!==0||isSolved(b)||!hasLegalMove(b))){
-  const [a,d]=reverseMoves.pop();const item=b[d].pop();b[a].push(item);
- }
- if(!hasLegalMove(b)||b[spare].length!==0||isSolved(b)){
-  // Guaranteed legal fallback: swap the top items of shelf pairs using
-  // the spare shelf. Each reverse step has a legal inverse in the player UI.
-  b=cloneBoard(goal);reverseMoves.length=0;
-  const order=Array.from({length:n},(_,i)=>i);
-  for(let i=n-1;i>0;i--){const j=Math.floor(rng()*(i+1));[order[i],order[j]]=[order[j],order[i]]}
-  for(let p=0;p+1<n;p+=2){
-   const a=order[p],d=order[p+1];
-   const first=b[d].pop();reverseMoves.push([d,spare]);b[spare].push(first);
-   const second=b[a].pop();reverseMoves.push([a,d]);b[d].push(second);
-   const third=b[spare].pop();reverseMoves.push([spare,a]);b[a].push(third);
-  }
- }
- return b;
+ if(state.toast>0){state.toast-=dt;if(state.toast<=0)$('toast').style.opacity='0'}
+ updateHud();
 }
-function newDay(){document.querySelector('.app')?.classList.add('playing');scrambleVariant=0;worldBonusPaid=!dailyMode&&worldPerkClaims.has(level);stacks=scramble();selected=-1;moves=0;history=[];busy=false;started=true;specialOrderDone=false;festivalBonusPaid=false;goldenBasketPaid=goldenBasketClaims.has(goldenBasketKey());orderProduct=dailyMode?((Number(dailySeed.replace(/-/g,''))||1)%typesForLevel()):((level*3+1)%typesForLevel());dailyTargetMoves=20+typesForLevel()*7;render();update();say(dailyMode?'Daily challenge: complete the customer order within '+dailyTargetMoves+' moves for bonus coins!':'Tap a shelf to pick up its top product. Match it with the same product or an empty shelf.');}
-function ensureShelfNodes(){
- const root=$('shelves');root.style.setProperty('--shelf-count',String(stacks.length));if(root.children.length===stacks.length)return root;
- const fragment=document.createDocumentFragment();
- stacks.forEach((stack,i)=>{const b=document.createElement('button');b.type='button';b.className='shelf';b.dataset.shelf=String(i);const lab=document.createElement('span');lab.className='shelf-label';const slots=document.createElement('span');slots.className='slots';b.append(lab,slots);fragment.appendChild(b)});
- root.replaceChildren(fragment);return root;
-}
-function renderShelf(i,updateItems=true){
- const root=$('shelves'),stack=stacks[i],b=root.children[i],basketType=specialBasketType(),goldenIndex=stacks.length-1,isGolden=goldenBasketEvent()&&i===goldenIndex;
- const source=selected>=0?stacks[selected]:null,sourceTop=source?.[source.length-1];
- const cls='shelf'+(isGolden?(basketType==='rainbow'?' rainbow-basket':' golden-basket'):'')+(i===selected?' selected':'')+(selected>=0&&i!==selected&&(stack.length===0||stack[stack.length-1]===sourceTop&&stack.length<CAP)?' target':'');
- if(b.className!==cls)b.className=cls;
- const label=(isGolden?(basketType==='rainbow'?'🌈':'🌟'):i===goldenIndex?'🧺':'🪵')+'|'+(isGolden?(basketType==='rainbow'?'RAINBOW BASKET':'GOLDEN BASKET'):'SHELF '+(i+1))+'|'+(isGolden?(basketType==='rainbow'?'+20 COINS ON FIRST USE':'+10 COINS ON FIRST USE'):'');
- const lab=b.firstElementChild;
- if(lab.dataset.label!==label){lab.dataset.label=label;const parts=label.split('|');lab.innerHTML='<span>'+parts[0]+'</span>'+parts[1]+(parts[2]?'<i class="golden-tag">'+parts[2]+'</i>':'')}
- if(updateItems){
-  b.setAttribute('aria-label','Shelf '+(i+1)+', '+stack.length+' of 4 items');
-  const slots=b.lastElementChild,signature=stack.join(',');
-  if(slots.dataset.signature!==signature){slots.dataset.signature=signature;const fragment=document.createDocumentFragment();
-   for(let k=0;k<CAP;k++){const item=document.createElement('span'),v=stack[k];item.className='item'+(v===undefined?' empty':k===stack.length-1?' top-item':'');if(v!==undefined)item.innerHTML=productArt(v);if(v!==undefined&&k===stack.length-1){const t=document.createElement('i');t.className='tiny';t.textContent='TOP';item.appendChild(t)}fragment.appendChild(item)}
-   slots.replaceChildren(fragment);
-  }
- }
-}
-function render(){
- ensureShelfNodes();for(let i=0;i<stacks.length;i++)renderShelf(i,true);
-}
-// Selection hot path: repaint only the shelf losing selection and the shelf gaining it.
-let lastSelectionPaint=-2;
-function renderSelection(){
- ensureShelfNodes();
- const previous=lastSelectionPaint,current=selected;
- if(previous>=0&&previous<stacks.length)renderShelf(previous,false);
- if(current>=0&&current<stacks.length&&current!==previous)renderShelf(current,false);
- if(previous===-2)for(let i=0;i<stacks.length;i++)renderShelf(i,false);
- lastSelectionPaint=current;
-}
-function renderMove(from,to){
- ensureShelfNodes();
- // A move changes only its source and destination shelf DOM.
- renderShelf(from,true);renderShelf(to,true);
- lastSelectionPaint=-2;
- const source=$('shelves').children[from],destination=$('shelves').children[to];
- source.classList.add('just-moved');destination.classList.add('just-moved');
- const arriving=destination.querySelector('.item.top-item');
- if(arriving)arriving.classList.add('arriving');
- setTimeout(()=>{source.classList.remove('just-moved');destination.classList.remove('just-moved');if(arriving)arriving.classList.remove('arriving')},300);
-}
-function showInvalidMove(i){
- const shelf=$('shelves').children[i];if(!shelf)return;
- shelf.classList.remove('invalid-move');void shelf.offsetWidth;shelf.classList.add('invalid-move');
- setTimeout(()=>shelf.classList.remove('invalid-move'),320);
-}
-function sortedCount(){return stacks.filter(s=>s.length===CAP&&s.every(v=>v===s[0])).length}
-function applyLevelPalette(){
- const hue=(Math.round((level-1)*137.508+24)%360);
- const app=document.querySelector('.app');
- app.style.setProperty('--level-h',String(hue));
- const environments=[
-  ['Saffron','🌅','🌴 🏮 🧺','SUNRISE SPICE LANE','Golden morning light and fluttering bazaar flags','🌶️','🕌'],
-  ['Lagoon','🌊','⛵ 🐚 🧺','RIVERSIDE FRESH MARKET','Cool river breeze, blue awnings and water sparkle','🐚','⛵'],
-  ['Rose','🌸','🌺 🪷 🧺','BLOSSOM COURTYARD','Petals drifting past pink flower stalls','🌺','🪷'],
-  ['Jade','🌿','🎋 🪴 🧺','GREEN GARDEN BAZAR','Leafy shade, hanging plants and fresh produce','🎋','🪴'],
-  ['Lavender','🌙','✨ 🪔 🧺','LANTERN NIGHT MARKET','Violet dusk with glowing lanterns overhead','🪔','🌙'],
-  ['Citrus','☀️','🍋 🌻 🧺','SUNNY FRUIT SQUARE','Bright sunshine, citrus crates and yellow shade cloth','🌻','🍋'],
-  ['Coral','🎏','🐟 🪸 🧺','COLOURFUL CANAL WALK','Coral awnings, canal reflections and festival bunting','🐟','🪸'],
-  ['Sky','☁️','🕊️ 🪁 🧺','BREEZY ROOFTOP BAZAR','Soft clouds, kites and cool rooftop shade','🪁','🕊️'],
-  ['Plum','🌆','🏮 🌆 🧺','TWILIGHT OLD TOWN','Warm evening windows and deep purple skies','🏮','🌆'],
-  ['Mint','🌧️','☂️ 🌱 🧺','MONSOON STREET MARKET','Gentle rain, bright umbrellas and wet-street shimmer','☂️','🌱']
- ];
- const env=environments[(chapterNumber()-1)%environments.length];
- app.style.setProperty('--scene-h',String((hue+18)%360));
- app.dataset.environment=env[0].toLowerCase();
- const living=$('livingBazaar');if(living){living.dataset.weather=env[0]==='Lavender'||env[0]==='Plum'?'night':env[0]==='Mint'?'rain':'sun';}
- const fest=FESTIVALS.find(f=>f.id===festival)||FESTIVALS[0];
- const livingScene=$('livingBazaar');if(livingScene){livingScene.dataset.festival=festival;}
- const dress=document.querySelector('.stall-dress');if(dress){const extras=DECORATIONS.filter(d=>ownedDecor.includes(d.id)).map(d=>d.icon);const chapterProps=[env[5],env[6],fest.faces[2],fest.faces[3]];Array.from(dress.children).forEach((el,i)=>{el.textContent=extras[i]||chapterProps[i]||'✨'})}
- $('marketScene').textContent=festival==='bazaar'?env[2]+' '+env[1]:fest.scene;
- $('marketName').textContent=festival==='bazaar'?env[3]:fest.name.toUpperCase()+' · '+env[3];
- $('marketRank').textContent='CHAPTER '+(Math.floor((level-1)/10)+1)+' · '+chapterName(level)+' · DAY '+level+' · '+(festival==='bazaar'?env[4]:fest.tag);
- $('boardTip').textContent=env[0]+' bazaar · Level '+level+' · Tap a shelf, then its destination';
- document.querySelector('.board-head b').textContent='🧺 '+env[0].toUpperCase()+' MARKET SHELVES';
-}
-
-function refreshBazaarLife(){
- const done=sortedCount(),total=typesForLevel(),title=$('customerTitle'),line=$('customerLine'),mood=$('customerMood');
- const one=$('customerOne'),two=$('customerTwo'),three=$('customerThree');if(!title||!line||!mood)return;
- const guests=[
-  {name:'Amina Aunty',job:'the spice-lane regular',face:['🧕🏽','👨🏽','🧒🏻'],hello:'Amina Aunty is shopping for fresh fruit.',cheer:'Amina Aunty loves your tidy spice-lane shelves!'},
-  {name:'Rafiq Chacha',job:'the riverside boat trader',face:['🧔🏽','🧕🏻','👦🏽'],hello:'Rafiq Chacha has brought a riverside delivery.',cheer:'Rafiq Chacha says your baskets are shipshape!'},
-  {name:'Zoya Begum',job:'the blossom courtyard florist',face:['👩🏽‍🦱','👧🏽','🧑🏽'],hello:'Zoya Begum is looking for colourful market treats.',cheer:'Zoya Begum loves your beautiful shelves!'},
-  {name:'Dev Uncle',job:'the garden harvest keeper',face:['🧔🏻','👩🏾','👦🏽'],hello:'Dev Uncle has brought today’s garden harvest.',cheer:'Dev Uncle says: a wonderful harvest sorted!'},
-  {name:'Farah Sultana',job:'the lantern-street baker',face:['👩🏽‍🍳','🧑🏽‍🌾','🧒🏽'],hello:'Farah Sultana is shopping under the lanterns.',cheer:'Farah Sultana says your night market shines!'},
-  {name:'Meera Maharani',job:'the sunny-square sweet seller',face:['👸🏽','👨🏽','👧🏽'],hello:'Meera Maharani wants the freshest sunny treats.',cheer:'Meera Maharani applauds your sunny sorting!'},
-  {name:'Kabir Khan',job:'the canal-side boat helper',face:['🧑🏽','👳🏽','👧🏻'],hello:'Kabir Khan is helping with the canal-side orders.',cheer:'Kabir Khan cheers for your brilliant canal trade!'},
-  {name:'Raju Bhai',job:'the rooftop kite merchant',face:['👨🏽‍🍳','👩🏽','👦🏻'],hello:'Raju Bhai has flown in with a rooftop order.',cheer:'Raju Bhai says your market is flying high!'},
-  {name:'Nawab Saheb',job:'the old-town collector',face:['🤵🏽','👳🏽','👩🏽'],hello:'Nawab Saheb is searching for a perfect old-town basket.',cheer:'Nawab Saheb declares your shelves a treasure!'},
-  {name:'Noor Aapa',job:'the monsoon umbrella seller',face:['🧕🏽','🧒🏽','👨🏽'],hello:'Noor Aapa has arrived with a rainy-day shopping list.',cheer:'Noor Aapa says your rainbow market is lovely!'}
- ];
- const guest=guests[chapterNumber()-1]||guests[0];one.textContent=guest.face[0];two.textContent=guest.face[1];three.textContent=guest.face[2];
- if(!started){title.textContent='THE NEIGHBOURHOOD IS CHEERING!';line.textContent=guest.cheer;mood.textContent='🥳';return}
- title.textContent=guest.name.toUpperCase()+' · '+guest.job.toUpperCase();
- if(done>=total-1){line.textContent=guest.name+' says: just one more shelf and the order is ready!';mood.textContent='🤩'}
- else if(done>0){line.textContent=guest.name+' is happy! '+done+' shelf'+(done===1?'':'es')+' sorted. Keep going!';mood.textContent='😄'}
- else if(moves>0){line.textContent=guest.name+' says: lovely start! Match the goods to fill the baskets.';mood.textContent='🛍️'}
- else{line.textContent=guest.hello+' '+worldPerkInfo().desc;mood.textContent='😊'}
-}
-function update(){
- applyLevelPalette();
- refreshBazaarLife();
- $('level').textContent=level;$('moves').textContent=moves;$('sorted').textContent=sortedCount()+'/'+typesForLevel();$('best').textContent=best;$('coins').textContent=coins;
-
- $('orderTitle').textContent=(dailyMode?'🌟 DAILY MISSION':isBossLevel()?'👑 BOSS CUSTOMER · '+bossInfo().name:vipCustomerRush()?'⚡ VIP CUSTOMER RUSH':'🛍️ CUSTOMER ORDER')+' · '+PRODUCTS[orderProduct].e+' '+PRODUCTS[orderProduct].n;
- $('orderText').textContent=(specialOrderDone?'Special order delivered! Bonus earned.':'First complete the '+PRODUCTS[orderProduct].n+' shelf for a '+(vipCustomerRush()?'30':'15')+'-coin tip.')+(chapterChallenge()?' Chapter '+chapterNumber()+' challenge: finish within '+chapterMoveTarget()+' moves for extra coins.':'')+(isBossLevel()?' Boss challenge: deliver the order and finish within '+bossMoveTarget()+' moves.':'')+(festival!=='bazaar'?' Festival first-shelf bonus: '+(festivalBonusPaid?'claimed':'10 coins')+'.':'');
-
- $('orderProgress').textContent=specialOrderDone?'DONE ✓':(sortedCount()+'/'+typesForLevel());$('progressFill').style.width=(sortedCount()/typesForLevel()*100)+'%';$('boardTip').textContent=isBossLevel()?'BOSS DAY: deliver the customer order and beat '+bossMoveTarget()+' moves!':goldenBasketEvent()?(goldenBasketPaid?'Special basket bonus collected!':(specialBasketType()==='rainbow'?'Rainbow Basket: use it once for +20 coins!':'Golden Basket: use it once for +10 coins!')):chapterChallenge()?'Chapter challenge: stay within '+chapterMoveTarget()+' moves for a bonus!':'Tap a shelf, then tap where its top item goes';
- refreshDailyCard();
- $('hint').disabled=busy||!started;$('undo').disabled=busy||!started||history.length===0;$('shuffle').disabled=busy||!started;
-}
-// Hot-path UI refresh: a shelf move does not need palette, daily-card or full-screen work.
-let lastMoveCustomerCount=-1;
-function updateMoveUI(){
- const done=sortedCount(),total=typesForLevel();
- $('moves').textContent=moves;$('sorted').textContent=done+'/'+total;$('best').textContent=best;$('coins').textContent=coins;
- $('orderProgress').textContent=specialOrderDone?'DONE ✓':done+'/'+total;
- $('progressFill').style.width=(done/total*100)+'%';
- $('boardTip').textContent=goldenBasketEvent()?(goldenBasketPaid?'Special basket bonus collected!':(specialBasketType()==='rainbow'?'Rainbow Basket: use it once for +20 coins!':'Golden Basket: use it once for +10 coins!')):chapterChallenge()?'Chapter challenge: stay within '+chapterMoveTarget()+' moves for a bonus!':'Tap a shelf, then tap where its top item goes';
- if(done!==lastMoveCustomerCount){lastMoveCustomerCount=done;refreshBazaarLife()}
- $('hint').disabled=busy||!started;$('undo').disabled=busy||!started||history.length===0;$('shuffle').disabled=busy||!started;
-}
-function legalMove(a,d){if(a===d||!stacks[a]||!stacks[a].length||stacks[d].length>=CAP)return false;const item=stacks[a][stacks[a].length-1];return stacks[d].length===0||stacks[d][stacks[d].length-1]===item}
-function snapshot(){history.push({stacks:cloneBoard(),moves});if(history.length>30)history.shift()}
-function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1000)}
-const HINDI_PRAISES=['शाबाश नाज़ीफ़! क्या कमाल कर दिया!','वाह नाज़ीफ़! तुमने तो बाज़ार चमका दिया!','बहुत खूब! ऐसे ही आगे बढ़ते रहो!','गज़ब कर दिया नाज़ीफ़! शानदार खेला!','कमाल है! सारे ग्राहक बहुत खुश हैं!','अरे वाह! तुम्हारी मेहनत रंग लाई!','जियो नाज़ीफ़! एक और शानदार जीत!','बहुत बढ़िया! तुम्हारा बाज़ार तरक्की कर रहा है!','क्या बात है! तुम तो sorting के उस्ताद हो!','शानदार! अगला दिन तुम्हारा इंतज़ार कर रहा है!','वाह! दिल खुश कर दिया नाज़ीफ़!','मस्त काम! ऐसे ही चमकते रहो!'];
-let lastPraise='शाबाश नाज़ीफ़! क्या कमाल कर दिया!';
-let hindiVoice=null,voiceReady=false;
-function pickHindiVoice(){
- if(!('speechSynthesis'in window))return null;
- const voices=speechSynthesis.getVoices()||[];
- const hindi=voices.filter(v=>/^hi(?:-|_|$)/i.test(v.lang));
- hindi.sort((a,b)=>{
-  const score=v=>((/google/i.test(v.name)?8:0)+(/india|hi[-_ ]?in/i.test(v.name+' '+v.lang)?5:0)+(/natural|neural|premium/i.test(v.name)?4:0)+(v.localService?1:0));
-  return score(b)-score(a);
- });
- return hindi[0]||null;
-}
-function loadHindiVoice(){hindiVoice=pickHindiVoice();voiceReady=true;const b=$('voiceTest');if(b)b.title=hindiVoice?'Hindi voice: '+hindiVoice.name+' ('+hindiVoice.lang+')':'No Hindi voice found. Install/enable a Hindi voice in Android text-to-speech settings.'}
-if('speechSynthesis'in window){loadHindiVoice();speechSynthesis.addEventListener?.('voiceschanged',loadHindiVoice)}
-function speakHindi(textToSpeak){
- if(!soundOn||!('speechSynthesis'in window)){say('Turn SOUND ON to hear the Hindi celebration.');return false}
- try{
-  loadHindiVoice();
-  if(!hindiVoice){say('Hindi voice is not available on this device. Enable a Hindi voice in Android Text-to-speech settings.');return false}
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(textToSpeak);
-  u.voice=hindiVoice;u.lang=hindiVoice.lang||'hi-IN';u.rate=.91;u.pitch=1.02;u.volume=1;
-  const btn=$('voiceTest');if(btn){btn.classList.add('voice-speaking');u.onend=()=>btn.classList.remove('voice-speaking');u.onerror=()=>btn.classList.remove('voice-speaking')}
-  speechSynthesis.speak(u);return true;
- }catch(e){say('Hindi voice could not start. Check Android Text-to-speech settings.');return false}
-}
-function celebrate(){
- const layer=document.createElement('div');layer.className='celebrate';document.body.appendChild(layer);
- const icons=['✨','🎉','🪙','🥭','⭐','🎊'];for(let i=0;i<44;i++){const p=document.createElement('span');p.className='spark';p.textContent=icons[i%icons.length];p.style.left=Math.random()*100+'%';p.style.bottom=(-10+Math.random()*20)+'%';p.style.animationDelay=Math.random()*.35+'s';layer.appendChild(p)}
- setTimeout(()=>layer.remove(),1900);lastPraise=HINDI_PRAISES[Math.floor(Math.random()*HINDI_PRAISES.length)];
- if(soundOn)speakHindi(lastPraise);
- celebrationJingle();
-}
-function moveShelf(from,to){
- if(busy||!started||from<0||to<0)return;
- if(!legalMove(from,to)){selected=to;renderSelection();showInvalidMove(to);say('That shelf cannot take this item. Match the top product or choose an empty shelf.');return}
- snapshot();const item=stacks[from].pop();stacks[to].push(item);moves++;totalMoves++;selected=-1;save();
- if(goldenBasketEvent()&&to===stacks.length-1&&!goldenBasketPaid){goldenBasketPaid=true;goldenBasketClaims.add(goldenBasketKey());try{localStorage.setItem('nbsGoldenBasketClaims',JSON.stringify([...goldenBasketClaims]))}catch(e){}const basketReward=specialBasketType()==='rainbow'?20:10;earnCoins(basketReward);toast((specialBasketType()==='rainbow'?'Rainbow':'Golden')+' Basket bonus! +'+basketReward+' coins 🌟')}
-
- // Commit the move immediately; do not wait for an animation timer before accepting the next move.
- renderMove(from,to);updateMoveUI();
- if(stacks[to].length===CAP&&stacks[to].every(v=>v===item)){toast('Perfect shelf! '+PRODUCTS[item].n+' sorted!');tone(820,'sine',.16,.04);if(!dailyMode&&!worldBonusPaid){worldBonusPaid=true;worldPerkClaims.add(level);try{localStorage.setItem('nbsWorldPerkClaims',JSON.stringify([...worldPerkClaims]))}catch(e){}const perk=worldPerkInfo();earnCoins(perk.coins);toast(perk.icon+' '+perk.name+'! +'+perk.coins+' coins');update()}if(festival!=='bazaar'&&!festivalBonusPaid){festivalBonusPaid=true;earnCoins(10);toast('Festival first-shelf bonus! +10 coins 🎊');update()}if(item===orderProduct&&!specialOrderDone){specialOrderDone=true;const orderBonus=vipCustomerRush()?30:15;earnCoins(orderBonus);document.querySelector('.order').classList.add('mission-flash');setTimeout(()=>document.querySelector('.order').classList.remove('mission-flash'),650);toast((vipCustomerRush()?'VIP rush order':'Customer order')+' delivered! +'+orderBonus+' coins 🪙');say('वाह! '+PRODUCTS[item].n+' का खास ऑर्डर पूरा! '+orderBonus+' बोनस सिक्के!');update()}}
- if(sortedCount()===typesForLevel())finishDay();
-}
-function onShelf(i){
- if(busy||!started||i<0||i>=stacks.length)return;
- // Keep ordinary shelf taps silent: speech synthesis startup can make touch input feel delayed.
- if(selected<0){if(!stacks[i].length)return;selected=i;renderSelection();return}
- if(selected===i){selected=-1;renderSelection();return}
- const from=selected;
- if(legalMove(from,i)){moveShelf(from,i);return}
- if(stacks[i].length){selected=i;renderSelection()}else{showInvalidMove(i)}
-}
-function findHint(){
- if(!started||busy)return;
- for(let a=0;a<stacks.length;a++)if(stacks[a].length){const item=stacks[a][stacks[a].length-1];for(let d=0;d<stacks.length;d++)if(legalMove(a,d)&&stacks[d].length&&stacks[d][stacks[d].length-1]===item){selected=a;render();say('Hint: move '+PRODUCTS[item].n+' from shelf '+(a+1)+' to shelf '+(d+1)+'.');toast('Try shelf '+(d+1));return}}
- for(let a=0;a<stacks.length;a++)if(stacks[a].length){for(let d=0;d<stacks.length;d++)if(legalMove(a,d)&&!stacks[d].length){selected=a;render();say('Hint: move the top item from shelf '+(a+1)+' to the empty shelf '+(d+1)+'.');return}}
- say('Every move is possible. Keep sorting!');}
-function undo(){if(!history.length||busy)return;const prev=history.pop();stacks=cloneBoard(prev.stacks);moves=prev.moves;selected=-1;render();update();say('Last move undone. Try another shelf!');tone(330)}
-function mixUp(){if(busy||!started)return;scrambleVariant++;stacks=scramble();selected=-1;history=[];render();update();say('Shelves mixed up. A fresh sorting puzzle is ready!');toast('Fresh market mix!')}
-function ratingForMoves(){const par=22+typesForLevel()*5+Math.max(0,level-1)*0.35;return moves<=par?3:moves<=par*1.55?2:1}
-function saveLevelRating(){if(dailyMode)return 0;const stars=ratingForMoves();levelStars[level]=Math.max(Number(levelStars[level]||0),stars);try{localStorage.setItem('nbsLevelStars',JSON.stringify(levelStars))}catch(e){}return stars}
-function showLevelBrief(){const chapter=chapterNumber(),types=typesForLevel(),boss=isBossLevel(),guest=bossInfo(),perk=worldPerkInfo();$('briefIcon').textContent=boss?'👑🏆🧺':chapter===1?'🏪🥭🧺':chapter===2?'🌿🍇🧺':'🏮🛍️✨';$('briefChapter').textContent='CHAPTER '+chapter+' · '+chapterName(level)+(boss?' · BOSS DAY':'');$('briefTitle').innerHTML=dailyMode?'🌟 <span>DAILY CHALLENGE</span>':boss?'DAY '+level+' <span>'+guest.title.toUpperCase()+'</span>':'DAY '+level+' <span>'+chapterName(level).toUpperCase()+'</span>';$('briefStory').textContent=boss?guest.name+' challenges you: “'+guest.line+'”':level%10===1?'A new neighborhood chapter begins! Discover '+perk.name+' and meet your new market regular.':'The bazaar is getting busier. '+perk.desc+' New customers and produce arrive as your market grows.';$('briefTypes').textContent=types;$('briefShelves').textContent=types+1;$('briefReward').textContent=20+types*10;$('briefChallenge').textContent=dailyMode?'DAILY MISSION · Complete the customer order within '+dailyTargetMoves+' moves for bonus coins.':boss?'BOSS CHALLENGE · Deliver '+PRODUCTS[orderProduct].n+' to '+guest.name+' and finish within '+bossMoveTarget()+' moves for '+(60+chapter*10)+' coins plus a chapter badge.':chapterChallenge()?'CHAPTER CHALLENGE · Finish in '+chapterMoveTarget()+' moves or fewer for '+(25+chapter*5)+' bonus coins.':vipCustomerRush()?'VIP CUSTOMER RUSH · Complete the special order for 30 bonus coins!':goldenBasketEvent()?(specialBasketType()==='rainbow'?'RAINBOW BASKET · Use it once for +20 coins!':'GOLDEN BASKET · Use it once for +10 coins!'):perk.icon+' '+perk.name.toUpperCase()+' · '+perk.desc+' Earn +'+perk.coins+' coins on your first completed shelf. New produce unlocks as you progress.';$('levelBrief').classList.remove('hidden')}
-function beginBriefLevel(){$('levelBrief').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newDay();if(musicOn&&soundOn)startMarketMusic()}
-function finishDay(){document.querySelector('.app')?.classList.remove('playing');started=false;try{navigator.vibrate?.([35,45,35,45,90])}catch(e){}let reward=20+typesForLevel()*10+Math.max(0,30-moves);let extra='';let bossWon=false;if(isBossLevel()){bossWon=specialOrderDone&&moves<=bossMoveTarget();if(bossWon&&!hasBossBadge()){const bossBonus=60+chapterNumber()*10;reward+=bossBonus;bossBadges.add(bossBadgeKey());saveBossBadges();extra+=' BOSS DEFEATED! '+bossInfo().name+' awarded the Chapter '+chapterNumber()+' badge and '+bossBonus+' bonus coins!';}else if(bossWon){extra+=' Boss challenge cleared again! Your chapter badge is already yours.';}else{extra+=' Boss challenge not cleared: deliver the customer order and finish within '+bossMoveTarget()+' moves. Replay this day to earn the chapter badge!';}}if(chapterChallenge()&&moves<=chapterMoveTarget()){const chapterBonus=25+chapterNumber()*5;reward+=chapterBonus;extra+=' Chapter '+chapterNumber()+' challenge cleared! +'+chapterBonus+' coins.'}else if(chapterChallenge()){extra+=' Chapter challenge target was '+chapterMoveTarget()+' moves; keep practising!'}if(dailyMode){const won=moves<=dailyTargetMoves,firstAttempt=!dailyAlreadyClaimed();if(won&&firstAttempt){try{localStorage.setItem('nbsDailyClaim',todayKey())}catch(e){}const bonus=35+typesForLevel()*5;reward+=bonus;extra=' Daily challenge bonus: '+bonus+' coins!'}else if(!firstAttempt){extra=' Today’s daily reward was already claimed.'}else{extra=' Daily target was '+dailyTargetMoves+' moves. You can try this challenge again today!'}}else{unlocked=Math.max(unlocked,Math.min(100,level+1));best=Math.max(best,level)}const earnedStars=saveLevelRating();earnCoins(reward);levelsCompleted++;recordPlayStreak();save();celebrate();$('finishMoves').textContent=moves;$('finishProducts').textContent=typesForLevel();$('finishReward').textContent=reward;$('finishRibbon').textContent=dailyMode?'DAILY CHALLENGE':isBossLevel()?(bossWon?'BOSS DEFEATED':'BOSS DAY COMPLETE'):earnedStars===3?'PERFECT MARKET DAY':'MARKET DAY COMPLETE';$('starResult').innerHTML=[1,2,3].map(n=>'<span class="'+(n<=earnedStars?'earned':'')+'">★</span>').join('');$('starCaption').textContent=dailyMode?'DAILY MISSION COMPLETE':isBossLevel()?(bossWon?'🏅 CHAPTER BOSS DEFEATED · '+earnedStars+' STARS':'BOSS CHALLENGE · '+earnedStars+' STARS') :earnedStars+' OF 3 STARS · '+(earnedStars===3?'PERFECT SORTING!':earnedStars===2?'GREAT MARKET WORK!':'DAY FINISHED!');$('finishIcon').textContent='🎉🏪🪙';$('finishTitle').textContent=dailyMode?'DAILY CHALLENGE COMPLETE!':'DAY '+level+' COMPLETE!';$('finishText').textContent=lastPraise+' All the shelves are sorted! Happy customers earned you '+reward+' coins. '+(specialOrderDone?'Special customer order bonus included! ':'')+extra+' तुम्हारे लिए '+reward+' सिक्के!';$('continue').textContent=dailyMode?'BACK TO BAZAAR':(level>=100?'CELEBRATE YOUR BAZAR ▶':'OPEN NEXT DAY ▶');$('finish').classList.remove('hidden');update()}
-function drawWorlds(){const root=$('worldGrid');root.innerHTML='';const worlds=[['🌅','Sunrise Spice Lane','First steps in the bazaar'],['🌊','Riverside Fresh Market','A cool breeze by the water'],['🌸','Blossom Courtyard','A garden of colourful flowers'],['🌿','Green Garden Bazar','Fresh produce under leafy shade'],['🏮','Lantern Night Market','A glowing evening market'],['☀️','Sunny Fruit Square','Bright stalls and citrus sunshine'],['🎏','Colourful Canal Walk','A lively market beside the canal'],['🪁','Breezy Rooftop Bazar','Kites above the rooftops'],['🌆','Twilight Old Town','A historic market at dusk'],['☔','Monsoon Street Market','A rainy-day bazaar adventure']];let cleared=0;worlds.forEach((w,i)=>{const first=i*10+1,last=first+9,open=unlocked>=first,done=bossBadges.has('chapter-'+(i+1)),current=chapterNumber()===i+1&&open;if(done)cleared++;const card=document.createElement('div');card.className='world-card'+(current?' current':'')+(!open?' locked':'')+(done?' cleared':'');card.innerHTML='<span class="world-art">'+w[0]+'</span><span class="world-copy"><b>CHAPTER '+(i+1)+' · '+w[1]+'</b><small>'+w[2]+' · Levels '+first+'–'+last+'</small></span><span class="world-state">'+(done?'CLEARED ✓':open?'UNLOCKED':'🔒 '+first)+'</span>';if(open){card.setAttribute('role','button');card.tabIndex=0;const go=()=>{level=Math.max(first,Math.min(last,unlocked));dailyMode=false;$('map').classList.add('hidden');showLevelBrief()};card.addEventListener('click',go);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})}root.appendChild(card)});$('worldProgress').textContent=cleared+' / 10 chapter bosses defeated · '+Math.min(100,unlocked-1)+' / 100 levels completed or unlocked.'}
-function drawMap(){drawWorlds();const root=$('levelGrid');root.innerHTML='';for(let n=1;n<=100;n++){if((n-1)%10===0){const h=document.createElement('div');h.className='chapter-label';h.textContent='CHAPTER '+(Math.floor((n-1)/10)+1)+' · '+chapterName(n);root.appendChild(h)}const b=document.createElement('button');b.type='button';b.className='level-cell'+(n===level?' current':'');b.disabled=n>unlocked;const rating=Number(levelStars[n]||0),badge=n%10===0&&bossBadges.has('chapter-'+(n/10));b.innerHTML=n>unlocked?'🔒':n+(badge?' 🏅':'')+'<span class="map-stars">'+(rating?'★'.repeat(rating)+'☆'.repeat(3-rating):'NEW')+'</span>';b.setAttribute('aria-label','Level '+n+(rating?', '+rating+' stars':''));b.addEventListener('click',()=>{level=n;dailyMode=false;$('map').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');showLevelBrief()});root.appendChild(b)}}
-// Fast Android controls: track the finger globally and resolve the shelf under its release point.
-let pointerShelf=-1,pointerId=null,pointerStartX=0,pointerStartY=0,pointerDragged=false,dragHover=-1;
-const shelfRoot=$('shelves');
-function setDragHover(next){
- if(next===dragHover)return;
- if(dragHover>=0&&shelfRoot.children[dragHover])shelfRoot.children[dragHover].classList.remove('drag-over');
- dragHover=next;
- if(dragHover>=0&&shelfRoot.children[dragHover])shelfRoot.children[dragHover].classList.add('drag-over');
-}
-function clearShelfPointer(){setDragHover(-1);pointerShelf=-1;pointerId=null;pointerDragged=false}
-shelfRoot.addEventListener('pointerdown',e=>{
- const b=e.target.closest('button.shelf');if(!b||!shelfRoot.contains(b)||!started||busy)return;
- pointerShelf=Number(b.dataset.shelf);pointerId=e.pointerId;pointerStartX=e.clientX;pointerStartY=e.clientY;pointerDragged=false;
- try{b.setPointerCapture(e.pointerId)}catch(_){}
-});
-document.addEventListener('pointermove',e=>{
- if(pointerId!==e.pointerId||pointerShelf<0)return;
- const dx=e.clientX-pointerStartX,dy=e.clientY-pointerStartY;
- if(dx*dx+dy*dy>9)pointerDragged=true;
- if(pointerDragged){
-  const under=document.elementFromPoint(e.clientX,e.clientY),target=under?.closest?.('button.shelf');
-  const dest=target&&shelfRoot.contains(target)?Number(target.dataset.shelf):-1;
-  setDragHover(dest>=0&&dest!==pointerShelf&&legalMove(pointerShelf,dest)?dest:-1);
- }
-},{passive:true});
-function finishShelfPointer(e){
- if(pointerId===null||e.pointerId!==pointerId)return;
- const from=pointerShelf,dragged=pointerDragged,under=document.elementFromPoint(e.clientX,e.clientY);
- const target=under?.closest?.('button.shelf'),dest=target&&shelfRoot.contains(target)?Number(target.dataset.shelf):from;
- clearShelfPointer();if(from<0||!started||busy)return;
- if(dragged&&from!==dest&&legalMove(from,dest)){moveShelf(from,dest);return}
- onShelf(dest);
-}
-document.addEventListener('pointerup',finishShelfPointer,{passive:true});
-document.addEventListener('pointercancel',clearShelfPointer,{passive:true});
-shelfRoot.addEventListener('click',e=>{
- // Pointer taps are handled on pointerup; retain keyboard activation.
- if(e.detail!==0)return;
- const b=e.target.closest('button.shelf');if(!b||!shelfRoot.contains(b))return;onShelf(Number(b.dataset.shelf));
-});
-bind('start',()=>{showLevelBrief()});
-bind('continue',()=>{if(dailyMode){dailyMode=false;$('finish').classList.add('hidden');newDay();return}level=level>=100?1:Math.min(100,level+1);unlocked=Math.max(unlocked,level);save();$('finish').classList.add('hidden');showLevelBrief()});
-bind('again',()=>{$('finish').classList.add('hidden');showLevelBrief()});
-bind('restart',()=>{if(!busy)showLevelBrief()});
-bind('dailyStart',()=>{if(busy||dailyAlreadyClaimed())return;dailyMode=true;dailySeed=todayKey();$('welcome').classList.add('hidden');$('finish').classList.add('hidden');newDay();if(musicOn&&soundOn)startMarketMusic()});
-bind('hint',findHint);bind('undo',undo);bind('shuffle',mixUp);
-bind('sound',()=>{soundOn=!soundOn;updateAudioButtons();if(soundOn){tone(660);if(musicOn)startMarketMusic()}else stopMarketMusic()});
-bind('music',()=>{musicOn=!musicOn;updateAudioButtons();if(musicOn&&soundOn){startMarketMusic();tone(660)}else stopMarketMusic();});
-bind('voiceTest',()=>{const sample='शाबाश नाज़ीफ़! क्या कमाल कर दिया!';if(speakHindi(sample))say('Hindi voice test playing. If it sounds robotic, choose a higher-quality Hindi voice in Android Text-to-speech settings.');});
-bind('mapOpen',()=>{drawMap();$('map').classList.remove('hidden')});bind('mapClose',()=>$('map').classList.add('hidden'));bind('briefStart',beginBriefLevel);bind('briefBack',()=>{$('levelBrief').classList.add('hidden');if(!started)$('welcome').classList.remove('hidden')});
-bind('festivalOpen',()=>{renderFestivals();$('festival').classList.remove('hidden')});bind('festivalClose',()=>{$('festival').classList.add('hidden');if(musicOn&&soundOn)startMarketMusic()});
-bind('albumOpen',()=>{renderAlbum();$('album').classList.remove('hidden')});
-bind('loginRewardOpen',()=>{renderLoginRewards();$('loginRewards').classList.remove('hidden')});bind('loginRewardsClose',()=>$('loginRewards').classList.add('hidden'));bind('loginClaim',claimLoginReward);
-bind('marketUpgradeOpen',openMarketUpgrades);bind('marketUpgradeClose',()=>$('marketUpgrade').classList.add('hidden'));
-bind('fruitDashOpen',()=>{$('fruitDash').classList.remove('hidden');$('fruitStart').disabled=false;$('fruitStart').textContent='START FRUIT DASH ▶';$('fruitInstructions').textContent='Catch the fresh fruit before it disappears. Avoid rotten fruit! You have 25 seconds.';$('fruitScore').textContent='0';$('fruitMiss').textContent='0';$('fruitTime').textContent='25';showFruitLanes()});
-bind('fruitDashClose',()=>{clearFruitDash();$('fruitDash').classList.add('hidden')});bind('fruitStart',startFruitDash);
-document.querySelectorAll('.fruit-lane').forEach(b=>b.addEventListener('click',()=>tapFruitLane(Number(b.dataset.lane))));
-bind('albumClose',()=>$('album').classList.add('hidden'));
-bind('profileOpen',()=>{renderProfile();$('profile').classList.remove('hidden')});
-bind('profileClose',()=>$('profile').classList.add('hidden'));
-$('playerNameInput').addEventListener('change',()=>{playerName=$('playerNameInput').value.trim().slice(0,18)||'Bazaar Player';save();renderProfile();update()});
-
-
-// Portable local backup: only this game's namespaced progress keys are exported.
-const BACKUP_KEYS=['nbsLevel','nbsUnlocked','nbsCoins','nbsBest','nbsDecor','nbsFestival','nbsTotalMoves','nbsLevelsCompleted','nbsTotalCoinsEarned','nbsPlayStreak','nbsLastFinishDate','nbsPlayerName','nbsPlayerAvatar','nbsDailyClaim','nbsMarketUpgrades','nbsFruitBest','nbsLoginLastDate','nbsLoginStreak','nbsGoldenBasketClaims','nbsLevelStars','nbsBossBadges','nbsWorldPerkClaims'];
-function makeBackup(){const data={};BACKUP_KEYS.forEach(k=>{const v=localStorage.getItem(k);if(v!==null)data[k]=v});return {app:'Nazeef Bazar Sort Stories',format:1,createdAt:new Date().toISOString(),data};}
-function exportBackup(){try{const blob=new Blob([JSON.stringify(makeBackup(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='nazeef-bazar-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);$('cloudStatus').textContent='Backup file exported. Keep it somewhere safe.'}catch(e){$('cloudStatus').textContent='Could not export backup on this browser.'}}
-function restoreBackupObject(obj){if(!obj||obj.app!=='Nazeef Bazar Sort Stories'||obj.format!==1||!obj.data||typeof obj.data!=='object'||Array.isArray(obj.data))throw new Error('This is not a supported Nazeef Bazar backup.');const allowed=new Set(BACKUP_KEYS);for(const [k,v] of Object.entries(obj.data)){if(!allowed.has(k)||typeof v!=='string'||v.length>200000)throw new Error('Backup contains invalid data.');}if(!obj.data.nbsLevel||!obj.data.nbsCoins)throw new Error('Backup is incomplete.');if(!confirm('Restore this backup? Your current device progress will be replaced.'))return false;BACKUP_KEYS.forEach(k=>{if(Object.prototype.hasOwnProperty.call(obj.data,k))localStorage.setItem(k,obj.data[k]);else localStorage.removeItem(k)});location.reload();return true;}
-$('backupExport').addEventListener('click',exportBackup);
-$('backupImport').addEventListener('click',()=>$('backupFile').click());
-$('backupFile').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{const obj=JSON.parse(await f.text());restoreBackupObject(obj)}catch(err){$('cloudStatus').textContent=err.message||'Could not read that backup file.'}e.target.value=''});
-function cloudConfig(){const url=$('cloudUrl').value.trim().replace(/\/$/,'');const key=$('cloudKey').value.trim();if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)||!key)throw new Error('Enter a valid Supabase Project URL and publishable/anon key.');localStorage.setItem('nbsCloudUrl',url);localStorage.setItem('nbsCloudKey',key);return {url,key};}
-function cloudHeaders(cfg,token){return {'apikey':cfg.key,'Authorization':'Bearer '+(token||cfg.key),'Content-Type':'application/json'};}
-function cloudSession(){try{return JSON.parse(localStorage.getItem('nbsCloudSession')||'null')}catch(e){return null}}
-async function cloudAuth(mode){const cfg=cloudConfig(),email=$('cloudEmail').value.trim(),password=$('cloudPassword').value;if(!email||!password)throw new Error('Enter your email and password.');const endpoint=mode==='signup'?'signup':'token?grant_type=password';const res=await fetch(cfg.url+'/auth/v1/'+endpoint,{method:'POST',headers:cloudHeaders(cfg),body:JSON.stringify({email,password})});const data=await res.json();if(!res.ok)throw new Error(data.msg||data.message||data.error_description||'Account request failed.');if(data.access_token){localStorage.setItem('nbsCloudSession',JSON.stringify({access_token:data.access_token,refresh_token:data.refresh_token,user:data.user}));$('cloudStatus').textContent='Signed in as '+(data.user?.email||email)+'.'}else{$('cloudStatus').textContent='Account created. Check your email if confirmation is enabled, then sign in.'}}
-async function cloudRequest(path,options={}){const cfg=cloudConfig(),session=cloudSession();if(!session?.access_token||!session?.user?.id)throw new Error('Sign in to your cloud account first.');const res=await fetch(cfg.url+'/rest/v1/'+path,{...options,headers:{...cloudHeaders(cfg,session.access_token),'Prefer':'resolution=merge-duplicates,return=minimal',...(options.headers||{})}});if(!res.ok){const body=await res.text();throw new Error('Cloud request failed ('+res.status+'): '+body.slice(0,240));}return res;}
-async function cloudSave(){const session=cloudSession();if(!session?.user?.id)throw new Error('Sign in to your cloud account first.');await cloudRequest('player_saves?on_conflict=user_id',{method:'POST',body:JSON.stringify({user_id:session.user.id,save_data:makeBackup(),updated_at:new Date().toISOString()})});$('cloudStatus').textContent='☁️ Cloud save complete · '+new Date().toLocaleString();}
-async function cloudRestore(){const session=cloudSession();if(!session?.user?.id)throw new Error('Sign in to your cloud account first.');const res=await cloudRequest('player_saves?select=save_data&user_id=eq.'+encodeURIComponent(session.user.id),{method:'GET',headers:{'Prefer':'return=representation'}});const rows=await res.json();if(!rows.length)throw new Error('No cloud backup found for this account yet.');restoreBackupObject(rows[0].save_data);}
-async function cloudAction(fn){$('cloudStatus').textContent='Connecting securely…';try{await fn()}catch(e){$('cloudStatus').textContent=e.message||'Cloud operation failed.'}}
-$('cloudSignup').addEventListener('click',()=>cloudAction(()=>cloudAuth('signup')));
-$('cloudLogin').addEventListener('click',()=>cloudAction(()=>cloudAuth('login')));
-$('cloudSave').addEventListener('click',()=>cloudAction(cloudSave));
-$('cloudRestore').addEventListener('click',()=>cloudAction(cloudRestore));
-try{$('cloudUrl').value=localStorage.getItem('nbsCloudUrl')||'';$('cloudKey').value=localStorage.getItem('nbsCloudKey')||'';const cs=cloudSession();if(cs?.user?.email)$('cloudStatus').textContent='Cloud account: '+cs.user.email+' · Ready to sync.'}catch(e){}
-
-applyMarketUpgrades();renderLoginRewards();setupInstallExperience();
-updateAudioButtons();
-renderProfile();
-update();
-window.addEventListener('error',()=>{busy=false;say('A small hiccup occurred. Use RESTART DAY to recover.')});
-window.addEventListener('unhandledrejection',()=>{busy=false;say('Move interrupted. You can safely restart this day.')});
+function loop(now){const dt=Math.min(.035,(now-state.last)/1000||0);state.last=now;if(state.screen==='run')update(dt);draw();raf=requestAnimationFrame(loop)}
+function pause(){if(state.screen!=='run')return;state.screen='pause';$('pauseScreen').classList.remove('hidden');$('hud').classList.add('hidden');$('order').classList.add('hidden');$('controls').classList.add('hidden')}
+function resume(){if(state.screen!=='pause')return;state.screen='run';state.last=performance.now();$('pauseScreen').classList.add('hidden');$('hud').classList.remove('hidden');$('order').classList.remove('hidden');$('controls').classList.remove('hidden')}
+function quit(){if(state.screen==='pause'){state.screen='run';finishRun('quit')}}
+$('play').addEventListener('click',startRun);$('again').addEventListener('click',startRun);$('pause').addEventListener('click',pause);$('resume').addEventListener('click',resume);$('quit').addEventListener('click',quit);$('home').addEventListener('click',()=>{state.screen='menu';$('gameover').classList.add('hidden');$('menu').classList.remove('hidden')});
+document.querySelectorAll('[data-action]').forEach(b=>b.addEventListener('pointerdown',e=>{e.preventDefault();act(b.dataset.action)}));
+let pointer=null;
+canvas.addEventListener('pointerdown',e=>{if(state.screen!=='run')return;pointer={x:e.clientX,y:e.clientY,id:e.pointerId};try{canvas.setPointerCapture(e.pointerId)}catch(err){}},{passive:true});
+canvas.addEventListener('pointerup',e=>{if(!pointer)return;const dx=e.clientX-pointer.x,dy=e.clientY-pointer.y;if(Math.max(Math.abs(dx),Math.abs(dy))>22){if(Math.abs(dx)>Math.abs(dy))act(dx<0?'left':'right');else act(dy<0?'jump':'slide')}pointer=null},{passive:true});
+canvas.addEventListener('pointercancel',()=>pointer=null);
+window.addEventListener('keydown',e=>{const map={ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right',ArrowUp:'jump',' ':'jump',ArrowDown:'slide',s:'slide',Escape:'pause'};const a=map[e.key];if(a){e.preventDefault();if(a==='pause')pause();else act(a)}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.screen==='run')pause()});
+window.__marketRushTest={state,act,startRun,finishRun,spawn,update,draw};
+$('hud').classList.add('hidden');$('order').classList.add('hidden');$('controls').classList.add('hidden');$('districtBanner').classList.add('hidden');
+state.last=performance.now();raf=requestAnimationFrame(loop);
 })();
 </script>
 </body></html>
