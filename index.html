@@ -622,14 +622,17 @@ function scramble(){
   const [a,d]=reverseMoves.pop();const item=b[d].pop();b[a].push(item);
  }
  if(!hasLegalMove(b)||b[spare].length!==0||isSolved(b)){
-  // Deterministic shuffled cycle: one top item is displaced around all product
-  // shelves, while the spare shelf is used as a temporary buffer and ends empty.
+  // Guaranteed legal fallback: swap the top items of shelf pairs using
+  // the spare shelf. Each reverse step has a legal inverse in the player UI.
+  b=cloneBoard(goal);reverseMoves.length=0;
   const order=Array.from({length:n},(_,i)=>i);
   for(let i=n-1;i>0;i--){const j=Math.floor(rng()*(i+1));[order[i],order[j]]=[order[j],order[i]]}
-  const first=order[0],item=b[first].pop();
-  reverseMoves.push([first,spare]);b[spare].push(item);
-  for(let i=1;i<n;i++){const source=order[i],destination=order[i-1],value=b[source].pop();reverseMoves.push([source,destination]);b[destination].push(value)}
-  const last=order[n-1];reverseMoves.push([spare,last]);b[last].push(b[spare].pop());
+  for(let p=0;p+1<n;p+=2){
+   const a=order[p],d=order[p+1];
+   const first=b[d].pop();reverseMoves.push([d,spare]);b[spare].push(first);
+   const second=b[a].pop();reverseMoves.push([a,d]);b[d].push(second);
+   const third=b[spare].pop();reverseMoves.push([spare,a]);b[a].push(third);
+  }
  }
  return b;
 }
