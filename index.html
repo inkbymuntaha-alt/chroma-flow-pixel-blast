@@ -334,6 +334,18 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
  .app.playing .item{height:25px!important}
 }
 
+
+/* Final compact shelf grid: distribute every shelf evenly in the available board height. */
+@media (pointer:coarse) and (max-height:1100px){
+ .app.playing .board-wrap{min-height:0!important;overflow:hidden!important}
+ .app.playing .shelves{display:grid!important;grid-auto-rows:minmax(0,1fr)!important;align-content:stretch!important;overflow-y:auto!important;overscroll-behavior:contain}
+ .app.playing .shelf{height:100%!important;min-height:0!important;padding:2px 4px!important;grid-template-columns:34px minmax(0,1fr)!important;gap:3px!important}
+ .app.playing .shelf-label{font-size:8px!important;line-height:1!important}
+ .app.playing .shelf-label span{font-size:12px!important;margin-bottom:0!important}
+ .app.playing .slots{gap:2px!important}
+ .app.playing .item{height:clamp(20px,2.7dvh,30px)!important;font-size:clamp(15px,4.2vw,21px)!important}
+}
+
 </style>
 </head>
 <body>
