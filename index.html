@@ -625,7 +625,7 @@ function scramble(){
  // A valid scramble always retains at least one legal reverse move.
  if(!hasLegalMove(b)||b[spare].length!==0||isSolved(b)){
   b=cloneBoard(goal);
-  const a=0,d=1,item=b[a].pop(),other=b[d].pop();
+  const a=Math.floor(rng()*n),d=(a+1+Math.floor(rng()*(n-1)))%n,item=b[a].pop(),other=b[d].pop();
   reverseMoves.push([a,spare]);b[spare].push(item);
   reverseMoves.push([d,a]);b[a].push(other);
   reverseMoves.push([spare,d]);b[d].push(b[spare].pop());
