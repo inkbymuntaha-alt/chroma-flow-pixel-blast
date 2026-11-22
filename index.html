@@ -370,36 +370,18 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 }
 
 
-/* Stable Android shelf geometry: each row owns its contents; scroll only if needed. */
+/* Android shelf layout v2: fixed compact rows prevent grid intrinsic-size overlap. */
 @media (pointer:coarse) and (max-height:1100px){
- .app.playing .board-wrap{min-height:0!important;overflow:hidden!important}
- .app.playing .shelves{
-  flex:1 1 0!important;height:0!important;min-height:0!important;
-  display:grid!important;grid-template-rows:repeat(var(--shelf-count,11),minmax(50px,1fr))!important;
-  grid-auto-rows:minmax(50px,1fr)!important;align-content:start!important;
-  gap:3px!important;overflow-y:auto!important;overflow-x:hidden!important;
-  overscroll-behavior:contain!important;
- }
- .app.playing .shelf{
-  box-sizing:border-box!important;height:50px!important;min-height:50px!important;max-height:50px!important;
-  padding:1px 3px!important;grid-template-columns:32px minmax(0,1fr)!important;gap:2px!important;
-  overflow:hidden!important;align-items:center!important;
- }
- .app.playing .shelf-label{font-size:7px!important;line-height:1!important;min-width:0!important}
- .app.playing .shelf-label span{font-size:10px!important;line-height:1!important;margin:0!important}
- .app.playing .slots{height:42px!important;min-height:42px!important;overflow:visible!important;align-items:center!important;gap:2px!important}
- .app.playing .item{
-  box-sizing:border-box!important;height:40px!important;min-height:40px!important;max-height:40px!important;
-  width:100%!important;overflow:visible!important;display:grid!important;place-items:center!important;
-  font-size:18px!important;border-radius:6px!important;
- }
- .app.playing .item .produce-art{
-  display:block!important;width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;
-  max-width:34px!important;max-height:34px!important;overflow:visible!important;flex:none!important;
- }
+ .app.playing .board-wrap{flex:1 1 0!important;height:0!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
+ .app.playing .shelves{display:grid!important;flex:1 1 0!important;height:0!important;min-height:0!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:repeat(var(--shelf-count,11),46px)!important;grid-auto-rows:46px!important;gap:2px!important;align-content:start!important;overflow-y:auto!important;overflow-x:hidden!important}
+ .app.playing .shelf{box-sizing:border-box!important;display:grid!important;grid-template-columns:30px minmax(0,1fr)!important;grid-template-rows:1fr!important;align-items:center!important;gap:2px!important;width:100%!important;height:46px!important;min-height:46px!important;max-height:46px!important;padding:1px 3px!important;overflow:hidden!important}
+ .app.playing .shelf-label{display:block!important;min-width:0!important;max-height:40px!important;overflow:hidden!important;font-size:7px!important;line-height:1!important;white-space:nowrap!important}
+ .app.playing .shelf-label span{display:block!important;font-size:10px!important;line-height:12px!important;margin:0!important}
+ .app.playing .slots{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:38px!important;align-self:center!important;width:100%!important;height:38px!important;min-height:38px!important;gap:2px!important;overflow:visible!important}
+ .app.playing .item{box-sizing:border-box!important;display:grid!important;place-items:center!important;width:100%!important;height:36px!important;min-height:36px!important;max-height:36px!important;min-width:0!important;padding:0!important;overflow:visible!important;font-size:17px!important}
+ .app.playing .item .produce-art{display:block!important;width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important;max-width:30px!important;max-height:30px!important;overflow:visible!important}
  .app.playing .item .tiny{font-size:6px!important;right:1px!important;bottom:0!important;z-index:3}
 }
-
 </style>
 </head>
 <body>
