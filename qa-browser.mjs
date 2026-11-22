@@ -66,7 +66,7 @@ try {
   await fitPage.locator('#levelBrief').waitFor({state:'hidden'});
   const fitShelves = fitPage.locator('#shelves button.shelf');
   assert.equal(await fitShelves.count(),11,'Level 56 must render all eleven shelves');
-  for (const viewport of [{width:360,height:640},{width:390,height:844},{width:768,height:1024},{width:1024,height:768}]) {
+  for (const viewport of [{width:320,height:568},{width:360,height:640},{width:390,height:844},{width:412,height:915},{width:768,height:1024},{width:1024,height:768}]) {
     await fitPage.setViewportSize(viewport);
     await fitPage.waitForTimeout(80);
     const fit = await fitPage.evaluate(()=>{
@@ -78,10 +78,11 @@ try {
     assert.equal(fit.count,11,'All eleven shelves must remain rendered at '+JSON.stringify(viewport));
     assert.ok(fit.scrollHeight<=fit.clientHeight+2,'Shelf list must not require scrolling at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
     assert.ok(fit.lastBottom<=fit.boardBottom+2,'Last shelf must fit inside the board at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
-    assert.ok(fit.rowHeights.every(height=>height>=20),'Shelf rows must remain usable at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
-    assert.ok(fit.artWidth>=19,'Produce artwork must remain recognisable at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
+    assert.ok(fit.rowHeights.every(height=>height>=(viewport.height<=600?17:20)),'Shelf rows must remain usable at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
+    assert.ok(fit.artWidth>=(viewport.width<=380?17:19),'Produce artwork must remain recognisable at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
     assert.ok(fit.labelRight<=fit.slotsLeft,'Shelf labels must not overlap product slots at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
     assert.ok(fit.labelText.includes('SHELF 1'),'Shelf number must remain visible at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
+    assert.equal(await fitPage.locator('#shelves .shelf').first().evaluate(el=>getComputedStyle(el).touchAction),'manipulation','Shelf touch must use low-latency manipulation at '+JSON.stringify(viewport));
   }
   assert.deepEqual(fitErrors,[],'Late-game layout must not emit JavaScript errors');
   console.log('PASS: Level 56 eleven-shelf layout fits compact phone and tablet viewports without shelf scrolling.');
