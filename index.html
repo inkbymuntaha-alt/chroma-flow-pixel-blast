@@ -11,7 +11,7 @@
 :root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#f6f7fb;background:#101a25;color-scheme:dark}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101a25;overscroll-behavior:none;touch-action:none}
 #game{position:relative;width:100%;height:100%;height:100dvh;max-width:620px;margin:auto;overflow:hidden;background:#17232e}
-canvas{display:block;width:100%;height:100%;touch-action:none}#world3d{position:absolute;inset:0;width:100%;height:100%;z-index:1;display:block;touch-action:none}#world{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+canvas{display:block;width:100%;height:100%;touch-action:none}#world3d{position:absolute;inset:0;width:100%;height:100%;z-index:1;touch-action:none}#world{position:absolute;inset:0;width:100%;height:100%;z-index:0}#world3d{position:absolute;inset:0;width:100%;height:100%;z-index:1;display:block;touch-action:none}#world{position:absolute;inset:0;width:100%;height:100%;z-index:0}
 .hud{position:absolute;inset:env(safe-area-inset-top,0) 0 auto;padding:calc(12px + env(safe-area-inset-top,0)) 12px 0;display:flex;gap:7px;align-items:flex-start;pointer-events:none}
 .stat{min-width:65px;padding:8px 9px;border:1px solid #ffffff2b;border-radius:12px;background:#101923d9;box-shadow:0 5px 15px #0004;text-align:center;backdrop-filter:blur(8px)}
 .stat b{display:block;font-size:19px;line-height:1.1;font-variant-numeric:tabular-nums}.stat small{font-size:9px;letter-spacing:1.2px;color:#9fb0c2;font-weight:900}
@@ -55,16 +55,17 @@ canvas{display:block;width:100%;height:100%;touch-action:none}#world3d{position:
 <section class="overlay hidden" id="pauseScreen"><div class="panel"><div class="kicker">PIT LANE</div><div class="logo" style="font-size:42px">RACE<br><em>PAUSED</em></div><div class="sub">Catch your breath. The track is waiting.</div><button class="primary" id="resume">RESUME RACE</button><button class="secondary" id="restart">RESTART RACE</button><button class="secondary" id="quit">EXIT TO GARAGE</button></div></section>
 <section class="overlay hidden" id="result"><div class="panel"><div class="kicker" id="resultKicker">CHEQUERED FLAG</div><div class="logo" id="resultTitle">PODIUM</div><div class="grid"><div><b id="resultPos">1st</b><small>PLACE</small></div><div><b id="resultTime">00:00</b><small>TIME</small></div><div><b id="resultBest">0</b><small>TOP SPEED</small></div></div><div class="sub" id="resultText">A brilliant ride.</div><button class="primary" id="again">RACE AGAIN</button><button class="secondary" id="garage">GARAGE</button></div></section>
 </div>
+<script src="./three-engine.js"></script>
 <script>
 (()=>{
 'use strict';
 const $=id=>document.getElementById(id),canvas=$('world'),ctx=canvas.getContext('2d',{alpha:false});
 const ui={hud:$('hud'),bar:$('racebar'),controls:$('controls'),menu:$('menu'),pause:$('pauseScreen'),result:$('result')};
-let W=480,H=850,dpr=1,last=0,raf=0,THREE=null,renderer3D=null,scene3D=null,camera3D=null,player3D=null,opponent3D=[],trackCurve3D=null,threeReady=false;
+let W=480,H=850,dpr=1,last=0,raf=0,threeReady=false;
 const state={mode:'menu',speed:0,playerX:0,steer:0,lean:0,lateralVelocity:0,drift:0,engineRPM:1100,gear:1,trackCurvature:0,offTrack:false,progress:0,lap:1,time:0,bestSpeed:0,position:4,opponents:[],roadOffset:0,curve:0,throttle:false,brake:false,steerLeft:false,steerRight:false,finish:false};
 const TRACKS=[{name:'COASTAL GP',sky:'#8ac5d5',ground:'#59866b',road:'#424b56',accent:'#f6d04d'},{name:'DESERT CIRCUIT',sky:'#e9ad78',ground:'#b17b4e',road:'#45464b',accent:'#f5cf58'},{name:'NIGHT SPRINT',sky:'#273653',ground:'#283f48',road:'#303945',accent:'#61d7ef'}];
 let track=0;
-function resize(){const r=$('game').getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,1.5);W=480;H=850;canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.height*dpr);ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);if(renderer3D){renderer3D.setPixelRatio(dpr);renderer3D.setSize(r.width,r.height,false);if(camera3D){camera3D.aspect=r.width/r.height;camera3D.updateProjectionMatrix()}}}
+function resize(){const r=$('game').getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,1.5);W=480;H=850;canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.height*dpr);ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);if(window.Nazeef3D)window.Nazeef3D.resize()}
 new ResizeObserver(resize).observe($('game'));resize();
 function reset(){state.speed=0;state.playerX=0;state.steer=0;state.lean=0;state.lateralVelocity=0;state.drift=0;state.engineRPM=1100;state.gear=1;state.trackCurvature=0;state.offTrack=false;state.progress=0;state.lap=1;state.time=0;state.bestSpeed=0;state.position=4;state.roadOffset=0;state.curve=0;state.finish=false;state.opponents=[{x:-.62,p:22,s:188,color:'#36b9e6',name:'ACE'},{x:.08,p:48,s:198,color:'#ff535d',name:'BOLT'},{x:.63,p:12,s:182,color:'#b98aff',name:'NOVA'}]}
 function show(mode){Object.values(ui).forEach(x=>x.classList.add('hidden'));state.mode=mode;if(mode==='menu')ui.menu.classList.remove('hidden');if(mode==='race'){ui.hud.classList.remove('hidden');ui.bar.classList.remove('hidden');ui.controls.classList.remove('hidden')}if(mode==='pause')ui.pause.classList.remove('hidden');if(mode==='result')ui.result.classList.remove('hidden')}
@@ -129,7 +130,7 @@ function bike(x,y,scale,color,lean=0,player=false){
 }
 function drawOpponents(){for(const o of state.opponents){let depth=clamp(1-(o.p-state.progress)/170,0,1);if(depth<=0)continue;let y=330+depth*400,scale=.24+depth*.72,half=65+depth*255,x=240+roadCurve(y)*half+o.x*half*.48;bike(x,y,scale,o.color,0,false)}}
 function drawPlayer(){let x=240+state.playerX*250,y=735;bike(x,y,1.13,'#ffb52e',state.lean,true);if(state.speed>80){ctx.strokeStyle='#ffffff25';ctx.lineWidth=3;for(let i=0;i<5;i++){let xx=x+(i-2)*12;ctx.beginPath();ctx.moveTo(xx,790);ctx.lineTo(xx+(i-2)*3,842);ctx.stroke()}}if(state.drift>.22){ctx.fillStyle='#f3e7c8aa';for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(x+(i%2?1:-1)*18,790+i*8,3+i,0,Math.PI*2);ctx.fill()}}}
-function draw(){if(threeReady){update3D();return}drawScene();drawOpponents();drawPlayer();ctx.fillStyle='#fff';ctx.font='900 12px system-ui';ctx.textAlign='center';ctx.fillText('🏁',240,316);if(state.offTrack){ctx.fillStyle='#ffcf4b';ctx.font='1000 13px system-ui';ctx.fillText('OFF TRACK  •  FIND THE RACING LINE',240,180)}if(state.drift>.3){ctx.fillStyle='#ffcf4b';ctx.font='1000 12px system-ui';ctx.fillText('DRIFT',240,205)}}
+function draw(){if(threeReady){window.Nazeef3D.render(state);return}drawScene();drawOpponents();drawPlayer();ctx.fillStyle='#fff';ctx.font='900 12px system-ui';ctx.textAlign='center';ctx.fillText('🏁',240,316);if(state.offTrack){ctx.fillStyle='#ffcf4b';ctx.font='1000 13px system-ui';ctx.fillText('OFF TRACK  •  FIND THE RACING LINE',240,180)}if(state.drift>.3){ctx.fillStyle='#ffcf4b';ctx.font='1000 12px system-ui';ctx.fillText('DRIFT',240,205)}}
 function update(dt){
  if(state.mode!=='race')return;
  // Four-speed superbike: torque at low speed, stronger pull through the middle gears.
@@ -172,7 +173,8 @@ $('play').onclick=start;$('pause').onclick=pause;$('resume').onclick=resume;$('r
 window.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key))e.preventDefault();if(e.key==='ArrowLeft'||e.key==='a')state.steerLeft=true;if(e.key==='ArrowRight'||e.key==='d')state.steerRight=true;if(e.key==='ArrowUp'||e.key==='w')state.throttle=true;if(e.key==='ArrowDown'||e.key==='s')state.brake=true;if(e.key==='Escape')state.mode==='race'?pause():state.mode==='pause'?resume():null});
 window.addEventListener('keyup',e=>{if(e.key==='ArrowLeft'||e.key==='a')state.steerLeft=false;if(e.key==='ArrowRight'||e.key==='d')state.steerRight=false;if(e.key==='ArrowUp'||e.key==='w')state.throttle=false;if(e.key==='ArrowDown'||e.key==='s')state.brake=false});
 window.addEventListener('blur',()=>{state.throttle=false;state.brake=false;state.steerLeft=false;state.steerRight=false;if(state.mode==='race')pause()});
-window.__bikeRaceTest={state,start,pause,resume,update,draw,finish,TRACKS,roadCurve,trackBend,get threeReady(){return threeReady},update3D};
+window.__bikeRaceTest={state,start,pause,resume,update,draw,finish,TRACKS,roadCurve,trackBend,get threeReady(){return threeReady}};
+function init3D(){if(!window.Nazeef3D)return;window.Nazeef3D.init($('game'),canvas).then(()=>{threeReady=true;draw()}).catch(err=>console.warn('3D mode unavailable; using compatibility renderer.',err))}
 draw();init3D();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 })();
