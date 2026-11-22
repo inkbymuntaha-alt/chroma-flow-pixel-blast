@@ -73,12 +73,13 @@ try {
       const root=document.querySelector('#shelves'), board=document.querySelector('.board-wrap');
       const rows=[...root.querySelectorAll('.shelf')];
       const last=rows.at(-1), rr=root.getBoundingClientRect(), lr=last.getBoundingClientRect(), br=board.getBoundingClientRect();
-      return {count:rows.length,scrollHeight:root.scrollHeight,clientHeight:root.clientHeight,rootBottom:rr.bottom,lastBottom:lr.bottom,boardBottom:br.bottom,rootTop:rr.top,firstTop:rows[0].getBoundingClientRect().top,rowHeights:rows.map(x=>x.getBoundingClientRect().height),coarse:matchMedia('(pointer:coarse)').matches};
+      return {count:rows.length,scrollHeight:root.scrollHeight,clientHeight:root.clientHeight,rootBottom:rr.bottom,lastBottom:lr.bottom,boardBottom:br.bottom,rootTop:rr.top,firstTop:rows[0].getBoundingClientRect().top,rowHeights:rows.map(x=>x.getBoundingClientRect().height),artWidth:root.querySelector('.produce-art')?.getBoundingClientRect().width||0,coarse:matchMedia('(pointer:coarse)').matches};
     });
     assert.equal(fit.count,11,'All eleven shelves must remain rendered at '+JSON.stringify(viewport));
     assert.ok(fit.scrollHeight<=fit.clientHeight+2,'Shelf list must not require scrolling at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
     assert.ok(fit.lastBottom<=fit.boardBottom+2,'Last shelf must fit inside the board at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
     assert.ok(fit.rowHeights.every(height=>height>=20),'Shelf rows must remain usable at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
+    assert.ok(fit.artWidth>=19,'Produce artwork must remain recognisable at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
   }
   assert.deepEqual(fitErrors,[],'Late-game layout must not emit JavaScript errors');
   console.log('PASS: Level 56 eleven-shelf layout fits compact phone and tablet viewports without shelf scrolling.');
