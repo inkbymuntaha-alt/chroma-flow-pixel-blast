@@ -13,7 +13,7 @@ try{
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
   await page.locator('#menu').waitFor({state:'visible'});
-  const canvas=await page.locator('#world').boundingBox();assert.ok(canvas&&canvas.width>0&&canvas.height>0,'Canvas visible '+JSON.stringify(viewport));
+  await page.waitForTimeout(1500);const canvas=await page.locator('#world3d').boundingBox().catch(()=>null);const fallback=await page.locator('#world').boundingBox();assert.ok((canvas&&canvas.width>0&&canvas.height>0)||(fallback&&fallback.width>0&&fallback.height>0),'3D or fallback canvas visible '+JSON.stringify(viewport));
   await page.locator('#play').click();await page.locator('#menu').waitFor({state:'hidden'});
   await page.locator('#hud').waitFor({state:'visible'});
   await page.keyboard.down('ArrowUp');await page.waitForTimeout(500);await page.keyboard.up('ArrowUp');
