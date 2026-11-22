@@ -501,6 +501,34 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
  .app.playing .slots{gap:5px!important}
  .app.playing .item .produce-art{width:clamp(28px,4.5vw,40px)!important;height:clamp(28px,4.5vw,40px)!important}
 }
+
+/* Final responsive polish: compact phones, short screens and tablet touch targets. */
+@media (pointer:coarse){
+ .app.playing .shelf,.app.playing .item{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+ .app.playing .shelf{contain:layout style}
+ .app.playing .item{contain:layout style}
+ .app.playing .item .produce-art{filter:drop-shadow(0 1px 1px #0007)!important}
+}
+@media (pointer:coarse) and (max-width:380px) and (min-height:601px){
+ .app.playing .shelf{grid-template-columns:44px minmax(0,1fr)!important;gap:2px!important;padding-inline:2px!important}
+ .app.playing .shelf-label{font-size:7px!important;letter-spacing:-.2px!important}
+ .app.playing .slots{gap:2px!important}
+ .app.playing .item .produce-art{width:clamp(19px,6vw,23px)!important;height:clamp(19px,6vw,23px)!important}
+ .app.playing .board-head small{font-size:7px!important}
+}
+@media (pointer:coarse) and (max-height:600px){
+ .app.playing .shelves{grid-template-rows:repeat(var(--shelf-count,11),minmax(0,1fr))!important;grid-auto-rows:minmax(0,1fr)!important;gap:1px!important;overflow:hidden!important}
+ .app.playing .shelf{min-height:0!important;grid-template-columns:42px minmax(0,1fr)!important;padding:0 2px!important}
+ .app.playing .shelf-label{font-size:6px!important}
+ .app.playing .item .produce-art{width:clamp(17px,5.6vw,21px)!important;height:clamp(17px,5.6vw,21px)!important}
+ .app.playing .board-wrap{min-height:0!important}
+ .app.playing .controls .tool{min-height:25px!important}
+}
+@media (pointer:coarse) and (min-width:600px) and (min-height:700px){
+ .app.playing .shelf{grid-template-columns:68px minmax(0,1fr)!important}
+ .app.playing .item .produce-art{width:clamp(30px,4.2vw,42px)!important;height:clamp(30px,4.2vw,42px)!important}
+ .app.playing .tool{min-height:44px!important}
+}
 </style>
 </head>
 <body>
