@@ -42,6 +42,8 @@ assert.ok(artFn.includes('aria-label'), 'Every fruit illustration must have an a
 assert.ok(html.includes('@media (pointer:coarse)'), 'Touch-device layout profile must exist');
 assert.ok(html.includes('grid-template-rows:repeat(var(--shelf-count,11),minmax(42px,1fr))'), 'Android shelves must use responsive non-overlapping rows');
 assert.ok(html.includes('min-height:42px!important'), 'Android shelf touch targets must remain usable');
+assert.ok(html.includes('grid-template-rows:repeat(var(--shelf-count,11),minmax(0,1fr))'), 'Short Android screens must fit every shelf without scrolling');
+assert.ok(html.includes('overflow:hidden!important'), 'Short Android puzzle board must not clip by internal scrolling');
 
 
 const seedFn = extract(/function seededRandom\(seed\)\{[^\n]*\}/, 'seededRandom');
