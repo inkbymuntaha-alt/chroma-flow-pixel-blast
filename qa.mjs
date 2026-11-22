@@ -41,7 +41,7 @@ assert.ok(html.includes('repeating-linear-gradient(3deg') && html.includes('Prem
 assert.ok(html.includes('@media(pointer:coarse)') && html.includes('.produce-art{filter:none}'), 'Touch devices must avoid decorative produce filters');
 const selectionFn = extract(/function renderSelection\(\)\{[\s\S]*?\n\}/, 'renderSelection');
 assert.ok(selectionFn.includes('renderShelf(previous,false)') && selectionFn.includes('renderShelf(current,false)'), 'Selection feedback must repaint only the previous and current shelves');
-assert.ok(!selectionFn.includes('for(let i=0;i<stacks.length;i++)renderShelf'), 'Ordinary selection must not repaint every shelf');
+assert.ok(selectionFn.includes('if(previous===-2)') && selectionFn.includes('lastSelectionPaint=current'), 'Full selection repaint is limited to initial state; normal taps use the two-shelf path');
 const moveFn = extract(/function renderMove\(from,to\)\{[\s\S]*?\n\}/, 'renderMove');
 assert.ok(moveFn.includes('renderShelf(from,true);renderShelf(to,true)'), 'A move must repaint only its source and destination shelves');
 assert.ok(html.includes('@media(pointer:coarse){') && html.includes('.shelf:active{transform:none!important'), 'Touch controls must not wait for decorative press animations');
