@@ -546,6 +546,15 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 .market{background:linear-gradient(115deg,#765332,#422b1a 48%,#25170e)!important;border-color:#c69a5e!important}
 @media(pointer:coarse){.item.top-item{animation:none!important;filter:none}.produce-art{filter:none}.shelf{transition:border-color .1s,background-color .1s,box-shadow .1s}.shelf:active{filter:none}}
 @media(prefers-reduced-motion:reduce){.produce-art,.item.top-item{animation:none!important}}
+
+/* Fast-touch profile: keep tap feedback synchronous and avoid repainting the whole board. */
+@media(pointer:coarse){
+ .shelf,.item,.tool{transition:none!important;animation:none!important}
+ .shelf:active{transform:none!important;filter:none!important}
+ .item,.item.top-item{filter:none!important;animation:none!important;transform:none}
+ .shelf.selected{box-shadow:inset 0 0 0 2px #ffe39a,0 0 0 2px #e8bb5a33!important}
+ .shelf.just-moved,.item.arriving{animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -877,14 +886,21 @@ function renderShelf(i,updateItems=true){
 function render(){
  ensureShelfNodes();for(let i=0;i<stacks.length;i++)renderShelf(i,true);
 }
-// Selection changes only need class/label updates; keep all product DOM nodes untouched.
+// Selection hot path: repaint only the shelf losing selection and the shelf gaining it.
+let lastSelectionPaint=-2;
 function renderSelection(){
- ensureShelfNodes();for(let i=0;i<stacks.length;i++)renderShelf(i,false);
+ ensureShelfNodes();
+ const previous=lastSelectionPaint,current=selected;
+ if(previous>=0&&previous<stacks.length)renderShelf(previous,false);
+ if(current>=0&&current<stacks.length&&current!==previous)renderShelf(current,false);
+ if(previous===-2)for(let i=0;i<stacks.length;i++)renderShelf(i,false);
+ lastSelectionPaint=current;
 }
 function renderMove(from,to){
  ensureShelfNodes();
- // Product art is regenerated only for the two shelves whose contents changed.
- for(let i=0;i<stacks.length;i++)renderShelf(i,i===from||i===to);
+ // A move changes only its source and destination shelf DOM.
+ renderShelf(from,true);renderShelf(to,true);
+ lastSelectionPaint=-2;
  const source=$('shelves').children[from],destination=$('shelves').children[to];
  source.classList.add('just-moved');destination.classList.add('just-moved');
  const arriving=destination.querySelector('.item.top-item');
