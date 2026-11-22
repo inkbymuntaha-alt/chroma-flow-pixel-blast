@@ -565,7 +565,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
 .finish-stats small{display:block;margin-top:3px;color:#d5bd91;font-size:8px;font-weight:900;letter-spacing:.7px}
 .finish-panel #finishText{margin:8px 0 15px}
 @media(max-height:680px){.finish-panel{padding:15px 14px}.finish-panel .hero{font-size:38px}.finish-stats{margin:8px 0}.finish-stats>div{padding:7px 3px}}
-</style>
+.shelf.drag-over{outline:3px solid #ffe08a!important;outline-offset:2px;background-color:#896334!important;box-shadow:inset 0 0 0 2px #fff3,0 0 0 4px #f4c96a55!important}@media(pointer:coarse){.shelf.drag-over{transition:none!important;filter:none!important;transform:none!important}}\n</style>
 </head>
 <body>
 <main class="app">
@@ -1048,13 +1048,13 @@ function moveShelf(from,to){
  if(sortedCount()===typesForLevel())finishDay();
 }
 function onShelf(i){
- if(busy||!started)return;
- if(selected<0){if(!stacks[i].length){say('That shelf is empty. Choose a shelf with products first.');return}selected=i;renderSelection();say('Picked up '+PRODUCTS[stacks[i][stacks[i].length-1]].n+'. Now choose a matching shelf or an empty shelf.');return}
- if(selected===i){selected=-1;renderSelection();say('Selection cleared. Choose a shelf.');return}
+ if(busy||!started||i<0||i>=stacks.length)return;
+ // Keep ordinary shelf taps silent: speech synthesis startup can make touch input feel delayed.
+ if(selected<0){if(!stacks[i].length)return;selected=i;renderSelection();return}
+ if(selected===i){selected=-1;renderSelection();return}
  const from=selected;
  if(legalMove(from,i)){moveShelf(from,i);return}
- if(stacks[i].length){selected=i;renderSelection();say('New shelf selected. Its top product is '+PRODUCTS[stacks[i][stacks[i].length-1]].n+'.')}
- else{showInvalidMove(i);say('That move is not available. Try an empty shelf or matching goods.')}
+ if(stacks[i].length){selected=i;renderSelection()}else{showInvalidMove(i)}
 }
 function findHint(){
  if(!started||busy)return;
@@ -1071,34 +1071,40 @@ function finishDay(){document.querySelector('.app')?.classList.remove('playing')
 function drawWorlds(){const root=$('worldGrid');root.innerHTML='';const worlds=[['🌅','Sunrise Spice Lane','First steps in the bazaar'],['🌊','Riverside Fresh Market','A cool breeze by the water'],['🌸','Blossom Courtyard','A garden of colourful flowers'],['🌿','Green Garden Bazar','Fresh produce under leafy shade'],['🏮','Lantern Night Market','A glowing evening market'],['☀️','Sunny Fruit Square','Bright stalls and citrus sunshine'],['🎏','Colourful Canal Walk','A lively market beside the canal'],['🪁','Breezy Rooftop Bazar','Kites above the rooftops'],['🌆','Twilight Old Town','A historic market at dusk'],['☔','Monsoon Street Market','A rainy-day bazaar adventure']];let cleared=0;worlds.forEach((w,i)=>{const first=i*10+1,last=first+9,open=unlocked>=first,done=bossBadges.has('chapter-'+(i+1)),current=chapterNumber()===i+1&&open;if(done)cleared++;const card=document.createElement('div');card.className='world-card'+(current?' current':'')+(!open?' locked':'')+(done?' cleared':'');card.innerHTML='<span class="world-art">'+w[0]+'</span><span class="world-copy"><b>CHAPTER '+(i+1)+' · '+w[1]+'</b><small>'+w[2]+' · Levels '+first+'–'+last+'</small></span><span class="world-state">'+(done?'CLEARED ✓':open?'UNLOCKED':'🔒 '+first)+'</span>';if(open){card.setAttribute('role','button');card.tabIndex=0;const go=()=>{level=Math.max(first,Math.min(last,unlocked));dailyMode=false;$('map').classList.add('hidden');showLevelBrief()};card.addEventListener('click',go);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})}root.appendChild(card)});$('worldProgress').textContent=cleared+' / 10 chapter bosses defeated · '+Math.min(100,unlocked-1)+' / 100 levels completed or unlocked.'}
 function drawMap(){drawWorlds();const root=$('levelGrid');root.innerHTML='';for(let n=1;n<=100;n++){if((n-1)%10===0){const h=document.createElement('div');h.className='chapter-label';h.textContent='CHAPTER '+(Math.floor((n-1)/10)+1)+' · '+chapterName(n);root.appendChild(h)}const b=document.createElement('button');b.type='button';b.className='level-cell'+(n===level?' current':'');b.disabled=n>unlocked;const rating=Number(levelStars[n]||0),badge=n%10===0&&bossBadges.has('chapter-'+(n/10));b.innerHTML=n>unlocked?'🔒':n+(badge?' 🏅':'')+'<span class="map-stars">'+(rating?'★'.repeat(rating)+'☆'.repeat(3-rating):'NEW')+'</span>';b.setAttribute('aria-label','Level '+n+(rating?', '+rating+' stars':''));b.addEventListener('click',()=>{level=n;dailyMode=false;$('map').classList.add('hidden');$('welcome').classList.add('hidden');$('finish').classList.add('hidden');showLevelBrief()});root.appendChild(b)}}
 // Fast Android controls: track the finger globally and resolve the shelf under its release point.
-let pointerShelf=-1,pointerId=null,pointerStartX=0,pointerStartY=0,pointerDragged=false;
+let pointerShelf=-1,pointerId=null,pointerStartX=0,pointerStartY=0,pointerDragged=false,dragHover=-1;
 const shelfRoot=$('shelves');
+function setDragHover(next){
+ if(next===dragHover)return;
+ if(dragHover>=0&&shelfRoot.children[dragHover])shelfRoot.children[dragHover].classList.remove('drag-over');
+ dragHover=next;
+ if(dragHover>=0&&shelfRoot.children[dragHover])shelfRoot.children[dragHover].classList.add('drag-over');
+}
+function clearShelfPointer(){setDragHover(-1);pointerShelf=-1;pointerId=null;pointerDragged=false}
 shelfRoot.addEventListener('pointerdown',e=>{
  const b=e.target.closest('button.shelf');if(!b||!shelfRoot.contains(b)||!started||busy)return;
  pointerShelf=Number(b.dataset.shelf);pointerId=e.pointerId;pointerStartX=e.clientX;pointerStartY=e.clientY;pointerDragged=false;
  try{b.setPointerCapture(e.pointerId)}catch(_){}
 });
-shelfRoot.addEventListener('pointermove',e=>{
+document.addEventListener('pointermove',e=>{
  if(pointerId!==e.pointerId||pointerShelf<0)return;
- const dx=e.clientX-pointerStartX,dy=e.clientY-pointerStartY;if(dx*dx+dy*dy>64)pointerDragged=true;
-});
+ const dx=e.clientX-pointerStartX,dy=e.clientY-pointerStartY;
+ if(dx*dx+dy*dy>9)pointerDragged=true;
+ if(pointerDragged){
+  const under=document.elementFromPoint(e.clientX,e.clientY),target=under?.closest?.('button.shelf');
+  const dest=target&&shelfRoot.contains(target)?Number(target.dataset.shelf):-1;
+  setDragHover(dest>=0&&dest!==pointerShelf&&legalMove(pointerShelf,dest)?dest:-1);
+ }
+},{passive:true});
 function finishShelfPointer(e){
  if(pointerId===null||e.pointerId!==pointerId)return;
- const from=pointerShelf,dragged=pointerDragged;pointerShelf=-1;pointerId=null;pointerDragged=false;
- if(from<0||!started||busy)return;
- const under=document.elementFromPoint(e.clientX,e.clientY);
- const target=under?.closest?.('button.shelf');
- const dest=target&&shelfRoot.contains(target)?Number(target.dataset.shelf):from;
- if(selected>=0){
-  if(selected===dest){onShelf(dest);return}
-  if(legalMove(selected,dest)){moveShelf(selected,dest);return}
-  onShelf(dest);return;
- }
+ const from=pointerShelf,dragged=pointerDragged,under=document.elementFromPoint(e.clientX,e.clientY);
+ const target=under?.closest?.('button.shelf'),dest=target&&shelfRoot.contains(target)?Number(target.dataset.shelf):from;
+ clearShelfPointer();if(from<0||!started||busy)return;
  if(dragged&&from!==dest&&legalMove(from,dest)){moveShelf(from,dest);return}
  onShelf(dest);
 }
 document.addEventListener('pointerup',finishShelfPointer,{passive:true});
-document.addEventListener('pointercancel',()=>{pointerShelf=-1;pointerId=null;pointerDragged=false},{passive:true});
+document.addEventListener('pointercancel',clearShelfPointer,{passive:true});
 shelfRoot.addEventListener('click',e=>{
  // Pointer taps are handled on pointerup; retain keyboard activation.
  if(e.detail!==0)return;
