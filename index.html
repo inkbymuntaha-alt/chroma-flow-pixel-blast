@@ -529,6 +529,23 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;ba
  .app.playing .item .produce-art{width:clamp(30px,4.2vw,42px)!important;height:clamp(30px,4.2vw,42px)!important}
  .app.playing .tool{min-height:44px!important}
 }
+
+/* Premium hand-painted 2D finish: tactile timber, soft painted light, crisp produce silhouettes. */
+:root{--wood-light:#b9874e;--wood-mid:#704626;--wood-deep:#2b1a10}
+.shelf{background-color:#4b301c;background-image:linear-gradient(180deg,#ffffff20 0,#ffffff08 14%,transparent 34%,#160b0660 100%),repeating-linear-gradient(3deg,transparent 0 9px,#d8a66a12 10px,#1c10091a 11px,transparent 14px 23px),linear-gradient(105deg,#8c6338 0%,#624126 24%,#442b19 62%,#2b1b11 100%);border-color:#c69a61;box-shadow:inset 0 2px 0 #fff5,inset 0 -3px 0 #1a0e08aa,inset 0 0 0 2px #2b180d55,0 4px 8px #0008}
+.shelf:before{width:6px;background:linear-gradient(90deg,#f0d19a,#a96f37 48%,#5b351d);box-shadow:1px 0 2px #160b08}
+.shelf:after{left:10px;right:10px;top:auto;bottom:5px;height:2px;background:linear-gradient(90deg,transparent,#e7bd8055 18% 82%,transparent)}
+.shelf-label{color:#ffe4b0;text-shadow:0 1px 2px #160b06,0 0 8px #f6d28a22}
+.item{background:linear-gradient(155deg,#9a7046 0%,#65452b 34%,#382315 100%);border-color:#d2a66b;box-shadow:inset 0 2px 0 #fff5,inset 0 -4px 6px #1b0f08aa,0 3px 5px #0009}
+.item.top-item{background:linear-gradient(155deg,#b18450 0%,#79522f 40%,#422716 100%);box-shadow:inset 0 2px 0 #fff8,inset 0 -3px 5px #1b0f08aa,0 0 0 1px #ffe2a055,0 4px 8px #0009}
+.item.empty{background:repeating-linear-gradient(135deg,#24170f 0 5px,#2b1b11 5px 10px);border:1px dashed #b58b58;box-shadow:inset 0 1px 5px #0009}
+.produce-art{width:100%;height:100%;max-width:46px;max-height:46px;overflow:visible;filter:drop-shadow(0 2px 1.5px #160b08);transform:translateY(-1px)}
+.item.top-item .produce-art{transform:translateY(-2px) scale(1.06)}
+.item .tiny{background:#201209cc;border:1px solid #f5d28a55;color:#fff0c8}
+.board-wrap{background:linear-gradient(145deg,#76512e 0%,#422b1a 16%,#21160e 72%,#130d08 100%);border-color:#d3a867;box-shadow:0 16px 32px #000a,inset 0 2px 0 #fff5,inset 0 -7px 16px #0c0705}
+.market{background:linear-gradient(115deg,#765332,#422b1a 48%,#25170e)!important;border-color:#c69a5e!important}
+@media(pointer:coarse){.item.top-item{animation:none!important;filter:none}.produce-art{filter:none}.shelf{transition:border-color .1s,background-color .1s,box-shadow .1s}.shelf:active{filter:none}}
+@media(prefers-reduced-motion:reduce){.produce-art,.item.top-item{animation:none!important}}
 </style>
 </head>
 <body>
@@ -613,12 +630,12 @@ function productArt(v){
  ];
  const [dark,main,light]=palettes[v];
  const defs='<defs>'+
-  '<linearGradient id="'+id+'body" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+light+'"/><stop offset=".38" stop-color="'+main+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient>'+
+  '<linearGradient id="'+id+'body" x1=".12" y1=".08" x2=".88" y2=".94"><stop offset="0" stop-color="'+light+'"/><stop offset=".18" stop-color="'+main+'"/><stop offset=".62" stop-color="'+main+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient>'+
   '<linearGradient id="'+id+'leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a9d66c"/><stop offset=".48" stop-color="#4f9b45"/><stop offset="1" stop-color="#245b32"/></linearGradient>'+
-  '<radialGradient id="'+id+'shine" cx=".28" cy=".2" r=".8"><stop stop-color="#fff" stop-opacity=".72"/><stop offset=".48" stop-color="#fff" stop-opacity=".14"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'+
+  '<radialGradient id="'+id+'shine" cx=".24" cy=".16" r=".82"><stop stop-color="#fff" stop-opacity=".82"/><stop offset=".22" stop-color="#fff" stop-opacity=".34"/><stop offset=".58" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'+
   '<linearGradient id="'+id+'cream" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff2ce"/><stop offset="1" stop-color="#d6a66b"/></linearGradient>'+
  '</defs>';
- const svg=body=>'<svg class="produce-art" viewBox="0 0 64 64" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+p.n+'" focusable="false">'+defs+body+'</svg>';
+ const svg=body=>'<svg class="produce-art" viewBox="0 0 64 64" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+p.n+'" focusable="false">'+defs+'<ellipse cx="33" cy="57" rx="18" ry="3.2" fill="#160d08" opacity=".28"/>'+body+'</svg>';
  const body='url(#'+id+'body)',leaf='url(#'+id+'leaf)',shine='url(#'+id+'shine)',cream='url(#'+id+'cream)';
  const arts=[
   // Apple: lobed fruit, stem, leaf, natural blush and reflected light
