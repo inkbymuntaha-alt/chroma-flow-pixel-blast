@@ -601,6 +601,14 @@ body{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env
 @media(max-height:760px){.app{gap:6px;padding-top:6px}.profile-card{padding:6px 9px}.profile-avatar{width:34px;height:34px;flex-basis:34px}.login-reward{padding:6px 8px}.login-reward button{padding:7px 9px}.living-bazaar{padding:7px 9px}.stall-dress{display:none}.customer-row{min-height:36px}.board-wrap{padding:8px}.board-head{margin-bottom:6px}.shelf{min-height:60px;padding:6px 8px}.item{height:38px}.controls .tool{min-height:39px;padding:8px 4px}}
 @media(max-width:370px){.app{gap:6px}.brand small{letter-spacing:1.4px;font-size:7px}.profile-open{padding:7px 8px;font-size:9px}.board-head small{max-width:52%;text-align:right}.shelf{grid-template-columns:47px 1fr;gap:5px}.item{height:37px}.slots{gap:4px}}
 @media(pointer:coarse){.shelf,.tool,.market-hub-actions button,.daily-card button,.footer button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}.shelf{transition:none!important}.shelf:active{transform:none!important}}
+
+/* Kenney CC0 scenery integration — lightweight raster backgrounds, no runtime canvas */
+.app:before{content:"";position:fixed;z-index:-1;pointer-events:none;left:50%;bottom:0;transform:translateX(-50%);width:min(100vw,760px);height:34vh;opacity:.13;background:url("./assets/kenney/colored_desert.png") center bottom/100% auto no-repeat;mask-image:linear-gradient(transparent,#000 35%);-webkit-mask-image:linear-gradient(transparent,#000 35%)}
+.board-wrap:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;background:linear-gradient(180deg,#20170caa,#21170fdd),url("./assets/kenney/colored_forest.png") center/cover no-repeat;opacity:.34}
+.board-head,.shelves{position:relative;z-index:1}
+.market{background-image:linear-gradient(100deg,#342818d9,#17120ce8),url("./assets/kenney/colored_castle.png");background-position:center,right center;background-size:cover,auto 180%;background-repeat:no-repeat}
+@media(max-width:380px){.app:before{height:27vh;opacity:.1}.board-wrap:before{opacity:.25}}
+@media(prefers-reduced-data:reduce){.app:before,.board-wrap:before{background-image:none}}
 </style>
 </head>
 <body>
