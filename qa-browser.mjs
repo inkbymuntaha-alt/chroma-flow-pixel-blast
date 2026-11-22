@@ -53,6 +53,36 @@ try {
   await page.locator('#shelves button.shelf').first().waitFor({state:'visible'});
   assert.deepEqual(pageErrors,[],'Browser must not emit uncaught JavaScript errors');
   console.log('PASS: Android-sized browser smoke test — launch, level start, shelf selection, legal move, undo, hint, mix-up, restart, and no uncaught page errors.');
+
+  // Exercise the real 11-shelf late-game board at compact phone and tablet viewports.
+  const fitContext = await browser.newContext({viewport:{width:360,height:640},isMobile:true,hasTouch:true});
+  await fitContext.addInitScript(()=>{localStorage.setItem('nbsLevel','56');localStorage.setItem('nbsUnlocked','56')});
+  const fitPage = await fitContext.newPage();
+  const fitErrors = [];
+  fitPage.on('pageerror',error=>fitErrors.push(error.message));
+  await fitPage.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
+  await fitPage.locator('#start').click();
+  await fitPage.locator('#briefStart').click();
+  await fitPage.locator('#levelBrief').waitFor({state:'hidden'});
+  const fitShelves = fitPage.locator('#shelves button.shelf');
+  assert.equal(await fitShelves.count(),11,'Level 56 must render all eleven shelves');
+  for (const viewport of [{width:360,height:640},{width:390,height:844},{width:768,height:1024},{width:1024,height:768}]) {
+    await fitPage.setViewportSize(viewport);
+    await fitPage.waitForTimeout(80);
+    const fit = await fitPage.evaluate(()=>{
+      const root=document.querySelector('#shelves'), board=document.querySelector('.board-wrap');
+      const rows=[...root.querySelectorAll('.shelf')];
+      const last=rows.at(-1), rr=root.getBoundingClientRect(), lr=last.getBoundingClientRect(), br=board.getBoundingClientRect();
+      return {count:rows.length,scrollHeight:root.scrollHeight,clientHeight:root.clientHeight,rootBottom:rr.bottom,lastBottom:lr.bottom,boardBottom:br.bottom,rootTop:rr.top,firstTop:rows[0].getBoundingClientRect().top,rowHeights:rows.map(x=>x.getBoundingClientRect().height),coarse:matchMedia('(pointer:coarse)').matches};
+    });
+    assert.equal(fit.count,11,'All eleven shelves must remain rendered at '+JSON.stringify(viewport));
+    assert.ok(fit.scrollHeight<=fit.clientHeight+2,'Shelf list must not require scrolling at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
+    assert.ok(fit.lastBottom<=fit.boardBottom+2,'Last shelf must fit inside the board at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
+    assert.ok(fit.rowHeights.every(height=>height>=20),'Shelf rows must remain usable at '+JSON.stringify(viewport)+': '+JSON.stringify(fit));
+  }
+  assert.deepEqual(fitErrors,[],'Late-game layout must not emit JavaScript errors');
+  console.log('PASS: Level 56 eleven-shelf layout fits compact phone and tablet viewports without shelf scrolling.');
+  await fitContext.close();
   await context.close();
 } finally {
   if(browser) await browser.close();
