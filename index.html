@@ -599,8 +599,11 @@ function refreshDailyCard(){const b=$('dailyStart'),d=$('dailyDescription');if(!
 function shelfCount(){return typesForLevel()+1}
 function cloneBoard(b=stacks){return b.map(s=>s.slice())}
 function scramble(){
- const n=typesForLevel(),count=n+1,spare=count-1,goal=Array.from({length:count},(_,i)=>i<n?Array(CAP).fill(i):[]);
- let b=cloneBoard(goal),steps=16+level*3,baseSeed=dailyMode?dailySeed+'-'+level:'nbs-level-'+level+'-layout-v2',rng=seededRandom(baseSeed+(scrambleVariant?'-mix-'+scrambleVariant:''));
+ const n=typesForLevel(),count=n+1,spare=count-1,baseSeed=dailyMode?dailySeed+'-'+level:'nbs-level-'+level+'-layout-v2',rng=seededRandom(baseSeed+(scrambleVariant?'-mix-'+scrambleVariant:''));
+ const productOrder=Array.from({length:n},(_,i)=>i);
+ for(let i=n-1;i>0;i--){const j=Math.floor(rng()*(i+1));[productOrder[i],productOrder[j]]=[productOrder[j],productOrder[i]]}
+ const goal=Array.from({length:count},(_,i)=>i<n?Array(CAP).fill(productOrder[i]):[]);
+ let b=cloneBoard(goal),steps=16+level*3;
  const reverseMoves=[];
  for(let z=0;z<steps;z++){
   let choices=[];
@@ -613,23 +616,19 @@ function scramble(){
   reverseMoves.push([a,d]);b[d].push(b[a].pop());
  }
  const hasLegalMove=board=>board.some((stack,from)=>stack.length&&board.some((target,to)=>to!==from&&target.length<CAP&&(!target.length||target[target.length-1]===stack[stack.length-1])));
- const isSolved=board=>board.slice(0,n).every((stack,index)=>stack.length===CAP&&stack.every(item=>item===index))&&board[spare].length===0;
- // Roll back only the latest scramble moves until the dedicated spare is empty
- // and the displayed puzzle has at least one legal move. The remaining moves
- // are still a complete, verified solution path back to the sorted board.
+ const isSolved=board=>board.slice(0,n).every(stack=>stack.length===CAP&&stack.every(item=>item===stack[0]))&&board[spare].length===0;
  while(reverseMoves.length&&(b[spare].length!==0||isSolved(b)||!hasLegalMove(b))){
-  const [a,d]=reverseMoves.pop();
-  const item=b[d].pop();
-  b[a].push(item);
+  const [a,d]=reverseMoves.pop();const item=b[d].pop();b[a].push(item);
  }
- // A valid scramble always retains at least one legal reverse move.
  if(!hasLegalMove(b)||b[spare].length!==0||isSolved(b)){
-  b=cloneBoard(goal);
-  const a=Math.floor(rng()*n),d=(a+1+Math.floor(rng()*(n-1)))%n,item=b[a].pop(),other=b[d].pop();
-  reverseMoves.push([a,spare]);b[spare].push(item);
-  reverseMoves.push([d,a]);b[a].push(other);
-  reverseMoves.push([spare,d]);b[d].push(b[spare].pop());
-  // A three-move cycle leaves the spare empty and a legal opening move.
+  // Deterministic shuffled cycle: one top item is displaced around all product
+  // shelves, while the spare shelf is used as a temporary buffer and ends empty.
+  const order=Array.from({length:n},(_,i)=>i);
+  for(let i=n-1;i>0;i--){const j=Math.floor(rng()*(i+1));[order[i],order[j]]=[order[j],order[i]]}
+  const first=order[0],item=b[first].pop();
+  reverseMoves.push([first,spare]);b[spare].push(item);
+  for(let i=1;i<n;i++){const source=order[i],destination=order[i-1],value=b[source].pop();reverseMoves.push([source,destination]);b[destination].push(value)}
+  const last=order[n-1];reverseMoves.push([spare,last]);b[last].push(b[spare].pop());
  }
  return b;
 }
