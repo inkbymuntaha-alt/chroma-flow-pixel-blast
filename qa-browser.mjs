@@ -23,6 +23,7 @@ try{
   await page.keyboard.press('ArrowRight');
   await page.keyboard.press('ArrowUp');
   assert.ok(await page.evaluate(()=>window.__marketRushTest.state.jump>0),'Jump action works');
+  await page.evaluate(()=>{window.__marketRushTest.state.jump=0});
   await page.keyboard.press('ArrowDown');
   assert.ok(await page.evaluate(()=>window.__marketRushTest.state.slide>0),'Slide action works');
   await page.locator('#pause').click();await page.locator('#pauseScreen').waitFor({state:'visible'});
