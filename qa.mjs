@@ -18,6 +18,7 @@ const missing = [...new Set(selectors.filter(id => !idSet.has(id)))];
 assert.deepEqual(missing, [], 'Every direct UI selector must have an HTML element');
 
 assert.equal(manifest.name, 'Nazeef Bazar Sort Stories');
+assert.deepEqual(manifest.display_override, ['fullscreen', 'standalone'], 'Installed Android app should prefer immersive fullscreen with standalone fallback');
 assert.ok(manifest.icons.some(icon => icon.src === './icon.svg'));
 for (const asset of ['./index.html', './manifest.webmanifest', './icon.svg']) {
   assert.ok(sw.includes(asset), 'Service worker must precache ' + asset);
