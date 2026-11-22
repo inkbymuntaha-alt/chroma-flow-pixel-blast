@@ -6,7 +6,7 @@ const manifest=JSON.parse(fs.readFileSync('manifest.webmanifest','utf8'));
 const start=html.indexOf('<script>')+8,end=html.indexOf('</script>',start);
 assert.ok(start>=8&&end>start,'Game script exists');
 const js=html.slice(start,end);new Function(js);
-const ids=[...html.matchAll(/\\bid="([^"]+)"/g)].map(x=>x[1]);
+const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 assert.equal(new Set(ids).size,ids.length,'IDs are unique');
 for(const id of ['world','speed','position','lap','raceTime','menu','play','pause','pauseScreen','resume','result','again','left','right','throttle','brake'])assert.ok(ids.includes(id),'Missing racing UI: '+id);
 for(const term of ['NAZEEF GP','MOTORSPORT','function start()','function finish()','function update(dt)','function drawScene','function bike(','pointerdown','pointerup','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','ngpBest','COASTAL GP','DESERT CIRCUIT','NIGHT SPRINT','window.__bikeRaceTest'])assert.ok(html.includes(term),'Missing racing feature: '+term);
