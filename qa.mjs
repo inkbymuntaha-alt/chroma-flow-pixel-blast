@@ -27,8 +27,8 @@ assert.ok(sw.includes('self.clients.claim()'));
 assert.ok(js.includes("if(!dailyMode&&!worldBonusPaid)"), 'Daily mode must not consume normal chapter rewards');
 assert.ok(js.includes("'nbsWorldPerkClaims'"), 'Chapter reward claims must be persisted');
 assert.ok(js.includes('Math.min(10,3+Math.floor((level-1)/4))'), 'Progression must support ten product types');
-const artFn = extract(/function productArt\\(v\\)\\{[\\s\\S]*?\\n\\}/, 'productArt');
-assert.equal((artFn.match(/\\n svg\\('/g) || []).length, 10, 'All ten products must have original vector artwork');
+const artFn = extract(/function productArt\(v\)\{[\s\S]*?\n\}/, 'productArt');
+assert.equal((artFn.match(/\n svg\('/g) || []).length, 10, 'All ten products must have original vector artwork');
 for (const name of ['Apples','Carrots','Lemons','Grapes','Pastries','Mangoes','Watermelons','Oranges','Coconuts','Pineapples']) {
   assert.ok(artFn.includes(name) || js.includes("n:'" + name + "'"), 'Product artwork/name mapping must include ' + name);
 }
