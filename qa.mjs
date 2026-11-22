@@ -45,6 +45,9 @@ assert.ok(selectionFn.includes('if(previous===-2)') && selectionFn.includes('las
 const moveFn = extract(/function renderMove\(from,to\)\{[\s\S]*?\n\}/, 'renderMove');
 assert.ok(moveFn.includes('renderShelf(from,true);renderShelf(to,true)'), 'A move must repaint only its source and destination shelves');
 assert.ok(html.includes('@media(pointer:coarse){') && html.includes('.shelf:active{transform:none!important'), 'Touch controls must not wait for decorative press animations');
+for (const id of ['finishRibbon','finishMoves','finishProducts','finishReward']) assert.ok(html.includes('id="'+id+'"'), 'Level results must show '+id);
+assert.ok(html.includes("$('finishMoves').textContent=moves") && html.includes("$('finishReward').textContent=reward"), 'Level results must report the actual moves and earned coin reward');
+assert.ok(html.includes('.finish-stats{display:grid;grid-template-columns:repeat(3'), 'Level results must use a compact responsive stats layout');
 assert.ok(artFn.includes('stroke-linecap') && artFn.includes('opacity'), 'Produce artwork must include highlight and contour detail');
 assert.ok(!artFn.includes('filter="url('), 'Produce artwork must avoid expensive SVG filter stacks');
 for (const name of ['Apples','Carrots','Lemons','Grapes','Pastries','Mangoes','Watermelons','Oranges','Coconuts','Pineapples']) {
