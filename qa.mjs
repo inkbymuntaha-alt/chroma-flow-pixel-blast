@@ -113,13 +113,13 @@ console.log('PASS: syntax, HTML selectors, unique IDs, PWA assets, reward isolat
 
 // Swipe responsiveness regression checks
 const swipeBlock = extract(/let pointerShelf=-1[\\s\\S]*?document\\.addEventListener\\('pointercancel',[\\s\\S]*?\\);/, 'shelf swipe handlers');
-assert.ok(swipeBlock.includes('>9)pointerDragged=true'), 'Swipe threshold must remain low for quick drags');
-assert.ok(swipeBlock.includes('setDragHover(dest>=0'), 'Dragging must show a live legal destination');
-assert.ok(swipeBlock.includes('if(dragged&&from!==dest&&legalMove(from,dest)){moveShelf(from,dest);return}'), 'One swipe must move an item directly without a second tap');
+assert.ok(swipeBlockFinal.includes('>9)pointerDragged=true'), 'Swipe threshold must remain low for quick drags');
+assert.ok(swipeBlockFinal.includes('setDragHover(dest>=0'), 'Dragging must show a live legal destination');
+assert.ok(swipeBlockFinal.includes('if(dragged&&from!==dest&&legalMove(from,dest)){moveShelf(from,dest);return}'), 'One swipe must move an item directly without a second tap');
 assert.ok(html.includes('Keep ordinary shelf taps silent') && !html.includes("say('Picked up '+PRODUCTS[stacks[i][stacks[i].length-1]].n)"), 'Ordinary shelf taps must not wait on speech synthesis');
 
-const swipeBlock=extract(/let pointerShelf=-1[\\s\\S]*?document\\.addEventListener\\('pointercancel',[\\s\\S]*?\\);/,'shelf swipe handlers');
-assert.ok(swipeBlock.includes('>9)pointerDragged=true'),'Swipe threshold must be low');
-assert.ok(swipeBlock.includes('setDragHover(dest>=0'),'Dragging must show a live legal destination');
-assert.ok(swipeBlock.includes('if(dragged&&from!==dest&&legalMove(from,dest)){moveShelf(from,dest);return}'),'One swipe must move directly');
+const swipeBlockFinal=extract(/let pointerShelf=-1[\\s\\S]*?document\\.addEventListener\\('pointercancel',[\\s\\S]*?\\);/,'shelf swipe handlers');
+assert.ok(swipeBlockFinal.includes('>9)pointerDragged=true'),'Swipe threshold must be low');
+assert.ok(swipeBlockFinal.includes('setDragHover(dest>=0'),'Dragging must show a live legal destination');
+assert.ok(swipeBlockFinal.includes('if(dragged&&from!==dest&&legalMove(from,dest)){moveShelf(from,dest);return}'),'One swipe must move directly');
 assert.ok(html.includes('Keep ordinary shelf taps silent'),'Ordinary shelf taps must not invoke speech synthesis');
