@@ -34,7 +34,10 @@ const extract = (pattern, label) => {
   return match[0];
 };
 const artFn = extract(/function productArt\(v\)\{[\s\S]*?\n\}/, 'productArt');
-assert.equal((artFn.match(/\n svg\('/g) || []).length, 10, 'All ten products must have original vector artwork');
+assert.equal((artFn.match(/^  \/\/ /gm) || []).length, 10, 'All ten products must have individually art-directed vector illustrations');
+assert.ok(artFn.includes('linearGradient') && artFn.includes('radialGradient'), 'Produce artwork must use lightweight dimensional gradients');
+assert.ok(artFn.includes('stroke-linecap') && artFn.includes('opacity'), 'Produce artwork must include highlight and contour detail');
+assert.ok(!artFn.includes('filter="url('), 'Produce artwork must avoid expensive SVG filter stacks');
 for (const name of ['Apples','Carrots','Lemons','Grapes','Pastries','Mangoes','Watermelons','Oranges','Coconuts','Pineapples']) {
   assert.ok(artFn.includes(name) || js.includes("n:'" + name + "'"), 'Product artwork/name mapping must include ' + name);
 }
